@@ -3,8 +3,10 @@ import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import Plus from "../../assets/icons/plus.svg";
 import UpArrow from "../../assets/icons/up-arrow.svg";
-import DotMenuCol from "../../assets/icons/dot-menu-col.svg";
-import SmHeart from "../../assets/icons/sm-heart.svg";
+import NovelLine from "./NovelLine";
+import SmStar from "../../assets/icons/sm-star.svg";
+import SmComment from "../../assets/icons/sm-comment.svg";
+import SmArrow from "../../assets/icons/sm-arrow.svg";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -21,6 +23,17 @@ const novelLines = [
     content:
       "한 번 숲 속으로 들어간 나무꾼이 있었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.\n어느 날, 숲에 이상한 일이 일어났어요. 나무들이 얘기를 하더니 갑자기 숲이 굉음처럼 울렸어요. 톰은 당황했지만, 나무들이 도와주기 시작했어요.\n모두 함께 숲의 문제를 해결했고, 톰은 그들의 우정을 더욱 소중히 여겼습니다. 그날 이후, 톰은 더 많은 모험을 찾아 떠나기로 했죠.",
     like: 71,
+  },
+];
+
+const comments = [
+  {
+    nickname: "맹구",
+    content: "한 번 숲 속으로 들어간 나무꾼이 있",
+  },
+  {
+    nickname: "홍길동",
+    content: "한 번 숲 속으로 들어간 나무꾼이 있었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.",
   },
 ];
 
@@ -50,42 +63,19 @@ const ViewerScreen = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollContainer>
         <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }} resetScrollToCoords={{ x: 0, y: 0 }}>
-          <Container>
+          <MainContainer>
             <ContentList>
               {novelLines.map((nl, idx) => {
                 const paragraphs = nl.content.split("\n");
                 return (
-                  <NovelLine key={idx}>
+                  <NovelContent key={idx}>
                     {paragraphs.map((paragraph, index) => (
                       <ContentText key={index}>{paragraph}</ContentText>
                     ))}
-                  </NovelLine>
+                  </NovelContent>
                 );
               })}
-              {notConfirmLine && (
-                <ContentView>
-                  <ProfileView>
-                    <UserStateView>
-                      <Nickname>{notConfirmLine.nickname}</Nickname>
-                      <ConfirmLabel>
-                        <ConfirmText>확인중</ConfirmText>
-                      </ConfirmLabel>
-                    </UserStateView>
-                    <DotMenuCol fill={colors.grey2} />
-                  </ProfileView>
-                  <NovelLine>
-                    {notConfirmLine.content.split("\n").map((paragraph, index) => (
-                      <ContentText key={index}>{paragraph}</ContentText>
-                    ))}
-                  </NovelLine>
-                  <NovelLineBtns>
-                    <LikeBtn>
-                      <SmHeart />
-                      <LikeCounter>0</LikeCounter>
-                    </LikeBtn>
-                  </NovelLineBtns>
-                </ContentView>
-              )}
+              {notConfirmLine && <NovelLine info={notConfirmLine} />}
             </ContentList>
             {write ? (
               <InputView>
@@ -111,7 +101,51 @@ const ViewerScreen = () => {
                 <AddBtnText>소설 작성하기</AddBtnText>
               </AddBtn>
             )}
-          </Container>
+          </MainContainer>
+          <SubContainer>
+            <BestCommentList>
+              {comments.map((co, idx) => {
+                return (
+                  <CommentView key={idx}>
+                    <TopView>
+                      <BestLabel style={idx === 0 && { backgroundColor: "#FF0000" }}>
+                        <BestLabelText>Best</BestLabelText>
+                      </BestLabel>
+                      <CommentNickname>{co.nickname}</CommentNickname>
+                    </TopView>
+                    <CommentText>{co.content}</CommentText>
+                  </CommentView>
+                );
+              })}
+            </BestCommentList>
+            <Horizon />
+            <Reviews>
+              <ReviewView>
+                <ReviewCounterView>
+                  <SmStar />
+                  <ReviewCounter>4.5</ReviewCounter>
+                </ReviewCounterView>
+                <ShortcutView>
+                  <ShortcutText>별점</ShortcutText>
+                  <ArrowIcon>
+                    <SmArrow />
+                  </ArrowIcon>
+                </ShortcutView>
+              </ReviewView>
+              <ReviewView>
+                <ReviewCounterView>
+                  <SmComment />
+                  <ReviewCounter>21</ReviewCounter>
+                </ReviewCounterView>
+                <ShortcutView>
+                  <ShortcutText>댓글</ShortcutText>
+                  <ArrowIcon>
+                    <SmArrow />
+                  </ArrowIcon>
+                </ShortcutView>
+              </ReviewView>
+            </Reviews>
+          </SubContainer>
         </KeyboardAwareScrollView>
       </ScrollContainer>
     </SafeAreaView>
@@ -121,74 +155,24 @@ const ViewerScreen = () => {
 const ScrollContainer = styled.ScrollView`
   flex: 1;
 `;
-const Container = styled.View`
+const MainContainer = styled.View`
   flex: 1;
+  gap: 16px;
   margin: 48px 0;
   padding: 24px;
-  gap: 16px;
 `;
 const ContentList = styled.View`
   gap: 16px;
 `;
-const ContentView = styled.View`
-  padding: 12px;
-  border: 1px solid ${colors.grey5};
-  border-radius: 8px;
-`;
-const ProfileView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-`;
-const UserStateView = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-`;
-const Nickname = styled.Text`
-  font-size: ${fontSize.body2};
-  font-weight: ${fontWeight.medium};
-  line-height: 24px;
-  color: ${colors.mainText};
-`;
-const ConfirmLabel = styled.View`
-  align-items: center;
-  padding: 0 8px;
-  border: 1px solid #749ff0;
-  border-radius: 2px;
-`;
-const ConfirmText = styled.Text`
-  color: #749ff0;
-  font-size: 13px;
-  line-height: 24px;
-  font-weight: ${fontWeight.medium};
-`;
-const NovelLine = styled.View`
+const NovelContent = styled.View`
   margin-bottom: 8px;
   gap: 16px;
 `;
 const ContentText = styled.Text`
-  font-size: ${fontSize.body4};
+  font-size: ${fontSize.body2};
   font-weight: ${fontWeight.regular};
   line-height: 24px;
   color: ${colors.mainText};
-`;
-const NovelLineBtns = styled.View`
-  flex-direction: row;
-`;
-const LikeBtn = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  padding: 2px 8px 2px 4px;
-  border: 1px solid ${colors.grey4};
-  border-radius: 8px;
-`;
-const LikeCounter = styled.Text`
-  font-size: ${fontSize.body3};
-  font-weight: ${fontWeight.medium};
-  line-height: 24px;
-  color: ${colors.grey2};
 `;
 const InputView = styled.View`
   justify-content: space-between;
@@ -199,7 +183,7 @@ const InputView = styled.View`
 `;
 const NovelLineInput = styled.TextInput`
   height: 248px;
-  font-size: ${fontSize.body4};
+  font-size: ${fontSize.body2};
   font-weight: ${fontWeight.regular};
 `;
 const TextActionsPanel = styled.View`
@@ -221,7 +205,7 @@ const TextLimit = styled.Text`
 const SubmitBtn = styled.TouchableOpacity`
   width: 24px;
   height: 24px;
-  background-color: #749ff0;
+  background-color: ${colors.blue};
   border-radius: 50px;
   color: ${colors.mainText};
 `;
@@ -234,9 +218,82 @@ const AddBtn = styled.TouchableOpacity`
   border-radius: 8px;
 `;
 const AddBtnText = styled.Text`
-  font-size: ${fontSize.body4};
+  font-size: ${fontSize.body2};
   font-weight: ${fontWeight.regular};
   color: ${colors.grey2};
+`;
+const SubContainer = styled.View`
+  padding: 24px;
+`;
+const BestCommentList = styled.View`
+  gap: 16px;
+`;
+const CommentView = styled.View`
+  padding: 8px;
+  gap: 8px;
+  border: 1px solid ${colors.grey5};
+  border-radius: 8px;
+`;
+const TopView = styled.View`
+  flex-direction: row;
+  gap: 8px;
+`;
+const BestLabel = styled.View`
+  padding: 0 3.5px;
+  background-color: ${colors.blue};
+  border-radius: 4px;
+  justify-content: center;
+`;
+const BestLabelText = styled.Text`
+  font-size: ${fontSize.body4};
+  font-weight: ${fontWeight.bold};
+  line-height: 20px;
+  color: ${colors.white};
+`;
+const CommentNickname = styled.Text`
+  font-size: ${fontSize.body2};
+  font-weight: ${fontWeight.regular};
+  line-height: 24px;
+  color: ${colors.mainText};
+`;
+const CommentText = styled.Text`
+  font-size: ${fontSize.body4};
+`;
+const Horizon = styled.View`
+  margin: 16px 12px;
+  height: 1px;
+  background-color: ${colors.grey6};
+`;
+const Reviews = styled.View`
+  gap: 16px;
+`;
+const ReviewView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+const ReviewCounterView = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+const ReviewCounter = styled.Text`
+  font-size: ${fontSize.body3};
+  font-weight: ${fontWeight.regular};
+  line-height: 24px;
+  color: ${colors.mainText};
+`;
+const ShortcutView = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+const ShortcutText = styled.Text`
+  font-size: ${fontSize.body3};
+  font-weight: ${fontWeight.regular};
+  line-height: 24px;
+  color: ${colors.mainText};
+`;
+const ArrowIcon = styled.View`
+  transform: scaleX(-1);
 `;
 
 export default ViewerScreen;
