@@ -1,0 +1,121 @@
+import Modal from "react-native-modal";
+import styled from "styled-components/native";
+import NovelLine from "./NovelLine";
+import { colors } from "../../../assets/color";
+import BigX from "../../assets/icons/big-x.svg";
+import { fontSize, fontWeight } from "../../../assets/font";
+import Buttons from "./Buttons";
+import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const proposals = [
+  {
+    nickname: "짱아",
+    content: "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
+  },
+  {
+    nickname: "흰둥이",
+    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
+  },
+];
+
+const Proposals = (props) => {
+  const { isVisible, onCloseProposals } = props;
+  const [isButtonsVisible, setIsButtonsVisible] = useState(false);
+  const onTouchMenu = () => {
+    setIsButtonsVisible(true);
+  };
+  const onCloseButtons = () => {
+    setIsButtonsVisible(false);
+  };
+
+  return (
+    <Modal isVisible={isVisible} style={{ margin: 0 }} backdropOpacity={0.35}>
+      <SafeAreaView style={{ flex: 1, paddingTop: "24px" }}>
+        <Title>
+          <CloseIcon onPress={onCloseProposals}>
+            <BigX />
+          </CloseIcon>
+          <TitleText>제안</TitleText>
+          <LayoutView />
+        </Title>
+        <ScrollContainer>
+          <ProposalList>
+            {proposals.map((proposal, idx) => {
+              return (
+                <NovelLineView key={idx}>
+                  <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />
+                  <NovelLine info={proposal} onTouchMenu={onTouchMenu} />
+                </NovelLineView>
+              );
+            })}
+            {proposals.map((proposal, idx) => {
+              return (
+                <NovelLineView key={idx}>
+                  <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />
+                  <NovelLine info={proposal} onTouchMenu={onTouchMenu} />
+                </NovelLineView>
+              );
+            })}
+            {proposals.map((proposal, idx) => {
+              return (
+                <NovelLineView key={idx}>
+                  <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />
+                  <NovelLine info={proposal} onTouchMenu={onTouchMenu} />
+                </NovelLineView>
+              );
+            })}
+            {proposals.map((proposal, idx) => {
+              return (
+                <NovelLineView key={idx}>
+                  <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />
+                  <NovelLine info={proposal} onTouchMenu={onTouchMenu} />
+                </NovelLineView>
+              );
+            })}
+            {proposals.map((proposal, idx) => {
+              return (
+                <NovelLineView key={idx}>
+                  <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />
+                  <NovelLine info={proposal} onTouchMenu={onTouchMenu} />
+                </NovelLineView>
+              );
+            })}
+          </ProposalList>
+        </ScrollContainer>
+      </SafeAreaView>
+    </Modal>
+  );
+};
+
+const Title = styled.View`
+  flex-direction: row;
+  margin-top: 69px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  height: 48px;
+  border-radius: 16px 16px 0 0;
+  background-color: ${colors.white};
+`;
+const CloseIcon = styled.TouchableOpacity``;
+const TitleText = styled.Text`
+  font-size: ${fontSize.body1};
+  font-weight: ${fontWeight.bold};
+  line-height: 22px;
+  color: ${colors.mainText};
+`;
+const LayoutView = styled.View`
+  width: 32px;
+  height: 32px;
+`;
+const ScrollContainer = styled.ScrollView`
+  padding: 24px 24px 0;
+  background-color: ${colors.white};
+`;
+const NovelLineView = styled.View``;
+const ProposalList = styled.View`
+  gap: 16px;
+`;
+
+export default Proposals;
