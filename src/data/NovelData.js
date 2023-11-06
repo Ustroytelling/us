@@ -92,3 +92,55 @@ export const hashtagData = [
         tag: "로맨스",
     },
 ];
+
+export const ParticipantData = [
+    {
+        id: "1",
+        name: "가나",
+        share: "45%",
+        rank: "1",
+        manager: false,
+    },
+    {
+        id: "2",
+        name: "다라",
+        share: "15%",
+        rank: "2",
+        manager: false,
+    },
+    {
+        id: "3",
+        name: "마바",
+        share: "14%",
+        rank: "3",
+        manager: false,
+    },
+    {
+        id: "4",
+        name: "사아",
+        share: "05%",
+        rank: "4",
+        manager: true,
+    },
+    {
+        id: "5",
+        name: "아자",
+        share: "0.2%",
+        rank: "5",
+        manager: false,
+    },
+    {
+        id: "6",
+        name: "차카",
+        share: "0.1%",
+        rank: "6",
+        manager: false,
+    },
+    {
+        id: "7",
+        name: "타파하",
+        share: "0.1%",
+        rank: "7",
+        manager: false,
+    },
+];
