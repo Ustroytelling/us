@@ -2,7 +2,7 @@ import Modal from "react-native-modal";
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import BigX from "../../assets/icons/big-x.svg";
+import BigX from "../../assets/Icons/big-x.svg";
 import { useState } from "react";
 
 const Report = (props) => {

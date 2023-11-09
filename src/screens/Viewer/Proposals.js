@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import NovelLine from "./NovelLine";
-import BigX from "../../assets/icons/big-x.svg";
+import BigX from "../../assets/Icons/big-x.svg";
 import Buttons from "./Buttons";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";

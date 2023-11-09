@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import Modal from "react-native-modal";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import Warning from "../../assets/icons/warning.svg";
+import Warning from "../../assets/Icons/warning.svg";
 
 const Confirm = (props) => {
   const { isVisible, onCloseConfirm } = props;
