@@ -12,10 +12,9 @@ export const colors = {
   red: "#D80707",
   yellow: "#D80707",
   blue: "#007AFF",
-  confirm: "#749ff0",
   choice: "#D0E8F9",
   positive: "#67D1FF",
-  primary: "#73E09F",
+  primary: "#6FDCDE",
   strong: "#0071BC",
   heavy: "#042F4D",
 };
