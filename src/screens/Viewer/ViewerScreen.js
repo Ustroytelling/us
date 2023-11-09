@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
-import { colors } from "../../../assets/color";
-import { fontSize, fontWeight } from "../../../assets/font";
+import { colors } from "../../assets/color";
+import { fontSize, fontWeight } from "../../assets/font";
 import Plus from "../../assets/icons/plus.svg";
 import UpArrow from "../../assets/icons/up-arrow.svg";
 import NovelLine from "./NovelLine";
@@ -13,13 +13,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Buttons from "./Buttons";
 import Proposals from "./Proposals";
-import Rating from "./Rating";
 import BigX from "../../assets/icons/big-x.svg";
-import Document from "../../assets/icons/document.svg";
-import BigComment from "../../assets/icons/big-comment.svg";
-import Text from "../../assets/icons/text.svg";
-import PreviousArrow from "../../assets/icons/previous-arrow.svg";
-import NextArrow from "../../assets/icons/next-arrow.svg";
+import StarRating from "./StarRating";
+import BottomBar from "./BottomBar";
+import Comments from "./Comments";
+import Confirm from "./Confirm";
 
 const novelLines = [
   {
@@ -52,6 +50,8 @@ const ViewerScreen = () => {
   const [isButtonsVisible, setIsButtonsVisible] = useState(false);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
   const [isRatingVisible, setIsRatingVisible] = useState(false);
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [write, setWrite] = useState(false);
   const [text, setText] = useState("");
   const [notConfirmLine, setNotConfirmLine] = useState(null);
@@ -71,35 +71,27 @@ const ViewerScreen = () => {
     setWrite(false);
     setText("");
   };
-  const onTouchScreen = () => {
-    setBarVisible(!barVisible);
-  };
-  const onTouchMenu = () => {
-    setIsButtonsVisible(true);
-  };
-  const onCloseButtons = () => {
-    setIsButtonsVisible(false);
-  };
-  const onOpenProposals = () => {
-    setIsProposalVisible(true);
-  };
-  const onCloseProposals = () => {
-    setIsProposalVisible(false);
-  };
-  const onOpenRating = () => {
-    setIsRatingVisible(true);
-  };
-  const onCloseRating = () => {
-    setIsRatingVisible(false);
-  };
+  const onTouchScreen = () => setBarVisible(!barVisible);
+  const onTouchMenu = () => setIsButtonsVisible(true);
+  const onCloseButtons = () => setIsButtonsVisible(false);
+  const onOpenProposals = () => setIsProposalVisible(true);
+  const onCloseProposals = () => setIsProposalVisible(false);
+  const onOpenRating = () => setIsRatingVisible(true);
+  const onCloseRating = () => setIsRatingVisible(false);
+  const onOpenComments = () => setIsCommentsVisible(true);
+  const onCloseComments = () => setIsCommentsVisible(false);
+  const onOpenConfirm = () => setIsConfirmVisible(true);
+  const onCloseConfirm = () => setIsConfirmVisible(false);
 
   // api에서 폰트 사이즈 가져와야 함
   return (
     <>
-      {isButtonsVisible && <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} />}
-      {isProposalVisible && <Proposals isVisible={isProposalVisible} onCloseProposals={onCloseProposals} />}
       <SafeAreaView style={{ flex: 1 }}>
-        {isRatingVisible && <Rating isVisible={isRatingVisible} onCloseRating={onCloseRating} />}
+        <Proposals isVisible={isProposalVisible} onCloseProposals={onCloseProposals} />
+        <Comments isVisible={isCommentsVisible} onCloseComments={onCloseComments} />
+        <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} onOpenConfirm={onOpenConfirm} />
+        <StarRating isVisible={isRatingVisible} onCloseRating={onCloseRating} />
+        <Confirm isVisible={isConfirmVisible} onCloseConfirm={onCloseConfirm} />
         {barVisible && (
           <TopBar>
             <CloseButton>
@@ -193,7 +185,7 @@ const ViewerScreen = () => {
                       <SmComment />
                       <ReviewCounter>21</ReviewCounter>
                     </ReviewCounterView>
-                    <ShortcutBtn>
+                    <ShortcutBtn onPress={onOpenComments}>
                       <ShortcutText>댓글</ShortcutText>
                       <ArrowIcon>
                         <SmArrow />
@@ -215,29 +207,7 @@ const ViewerScreen = () => {
             </KeyboardAwareScrollView>
           </TouchScreen>
         </ScrollContainer>
-        {barVisible && (
-          <BottomBar>
-            <SettingView>
-              <CommentIcon>
-                <BigComment />
-              </CommentIcon>
-              <UsNoteIcon>
-                <Document />
-              </UsNoteIcon>
-              <TextSettingIcon>
-                <Text />
-              </TextSettingIcon>
-            </SettingView>
-            <MoveEpisodeView>
-              <EpisodeArrow>
-                <PreviousArrow />
-              </EpisodeArrow>
-              <EpisodeArrow>
-                <NextArrow />
-              </EpisodeArrow>
-            </MoveEpisodeView>
-          </BottomBar>
-        )}
+        {barVisible && <BottomBar onOpenComments={onOpenComments} />}
       </SafeAreaView>
     </>
   );
@@ -268,30 +238,6 @@ const TitleText = styled.Text`
   line-height: 22px;
   color: ${colors.mainText};
 `;
-const BottomBar = styled.View`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 48px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 36px 0 24px;
-  border: 1px solid ${colors.grey6};
-`;
-const SettingView = styled.View`
-  flex-direction: row;
-  gap: 32px;
-`;
-const CommentIcon = styled.TouchableOpacity``;
-const UsNoteIcon = styled.TouchableOpacity``;
-const TextSettingIcon = styled.TouchableOpacity``;
-const MoveEpisodeView = styled.View`
-  flex-direction: row;
-  gap: 16px;
-`;
-const EpisodeArrow = styled.TouchableOpacity``;
 const MainContainer = styled.View`
   flex: 1;
   gap: 16px;
@@ -342,7 +288,7 @@ const TextLimit = styled.Text`
 const SubmitBtn = styled.TouchableOpacity`
   width: 24px;
   height: 24px;
-  background-color: ${colors.confirm};
+  background-color: ${colors.primary};
   border-radius: 50px;
   color: ${colors.mainText};
 `;
@@ -380,7 +326,7 @@ const BestLabel = styled.View`
   padding: 0 3.5px;
   width: 40px;
   height: 20px;
-  background-color: ${colors.confirm};
+  background-color: ${colors.primary};
   border-radius: 4px;
   justify-content: center;
   align-items: center;

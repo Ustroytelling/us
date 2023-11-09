@@ -1,11 +1,12 @@
-import BigStar from "../../assets/icons/big-star.svg";
 import styled from "styled-components/native";
 import Modal from "react-native-modal";
-import { colors } from "../../../assets/color";
-import { fontSize, fontWeight } from "../../../assets/font";
+import { colors } from "../../assets/color";
+import { fontSize, fontWeight } from "../../assets/font";
+import { Rating } from "react-native-ratings";
 
-const Rating = (props) => {
+const StarRating = (props) => {
   const { isVisible, onCloseRating } = props;
+
   const onPressCancel = () => {
     onCloseRating();
   };
@@ -18,11 +19,15 @@ const Rating = (props) => {
       <Container>
         <Main>
           <Stars onPress={onCloseRating}>
-            {Array(5)
-              .fill(0)
-              .map((_, idx) => {
-                return <BigStar key={idx} />;
-              })}
+            <Rating
+              type="custom"
+              ratingImage={require("../../assets/star.png")}
+              ratingColor="#FFEA30"
+              ratingBackgroundColor="#c8c7c8"
+              ratingCount={5}
+              imageSize={40}
+              onFinishRating={this.ratingCompleted}
+            />
           </Stars>
           <Explain>좌우로 드래그해주세요.</Explain>
         </Main>
@@ -77,4 +82,4 @@ const ButtonText = styled.Text`
   color: ${colors.mainText};
 `;
 
-export default Rating;
+export default StarRating;

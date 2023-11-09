@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
 import DotMenuCol from "../../assets/icons/dot-menu-col.svg";
-import SmHeart from "../../assets/icons/sm-heart.svg";
-import { colors } from "../../../assets/color";
-import { fontSize, fontWeight } from "../../../assets/font";
+import Thumbs from "../../assets/icons/thumbs up like vote.svg";
+import { colors } from "../../assets/color";
+import { fontSize, fontWeight } from "../../assets/font";
 import { Path, Svg } from "react-native-svg";
 
 const NovelLine = (props) => {
@@ -28,7 +28,7 @@ const NovelLine = (props) => {
       </NovelContent>
       <NovelLineBtns>
         <Button>
-          <SmHeart />
+          <Thumbs />
           <ButtonText>0</ButtonText>
         </Button>
         {page === "viewer" && (
@@ -74,14 +74,14 @@ const Nickname = styled.Text`
 const ConfirmLabel = styled.View`
   align-items: center;
   padding: 0 8px;
-  border: 1px solid ${colors.confirm};
+  border: 1px solid ${colors.primary};
   border-radius: 2px;
 `;
 const ConfirmText = styled.Text`
   font-size: ${fontSize.body4};
   font-weight: ${fontWeight.medium};
   line-height: 24px;
-  color: ${colors.confirm};
+  color: ${colors.primary};
 `;
 const DotMenuIcon = styled.TouchableOpacity``;
 const NovelContent = styled.View`
