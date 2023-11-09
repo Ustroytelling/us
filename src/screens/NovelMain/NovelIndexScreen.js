@@ -13,7 +13,8 @@ import NovelNextImg from "../../assets/Icons/NovelNext.svg";
 import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 
-const NovelIndexScreen = () => {
+const NovelIndexScreen = ({ navigation, route: { params } }) => {
+  console.log(params);
   const [order, setOrder] = useState(false);
   const [stay, setStay] = useState(false);
   const [star, setStar] = useState(false);
@@ -46,7 +47,7 @@ const NovelIndexScreen = () => {
     <Container>
       <NovelHeaderBox>
         <IconBar stay={stay}>
-          <LeftIconBox>
+          <LeftIconBox onPress={() => navigation.goBack()}>
             <LeftArrowIcon width={32} height={32} />
           </LeftIconBox>
           <RightIconBox>
@@ -58,7 +59,7 @@ const NovelIndexScreen = () => {
             </PaperFileIconBox>
           </RightIconBox>
         </IconBar>
-        <NovelCoverImg source={NovelCover} />
+        <NovelCoverImg source={params ? { uri: params.image } : NovelCover} />
       </NovelHeaderBox>
 
       <WhiteBack />
@@ -77,7 +78,7 @@ const NovelIndexScreen = () => {
             <NovelIndexBody>
               <NovelTitleContainer>
                 <NovelTitleBox>
-                  <NovelTitle>주술회전 1</NovelTitle>
+                  <NovelTitle>{params ? params.name : "주술회전 1"}</NovelTitle>
                   <NovelInfoBtn onPress={handlePresentModalPress}>
                     <RightArrowIcon width={24} height={24} style={{ transform: [{ rotateY: "180deg" }] }} />
                   </NovelInfoBtn>
@@ -87,7 +88,7 @@ const NovelIndexScreen = () => {
                   <NovelSubBox1>
                     <NovelSubText>학원물</NovelSubText>
                     <Line />
-                    <NovelSubText>홍길동</NovelSubText>
+                    <NovelSubText>{params ? params.name : "홍길동"}</NovelSubText>
                   </NovelSubBox1>
                   <NovelSubBox2>
                     <TouchableOpacity>
@@ -220,7 +221,7 @@ const WhiteBack = styled.View`
 
 const NovelIndexBody = styled.View`
   background-color: white;
-  height: 890px;
+  height: 1000px;
 `;
 
 const NovelTitleContainer = styled.View`
@@ -260,7 +261,7 @@ const NovelSubTitleBox = styled.View`
 const NovelSubBox1 = styled.View`
   flex-direction: row;
   align-items: center;
-  width: 76px;
+  /* width: 76px; */
 `;
 
 const NovelSubText = styled.Text`
