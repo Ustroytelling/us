@@ -12,7 +12,7 @@ export default function App() {
       <NavigationContainer>
         <AppMainRoot />
         {/* <NovelIndexScreen /> */}
-        <StatusBar style="auto" />
+        <StatusBar style="rgba(255, 255, 255, 1)" />
       </NavigationContainer>
     </SafeAreaView>
   );

@@ -133,7 +133,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
                   inverted={order === false ? false : true}
                   keyExtractor={(item) => item.novel.id + ""}
                   renderItem={({ item }) => (
-                    <NovelIndexBox>
+                    <NovelIndexBox onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })}>
                       <NovelIndexImg source={item.novel.image} />
                       <NovelIndexTextBox>
                         <NovelIndexTitle>

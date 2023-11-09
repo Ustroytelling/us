@@ -9,7 +9,7 @@ import { FlatList, TouchableOpacity, View } from "react-native";
 
 const AppMainScreen = ({ navigation }) => {
   const onGoNovel = () => {
-    navigation.navigate("MainStack", { screen: "NovelIndex" });
+    navigation.navigate("NovelStack", { screen: "NovelIndex" });
   };
 
   return (
@@ -19,10 +19,10 @@ const AppMainScreen = ({ navigation }) => {
           <LogoIcon />
         </LogoBox>
         <IconBox>
-          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "NewNovel" })}>
+          <TouchableOpacity onPress={() => navigation.navigate("NovelStack", { screen: "NewNovel" })}>
             <EditIcon />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "Search" })}>
+          <TouchableOpacity onPress={() => navigation.navigate("NovelStack", { screen: "Search" })}>
             <SearchIcon />
           </TouchableOpacity>
         </IconBox>
@@ -110,7 +110,7 @@ const AppMainScreen = ({ navigation }) => {
                 <View key={i} style={{ marginRight: 4 }}>
                   <RealTimeBox
                     onPress={() => {
-                      navigation.navigate("MainStack", { screen: "NovelIndex", params: item });
+                      navigation.navigate("NovelStack", { screen: "NovelIndex", params: item });
                     }}
                   >
                     <RealTimeImg source={{ uri: item.image }} />
@@ -125,7 +125,7 @@ const AppMainScreen = ({ navigation }) => {
                 <View key={i} style={{ marginRight: 4 }}>
                   <RealTimeBox
                     onPress={() => {
-                      navigation.navigate("MainStack", { screen: "NovelIndex", params: item });
+                      navigation.navigate("NovelStack", { screen: "NovelIndex", params: item });
                     }}
                   >
                     <RealTimeImg source={{ uri: item.image }} />
@@ -151,7 +151,7 @@ const AppMainScreen = ({ navigation }) => {
             renderItem={({ item }) => (
               <RealTimeBox
                 onPress={() => {
-                  navigation.navigate("MainStack", { screen: "NovelIndex", params: item });
+                  navigation.navigate("NovelStack", { screen: "NovelIndex", params: item });
                 }}
                 style={{ marginRight: 4 }}
               >
