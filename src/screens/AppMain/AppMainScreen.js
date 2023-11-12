@@ -24,10 +24,10 @@ const AppMainScreen = ({ navigation }) => {
           <LogoIcon />
         </LogoBox>
         <IconBox>
-          <TouchableOpacity onPress={() => navigation.navigate("NovelStack", { screen: "NewNovel" })}>
+          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "NewNovel" })}>
             <EditIcon />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("NovelStack", { screen: "Search" })}>
+          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "Search" })}>
             <SearchIcon />
           </TouchableOpacity>
         </IconBox>
