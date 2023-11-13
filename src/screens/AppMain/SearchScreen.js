@@ -28,7 +28,6 @@ const SearchScreen = () => {
   };
   const handleSubmission = () => {
     setSearchText(text);
-    setSearch(true);
     setText("");
   };
 
