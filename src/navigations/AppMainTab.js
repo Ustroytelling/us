@@ -4,11 +4,11 @@ import styled from "styled-components";
 import AppMainScreen from "../screens/AppMain/AppMainScreen";
 import AlertScreen from "../screens/Tab/AlertScreen";
 import LockerScreen from "../screens/Tab/LockerScreen";
-import ProfileScreen from "../screens/Tab/ProfileScreen";
 import HomeIcon from "../assets/BottomIcons/homeMenu3.svg";
 import AlertIcon from "../assets/BottomIcons/onigiriRiceBall.svg";
 import LocerIcon from "../assets/BottomIcons/creditCard.svg";
 import ProfileIcon from "../assets/BottomIcons/profileUserPerson.svg";
+import MyInfoScreen from "../screens/Profile/MyInfoScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +67,7 @@ const AppMainTab = () => {
       />
       <Tab.Screen
         name="MyProfile"
-        component={ProfileScreen}
+        component={MyInfoScreen}
         options={{
           title: "내정보",
           headerShown: true,
