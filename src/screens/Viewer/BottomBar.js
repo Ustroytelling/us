@@ -56,7 +56,8 @@ const Container = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: 0 36px 0 24px;
-  border: 1px solid ${colors.grey6};
+  border-top-color: ${colors.grey6};
+  border-top-width: 1px;
 `;
 const SettingView = styled.View`
   flex-direction: row;

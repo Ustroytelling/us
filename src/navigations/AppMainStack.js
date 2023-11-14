@@ -3,8 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import NewNevelScreen from "../screens/AppMain/NewNevelScreen";
 import SearchScreen from "../screens/AppMain/SearchScreen";
-import NovelIndexScreen from "../screens/NovelMain/NovelIndexScreen";
-import ProfileScreen from "../screens/Tab/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +13,6 @@ const AppMainStack = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="NovelIndex" component={NovelIndexScreen} />
       <Stack.Screen
         name="NewNovel"
         component={NewNevelScreen}

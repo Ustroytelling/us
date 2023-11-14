@@ -91,6 +91,65 @@ export const hashtagData = [
     id: "6",
     tag: "로맨스",
   },
+  {
+    id: "7",
+    tag: "웹1",
+  },
+  {
+    id: "8",
+    tag: "액션물2",
+  },
+  {
+    id: "9",
+    tag: "주술회전3",
+  },
+  {
+    id: "10",
+    tag: "로맨스4",
+  },
+];
+
+export const genreData = [
+  {
+    id: "1",
+    genre: "드라마",
+  },
+  {
+    id: "2",
+    genre: "이세계",
+  },
+  {
+    id: "3",
+    genre: "웹",
+  },
+  {
+    id: "4",
+    genre: "액션물",
+  },
+  {
+    id: "5",
+    genre: "주술회전",
+  },
+  {
+    id: "6",
+    genre: "로맨스",
+  },
+  {
+    id: "7",
+    genre: "웹1",
+  },
+  {
+    id: "8",
+    genre: "액션물2",
+  },
+  {
+    id: "9",
+    genre: "주술회전3",
+  },
+  {
+    id: "10",
+    genre: "로맨스4",
+  },
 ];
 
 export const ParticipantData = [
@@ -198,17 +257,7 @@ export const RealTimeData = [
     ],
     name: "쿼카 1",
     username: "쿼카",
-    description: `Inspired by the original that debuted in 1985, the Air Jordan 1 Low delivers a clean, classic look that's familiar yet fresh. With an iconic design that blends seamlessly with any fit, these shoes are perfect for taking charge.
-    
-            Advantages:
-            - Encapsulated Air-Sole unit for lightweight cushioning.
-            - Genuine leather on the upper for durability and a premium look.
-            - Solid rubber outsole for greater traction on different types of surfaces.
-            - Color Shown: Palomino/White/Wild Berry
-            - Model: 553558-215
-            - Proven efficacy
-            
-            A timeless rubber sole combines with a soft sockliner and encapsulated Nike Air cushioning for all-day comfort. The rubber outsole offers durable traction on a variety of surfaces.`,
+    description: `국가는 청원에 대하여 심사할 의무를 진다. 에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.국가는 청원에 대하여 심사할 의무를 진다.`,
   },
   {
     id: "2",
