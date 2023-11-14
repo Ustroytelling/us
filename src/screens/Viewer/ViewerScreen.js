@@ -51,7 +51,7 @@ const comments = [
   },
 ];
 
-const ViewerScreen = () => {
+const ViewerScreen = ({ navigation }) => {
   const [barVisible, setBarVisible] = useState(true);
   const [isButtonsVisible, setIsButtonsVisible] = useState(false);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
@@ -92,7 +92,7 @@ const ViewerScreen = () => {
   // api에서 폰트 사이즈 가져와야 함
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}>
         <Proposals isVisible={isProposalVisible} onCloseProposals={onCloseProposals} />
         <Comments isVisible={isCommentsVisible} onCloseComments={onCloseComments} />
         <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} onOpenConfirm={onOpenConfirm} />
@@ -100,7 +100,7 @@ const ViewerScreen = () => {
         <Confirm isVisible={isConfirmVisible} onCloseConfirm={onCloseConfirm} />
         {barVisible && (
           <TopBar>
-            <CloseButton>
+            <CloseButton onPress={() => navigation.goBack()}>
               <BigX />
             </CloseButton>
             <TitleText>주술회전 1화</TitleText>
@@ -237,7 +237,8 @@ const TopBar = styled.View`
   gap: 16px;
   padding: 0 8px;
   height: 48px;
-  border: 1px solid ${colors.grey6};
+  border-bottom-color: ${colors.grey6};
+  border-bottom-width: 1px;
 `;
 const CloseButton = styled.TouchableOpacity``;
 const TitleText = styled.Text`

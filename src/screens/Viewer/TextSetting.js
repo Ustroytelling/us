@@ -75,7 +75,7 @@ const Container = styled.View`
   background-color: ${colors.white};
   border: 1px solid ${colors.grey5};
   border-radius: 16px 16px 0 0;
-  over-flow: hidden;
+  overflow: hidden;
 `;
 const Title = styled.View`
   flex-direction: row;
