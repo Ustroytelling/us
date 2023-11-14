@@ -29,12 +29,12 @@ const TextSetting = (props) => {
           <LayoutView />
         </Title>
         <SettingView>
-          <Viewing>
+          {/* <Viewing>
             <SettingText>열람 방식</SettingText>
             <ViewingType>
               <ViewingText>스크롤</ViewingText>
             </ViewingType>
-          </Viewing>
+          </Viewing> */}
           <Setting>
             <SettingText>글자 크기</SettingText>
             <SizeControll>

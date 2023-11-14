@@ -41,7 +41,13 @@ const comments = [
   },
   {
     nickname: "홍길동",
-    content: "한 번 숲 속으로 들어간 나무꾼이 있었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.",
+    content:
+      "한 번 숲 속으로 들어간 나무꾼이 있나무꾼이 있었습니다. 그의 이름은 톰이었었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.",
+  },
+  {
+    nickname: "홍길동",
+    content:
+      "한 번 숲 속으로 들어간 나무꾼이 있나무꾼이 있었습니다. 그의 이름은 톰이었었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.",
   },
 ];
 
@@ -156,36 +162,38 @@ const ViewerScreen = () => {
                     return (
                       <CommentView key={idx}>
                         <TopView>
-                          <BestLabel style={idx === 0 && { backgroundColor: "#FF0000" }}>
-                            <BestLabelText>Best</BestLabelText>
+                          <BestLabel style={idx === 0 && { backgroundColor: colors.red }}>
+                            <BestLabelText>BEST</BestLabelText>
                           </BestLabel>
                           <CommentNickname>{co.nickname}</CommentNickname>
                         </TopView>
-                        <CommentText>{co.content}</CommentText>
+                        <CommentText ellipsizeMode="tail" numberOfLines={2}>
+                          {co.content}
+                        </CommentText>
                       </CommentView>
                     );
                   })}
                 </BestCommentList>
                 <Horizon />
                 <Reviews>
-                  <ReviewView>
+                  <ReviewView onPress={onOpenRating}>
                     <ReviewCounterView>
                       <SmStar />
                       <ReviewCounter>4.5</ReviewCounter>
                     </ReviewCounterView>
-                    <ShortcutBtn onPress={onOpenRating}>
+                    <ShortcutBtn>
                       <ShortcutText>별점</ShortcutText>
                       <ArrowIcon>
                         <SmArrow />
                       </ArrowIcon>
                     </ShortcutBtn>
                   </ReviewView>
-                  <ReviewView>
+                  <ReviewView onPress={onOpenComments}>
                     <ReviewCounterView>
                       <SmComment />
                       <ReviewCounter>21</ReviewCounter>
                     </ReviewCounterView>
-                    <ShortcutBtn onPress={onOpenComments}>
+                    <ShortcutBtn>
                       <ShortcutText>댓글</ShortcutText>
                       <ArrowIcon>
                         <SmArrow />
@@ -326,7 +334,7 @@ const BestLabel = styled.View`
   padding: 0 3.5px;
   width: 40px;
   height: 20px;
-  background-color: ${colors.primary};
+  background-color: ${colors.strong};
   border-radius: 4px;
   justify-content: center;
   align-items: center;
@@ -356,7 +364,7 @@ const Horizon = styled.View`
 const Reviews = styled.View`
   gap: 16px;
 `;
-const ReviewView = styled.View`
+const ReviewView = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -371,7 +379,7 @@ const ReviewCounter = styled.Text`
   line-height: 24px;
   color: ${colors.mainText};
 `;
-const ShortcutBtn = styled.TouchableOpacity`
+const ShortcutBtn = styled.View`
   flex-direction: row;
   align-items: center;
 `;
