@@ -19,6 +19,7 @@ import BottomBar from "./BottomBar";
 import Comments from "./Comments";
 import Confirm from "./Confirm";
 import UsNote from "./UsNote";
+import LikeBtn from "./LikeBtn";
 
 const novelLines = [
   {
@@ -55,6 +56,7 @@ const comments = [
 const ViewerScreen = ({ navigation }) => {
   const [barVisible, setBarVisible] = useState(true);
   const [isButtonsVisible, setIsButtonsVisible] = useState(false);
+  const [isLikeBtnVisible, setIsLikeBtnVisible] = useState(false);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
   const [isRatingVisible, setIsRatingVisible] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
@@ -92,6 +94,8 @@ const ViewerScreen = ({ navigation }) => {
   const onCloseConfirm = () => setIsConfirmVisible(false);
   const onOpenUsNote = () => setIsUsNoteVisible(true);
   const onCloseUsNote = () => setIsUsNoteVisible(false);
+  const onOpenLikeBtn = () => setIsLikeBtnVisible(true);
+  const onCloseLikeBtn = () => setIsLikeBtnVisible(false);
 
   // api에서 폰트 사이즈 가져와야 함
   return (
@@ -119,11 +123,14 @@ const ViewerScreen = ({ navigation }) => {
                   {novelLines.map((nl, idx) => {
                     const paragraphs = nl.content.split("\n");
                     return (
-                      <NovelContent key={idx}>
-                        {paragraphs.map((paragraph, index) => (
-                          <ContentText key={index}>{paragraph}</ContentText>
-                        ))}
-                      </NovelContent>
+                      <>
+                        <LikeBtn isVisible={isLikeBtnVisible} onCloseButtons={onCloseLikeBtn} />
+                        <NovelContent key={idx} activeOpacity={1} onPress={onTouchScreen} onLongPress={onOpenLikeBtn}>
+                          {paragraphs.map((paragraph, index) => (
+                            <ContentText key={index}>{paragraph}</ContentText>
+                          ))}
+                        </NovelContent>
+                      </>
                     );
                   })}
                   {notConfirmLine && (
@@ -261,7 +268,7 @@ const MainContainer = styled.View`
 const ContentList = styled.View`
   gap: 16px;
 `;
-const NovelContent = styled.View`
+const NovelContent = styled.TouchableOpacity`
   margin-bottom: 8px;
   gap: 16px;
 `;
