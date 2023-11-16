@@ -18,6 +18,7 @@ import StarRating from "./StarRating";
 import BottomBar from "./BottomBar";
 import Comments from "./Comments";
 import Confirm from "./Confirm";
+import UsNote from "./UsNote";
 
 const novelLines = [
   {
@@ -58,6 +59,7 @@ const ViewerScreen = ({ navigation }) => {
   const [isRatingVisible, setIsRatingVisible] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const [isUsNoteVisible, setIsUsNoteVisible] = useState(false);
   const [write, setWrite] = useState(false);
   const [text, setText] = useState("");
   const [notConfirmLine, setNotConfirmLine] = useState(null);
@@ -88,6 +90,8 @@ const ViewerScreen = ({ navigation }) => {
   const onCloseComments = () => setIsCommentsVisible(false);
   const onOpenConfirm = () => setIsConfirmVisible(true);
   const onCloseConfirm = () => setIsConfirmVisible(false);
+  const onOpenUsNote = () => setIsUsNoteVisible(true);
+  const onCloseUsNote = () => setIsUsNoteVisible(false);
 
   // api에서 폰트 사이즈 가져와야 함
   return (
@@ -98,6 +102,7 @@ const ViewerScreen = ({ navigation }) => {
         <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} onOpenConfirm={onOpenConfirm} />
         <StarRating isVisible={isRatingVisible} onCloseRating={onCloseRating} />
         <Confirm isVisible={isConfirmVisible} onCloseConfirm={onCloseConfirm} />
+        <UsNote isVisible={isUsNoteVisible} onCloseUsNote={onCloseUsNote} />
         {barVisible && (
           <TopBar>
             <CloseButton onPress={() => navigation.goBack()}>
@@ -215,7 +220,7 @@ const ViewerScreen = ({ navigation }) => {
             </KeyboardAwareScrollView>
           </TouchScreen>
         </ScrollContainer>
-        {barVisible && <BottomBar onOpenComments={onOpenComments} />}
+        {barVisible && <BottomBar onOpenComments={onOpenComments} onOpenUsNote={onOpenUsNote} />}
       </SafeAreaView>
     </>
   );

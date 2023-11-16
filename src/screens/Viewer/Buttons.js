@@ -8,7 +8,7 @@ import ReportConfirm from "./ReportConfirm";
 import { useState } from "react";
 
 const Buttons = (props) => {
-  const { isVisible, onCloseButtons, onOpenConfirm } = props;
+  const { isVisible, onCloseButtons, onOpenConfirm, type } = props;
   const [isReportVisible, setIsReportVisible] = useState(false);
   const [isReportConfirmVisible, setIsReportConfirmVisible] = useState(false);
   const onOpenReport = () => setIsReportVisible(true);
@@ -36,9 +36,11 @@ const Buttons = (props) => {
       <Modal isVisible={isVisible} backdropOpacity={0} style={{ margin: 0 }}>
         <SafeAreaView style={{ flex: 1, justifyContent: "flex-end", marginBottom: 16 }}>
           <Btns>
-            <BtnView onPress={onPressConfirm}>
-              <BtnText>확정하기</BtnText>
-            </BtnView>
+            {type !== "post" && (
+              <BtnView onPress={onPressConfirm}>
+                <BtnText>확정하기</BtnText>
+              </BtnView>
+            )}
             <BtnView onPress={onPressReport}>
               <BtnText>신고하기</BtnText>
             </BtnView>

@@ -36,7 +36,7 @@ const NovelLine = (props) => {
           <ContentText onTextLayout={handleTextLayout}>{paragraph}</ContentText>;
           if (fold)
             return (
-              <ContentText ellipsizeMode="tail" numberOfLines={4} key={index}>
+              <ContentText ellipsizeMode="tail" numberOfLines={4} key={index} onTextLayout={handleTextLayout}>
                 {paragraph}
               </ContentText>
             );
@@ -61,9 +61,9 @@ const NovelLine = (props) => {
             <ButtonText>제안보기</ButtonText>
           </Button>
         )}
-        {page !== "viewer" && isTextOverflowed && (
+        {page !== "viewer" && isTextOverflowed && fold && (
           <Button style={{ paddingLeft: 8 }} onPress={onPressUnfold}>
-            <ButtonText>{fold ? "펼치기" : "접기"}</ButtonText>
+            <ButtonText>펼쳐보기</ButtonText>
           </Button>
         )}
       </NovelLineBtns>
@@ -96,14 +96,14 @@ const Nickname = styled.Text`
 const ConfirmLabel = styled.View`
   align-items: center;
   padding: 0 8px;
-  border: 1px solid ${colors.primary};
+  border: 1px solid ${colors.strong};
   border-radius: 2px;
 `;
 const ConfirmText = styled.Text`
   font-size: ${fontSize.body4};
   font-weight: ${fontWeight.medium};
   line-height: 24px;
-  color: ${colors.primary};
+  color: ${colors.strong};
 `;
 const DotMenuIcon = styled.TouchableOpacity``;
 const NovelContent = styled.View`

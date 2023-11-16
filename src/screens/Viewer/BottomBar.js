@@ -9,7 +9,7 @@ import { useState } from "react";
 import TextSetting from "./TextSetting";
 
 const BottomBar = (props) => {
-  const { onOpenComments } = props;
+  const { onOpenComments, onOpenUsNote } = props;
   const [isTextSettingVisible, setIsTextSettingVisible] = useState(false);
   const onOpenTestSetting = () => {
     setIsTextSettingVisible(true);
@@ -26,7 +26,7 @@ const BottomBar = (props) => {
           <CommentIcon onPress={onOpenComments}>
             <BigComment />
           </CommentIcon>
-          <UsNoteIcon>
+          <UsNoteIcon onPress={onOpenUsNote}>
             <Document />
           </UsNoteIcon>
           <TextSettingIcon onPress={onOpenTestSetting}>
