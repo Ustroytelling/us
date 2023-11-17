@@ -5,19 +5,22 @@ import { fontSize, fontWeight } from "../../assets/font";
 import ProfileNovelTab from "../../navigations/ProfileNovelTab";
 import { useState } from "react";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [preview, setPreview] = useState(true);
+  const onGoEditProfile = () => {
+    navigation.navigate("ProfileStack", { screen: "EditProfile" });
+  };
 
   return (
     <Container>
       <TitleView>
-        <ReturnBtn>
+        <ReturnBtn onPress={() => navigation.goBack()}>
           <Arrow />
         </ReturnBtn>
         <Title>
           <TitleText>프로필</TitleText>
         </Title>
-        <EditBtn>
+        <EditBtn onPress={onGoEditProfile}>
           <EditText>편집</EditText>
         </EditBtn>
       </TitleView>

@@ -7,7 +7,7 @@ import { useState } from "react";
 import Plus from "../../assets/Icons/image plus.svg";
 import ImagePicker from "react-native-image-picker";
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [nickname, setNickname] = useState("");
   const [introduce, setIntroduce] = useState("");
@@ -40,7 +40,7 @@ const EditProfileScreen = () => {
   return (
     <Container>
       <TitleView>
-        <ReturnBtn>
+        <ReturnBtn onPress={() => navigation.goBack()}>
           <Arrow />
         </ReturnBtn>
         <Title>

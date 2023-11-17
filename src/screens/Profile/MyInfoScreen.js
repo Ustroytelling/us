@@ -3,10 +3,14 @@ import BigArrow from "../../assets/Icons/big-arrow.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 
-const MyInfoScreen = () => {
+const MyInfoScreen = ({ navigation }) => {
+  const onGoProfile = () => {
+    navigation.navigate("ProfileStack", { screen: "Profile" });
+  };
+
   return (
     <Container>
-      <ProfileView>
+      <ProfileView onPress={onGoProfile}>
         <ProfileImage />
         <NicknameView>
           <Nickname>홍길동</Nickname>
