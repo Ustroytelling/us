@@ -70,7 +70,7 @@ const AppMainTab = () => {
         component={MyInfoScreen}
         options={{
           title: "내정보",
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <ProfileIcon />;
