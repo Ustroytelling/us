@@ -4,9 +4,19 @@ import Thumbs from "../../assets/Icons/thumbs up like vote.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import { Path, Svg } from "react-native-svg";
+import { useState } from "react";
 
 const NovelLine = (props) => {
   const { page, info, onTouchMenu, onOpenProposals } = props;
+  const [fold, setFold] = useState(true);
+  const [isTextOverflowed, setIsTextOverflowed] = useState(false);
+  const onPressUnfold = () => {
+    setFold(!fold);
+  };
+  const handleTextLayout = (event) => {
+    const { lines } = event.nativeEvent;
+    if (lines.length > 4) setIsTextOverflowed(true);
+  };
 
   return (
     <ContentView>
@@ -22,9 +32,16 @@ const NovelLine = (props) => {
         </DotMenuIcon>
       </ProfileView>
       <NovelContent>
-        {info.content.split("\n").map((paragraph, index) => (
-          <ContentText key={index}>{paragraph}</ContentText>
-        ))}
+        {info.content.split("\n").map((paragraph, index) => {
+          <ContentText onTextLayout={handleTextLayout}>{paragraph}</ContentText>;
+          if (fold)
+            return (
+              <ContentText ellipsizeMode="tail" numberOfLines={4} key={index} onTextLayout={handleTextLayout}>
+                {paragraph}
+              </ContentText>
+            );
+          return <ContentText key={index}>{paragraph}</ContentText>;
+        })}
       </NovelContent>
       <NovelLineBtns>
         <Button>
@@ -42,6 +59,11 @@ const NovelLine = (props) => {
               />
             </Svg>
             <ButtonText>제안보기</ButtonText>
+          </Button>
+        )}
+        {page !== "viewer" && isTextOverflowed && fold && (
+          <Button style={{ paddingLeft: 8 }} onPress={onPressUnfold}>
+            <ButtonText>펼쳐보기</ButtonText>
           </Button>
         )}
       </NovelLineBtns>
@@ -74,14 +96,14 @@ const Nickname = styled.Text`
 const ConfirmLabel = styled.View`
   align-items: center;
   padding: 0 8px;
-  border: 1px solid ${colors.primary};
+  border: 1px solid ${colors.strong};
   border-radius: 2px;
 `;
 const ConfirmText = styled.Text`
   font-size: ${fontSize.body4};
   font-weight: ${fontWeight.medium};
   line-height: 24px;
-  color: ${colors.primary};
+  color: ${colors.strong};
 `;
 const DotMenuIcon = styled.TouchableOpacity``;
 const NovelContent = styled.View`
@@ -101,9 +123,11 @@ const NovelLineBtns = styled.View`
 const Button = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  padding: 2px 8px 2px 4px;
+  padding: 0 8px 0 4px;
+  height: 28px;
   border: 1px solid ${colors.grey4};
-  border-radius: 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
 `;
 const ButtonText = styled.Text`
   font-size: ${fontSize.body3};

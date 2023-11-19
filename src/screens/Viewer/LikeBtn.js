@@ -7,22 +7,22 @@ import Report from "./Report";
 import ReportConfirm from "./ReportConfirm";
 import { useState } from "react";
 
-const Buttons = (props) => {
-  const { isVisible, onCloseButtons, onOpenConfirm, type } = props;
+const LikeBtn = (props) => {
+  const { likeState, isVisible, onCloseButtons } = props;
   const [isReportVisible, setIsReportVisible] = useState(false);
   const [isReportConfirmVisible, setIsReportConfirmVisible] = useState(false);
+  const [like, setLike] = useState(likeState);
   const onOpenReport = () => setIsReportVisible(true);
   const onCloseReport = () => setIsReportVisible(false);
   const onOpenReportConfirm = () => setIsReportConfirmVisible(true);
   const onCloseReportConfirm = () => setIsReportConfirmVisible(false);
-
-  const onPressConfirm = () => {
-    onCloseButtons();
-    onOpenConfirm();
-  };
   const onPressReport = () => {
     onCloseButtons();
     onOpenReport();
+  };
+  const onChangeLike = () => {
+    onCloseButtons();
+    setLike(!like);
   };
 
   return (
@@ -36,11 +36,9 @@ const Buttons = (props) => {
       <Modal isVisible={isVisible} backdropOpacity={0} style={{ margin: 0 }}>
         <SafeAreaView style={{ flex: 1, justifyContent: "flex-end", marginBottom: 16 }}>
           <Btns>
-            {type !== "post" && (
-              <BtnView onPress={onPressConfirm}>
-                <BtnText>확정하기</BtnText>
-              </BtnView>
-            )}
+            <BtnView onPress={onChangeLike}>
+              <BtnText>{like ? "좋아요" : "좋아요 취소"}</BtnText>
+            </BtnView>
             <BtnView onPress={onPressReport}>
               <BtnText>신고하기</BtnText>
             </BtnView>
@@ -90,4 +88,4 @@ const CancelText = styled.Text`
   color: ${colors.blue};
 `;
 
-export default Buttons;
+export default LikeBtn;
