@@ -20,21 +20,24 @@ const popularTerms = [
   "법원은 최고법원인 대법원과 각급법원으로 조지고딘다.",
 ];
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
   const [text, setText] = useState("");
-  const [searchText, setSearchText] = useState("");
   const onChangeText = (value) => {
     setText(value);
   };
-  const handleSubmission = () => {
-    setSearchText(text);
+  const onSearchNovel = () => {
+    navigation.navigate("MainStack", { screen: "SearchResult", params: text });
+    setText("");
+  };
+  const onSearchTerm = (term) => {
+    navigation.navigate("MainStack", { screen: "SearchResult", params: term });
     setText("");
   };
 
   return (
     <Container>
       <SearchBar>
-        <ReturnBtn>
+        <ReturnBtn onPress={() => navigation.goBack()}>
           <Arrow />
         </ReturnBtn>
         <InputView>
@@ -45,7 +48,7 @@ const SearchScreen = () => {
             onChangeText={onChangeText}
             placeholderTextColor={colors.grey3}
             returnKeyType="search"
-            onSubmitEditing={handleSubmission}
+            onSubmitEditing={onSearchNovel}
           />
         </InputView>
       </SearchBar>
@@ -67,7 +70,7 @@ const SearchScreen = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <SearchTermButton>
+            <SearchTermButton onPress={() => onSearchTerm(item)}>
               <Term>{item}</Term>
               <DeleteButton>
                 <XsX />
@@ -82,7 +85,7 @@ const SearchScreen = () => {
         <PopularSearchTerms>
           {popularTerms.map((term, idx) => {
             return (
-              <PopularSearchTermView key={idx}>
+              <PopularSearchTermView key={idx} onPress={() => onSearchTerm(term)}>
                 <RankView>
                   <Rank style={idx < 3 && { color: colors.primary }}>{idx + 1}</Rank>
                 </RankView>
