@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import NewNevelScreen from "../screens/AppMain/NewNevelScreen";
 import SearchScreen from "../screens/AppMain/SearchScreen";
+import SearchResultScreen from "../screens/AppMain/SearchResultScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const AppMainStack = () => {
         }}
       />
       <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
     </Stack.Navigator>
   );
 };

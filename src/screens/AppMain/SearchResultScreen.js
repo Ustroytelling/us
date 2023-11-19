@@ -3,7 +3,7 @@ import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import Search from "../../assets/Icons/search.svg";
 import Arrow from "../../assets/Icons/big-arrow.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Star from "../../assets/Icons/Star 1.svg";
 
 const results = [
@@ -113,21 +113,20 @@ const results = [
   },
 ];
 
-const SearchResultScreen = () => {
-  const [text, setText] = useState("");
-  const [searchText, setSearchText] = useState("");
+const SearchResultScreen = ({ navigation, route }) => {
+  const [text, setText] = useState(route.params);
+  const [searchText, setSearchText] = useState(route.params);
   const onChangeText = (value) => {
     setText(value);
   };
   const handleSubmission = () => {
     setSearchText(text);
-    setText("");
   };
 
   return (
     <Container>
       <SearchBar>
-        <ReturnBtn>
+        <ReturnBtn onPress={() => navigation.goBack()}>
           <Arrow />
         </ReturnBtn>
         <InputView>
@@ -235,6 +234,8 @@ const Result = styled.View`
 const Thumbnail = styled.View`
   width: 56px;
   height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 const ThumbnailImage = styled.Image`
   width: 100%;
