@@ -3,10 +3,19 @@ import BigArrow from "../../assets/Icons/big-arrow.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 
-const MyInfoScreen = () => {
+const MyInfoScreen = ({ navigation }) => {
+  const onGoProfile = () => {
+    navigation.navigate("ProfileStack", { screen: "Profile" });
+  };
+
   return (
     <Container>
-      <ProfileView>
+      <TitleView>
+        <Title>
+          <TitleText>내 정보</TitleText>
+        </Title>
+      </TitleView>
+      <ProfileView onPress={onGoProfile}>
         <ProfileImage />
         <NicknameView>
           <Nickname>홍길동</Nickname>
@@ -37,7 +46,23 @@ const Container = styled.View`
   flex: 1;
   background-color: rgba(255, 255, 255, 1);
 `;
-
+const TitleView = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 16px;
+`;
+const Title = styled.View`
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+`;
+const TitleText = styled.Text`
+  font-size: ${fontSize.body1};
+  font-weight: ${fontWeight.bold};
+  line-height: 22px;
+  color: ${colors.mainText};
+`;
 const ProfileView = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
