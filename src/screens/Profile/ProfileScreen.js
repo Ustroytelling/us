@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import Arrow from "../../assets/Icons/angle arrow left.svg";
+import Arrow from "../../assets/icons/angle arrow left.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import ProfileNovelTab from "../../navigations/ProfileNovelTab";

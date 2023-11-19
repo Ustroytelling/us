@@ -2,11 +2,11 @@ import Modal from "react-native-modal";
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import BigX from "../../assets/Icons/big-x.svg";
+import BigX from "../../assets/icons/big-x.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DotMenuCol from "../../assets/Icons/dot-menu-col.svg";
-import SmHeart from "../../assets/Icons/sm-heart.svg";
-import UpArrow from "../../assets/Icons/up-arrow.svg";
+import DotMenuCol from "../../assets/icons/dot-menu-col.svg";
+import SmHeart from "../../assets/icons/sm-heart.svg";
+import UpArrow from "../../assets/icons/up-arrow.svg";
 import { useState } from "react";
 
 const comments = [

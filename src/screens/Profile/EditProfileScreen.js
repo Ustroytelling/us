@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
-import Arrow from "../../assets/Icons/angle arrow left.svg";
-import Check from "../../assets/Icons/check.svg";
+import Arrow from "../../assets/icons/angle arrow left.svg";
+import Check from "../../assets/icons/check.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import { useState } from "react";
-import Plus from "../../assets/Icons/image plus.svg";
+import Plus from "../../assets/icons/image plus.svg";
 import ImagePicker from "react-native-image-picker";
 
 const EditProfileScreen = ({ navigation }) => {

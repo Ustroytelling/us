@@ -2,11 +2,11 @@ import Modal from "react-native-modal";
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import BigX from "../../assets/Icons/big-x.svg";
-import Text from "../../assets/Icons/Text.svg";
-import Rotate from "../../assets/Icons/rotate.svg";
-import Minus from "../../assets/Icons/minus.svg";
-import Plus from "../../assets/Icons/plus.svg";
+import BigX from "../../assets/icons/big-x.svg";
+import Text from "../../assets/icons/text.svg";
+import Rotate from "../../assets/icons/rotate.svg";
+import Minus from "../../assets/icons/minus.svg";
+import Plus from "../../assets/icons/plus.svg";
 import { useState } from "react";
 
 const TextSetting = (props) => {

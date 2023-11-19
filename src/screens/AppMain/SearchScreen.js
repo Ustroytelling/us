@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { useState } from "react";
 import { colors } from "../../assets/color";
-import Search from "../../assets/Icons/search.svg";
-import Arrow from "../../assets/Icons/big-arrow.svg";
+import Search from "../../assets/icons/search.svg";
+import Arrow from "../../assets/icons/big-arrow.svg";
 import { fontSize, fontWeight } from "../../assets/font";
-import XsX from "../../assets/Icons/xs_X.svg";
+import XsX from "../../assets/icons/xs_X.svg";
 
 const terms = ["모든 국민은", "법률이 정하는", "바에 의하여", "공무담임권을 가진다."];
 const popularTerms = [

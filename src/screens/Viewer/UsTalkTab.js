@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import UpArrow from "../../assets/Icons/up-arrow.svg";
+import UpArrow from "../../assets/icons/up-arrow.svg";
 import { useState } from "react";
 
 const talks = [

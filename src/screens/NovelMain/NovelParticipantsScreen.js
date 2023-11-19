@@ -1,12 +1,12 @@
 import React from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components";
-import LikeEmoji from "../../assets/Icons/likeEmoji.svg";
-import Star from "../../assets/Icons/star.svg";
-import Number1 from "../../assets/Icons/number1.svg";
-import Number2 from "../../assets/Icons/number2.svg";
-import Number3 from "../../assets/Icons/number3.svg";
-import User from "../../assets/Icons/infouser.svg";
+import LikeEmoji from "../../assets/icons/likeEmoji.svg";
+import Star from "../../assets/icons/star.svg";
+import Number1 from "../../assets/icons/number1.svg";
+import Number2 from "../../assets/icons/number2.svg";
+import Number3 from "../../assets/icons/number3.svg";
+import User from "../../assets/icons/infouser.svg";
 import { ParticipantData } from "../../data/NovelData";
 
 const NovelParticipantsScreen = () => {

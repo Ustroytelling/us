@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import SmHeart from "../../assets/Icons/sm-heart.svg";
-import SmFillHeart from "../../assets/Icons/heart.svg";
-import DotMenu from "../../assets/Icons/dot-menu-row.svg";
+import SmHeart from "../../assets/icons/sm-heart.svg";
+import SmFillHeart from "../../assets/icons/heart.svg";
+import DotMenu from "../../assets/icons/dot-menu-row.svg";
 import { useState } from "react";
 import Buttons from "./Buttons";
 

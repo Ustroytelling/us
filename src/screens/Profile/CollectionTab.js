@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import Private from "../../assets/Icons/private.svg";
+import Private from "../../assets/icons/private.svg";
 import { useState } from "react";
 
 const results = [
