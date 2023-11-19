@@ -20,19 +20,20 @@ import Comments from "./Comments";
 import Confirm from "./Confirm";
 import UsNote from "./UsNote";
 import LikeBtn from "./LikeBtn";
+import { View } from "react-native";
 
 const novelLines = [
   {
     nickname: "짱구",
     content:
       "구성원으로서 국정을 심의한다. 대통령은국무총리·국무위원·행정각부의 장 기타 법률이 정하는 공사의 직을 겸할 수 없다. 국토와 자원은\n보호를 받으며, 국가는 그 균형있는 개발과 이용을 위하여 필요한 계획을 수립한다. 국가안전보장에 관련되는\n대외정책·군사정책과 국내정책의 수립에 관하여 국무회의의 심 국교는 인정되지 아니하며,",
-    like: 100,
+    like: true,
   },
   {
     nickname: "홍길동",
     content:
       "한 번 숲 속으로 들어간 나무꾼이 있었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.\n어느 날, 숲에 이상한 일이 일어났어요. 나무들이 얘기를 하더니 갑자기 숲이 굉음처럼 울렸어요. 톰은 당황했지만, 나무들이 도와주기 시작했어요.\n모두 함께 숲의 문제를 해결했고, 톰은 그들의 우정을 더욱 소중히 여겼습니다. 그날 이후, 톰은 더 많은 모험을 찾아 떠나기로 했죠.",
-    like: 71,
+    like: false,
   },
 ];
 
@@ -123,14 +124,14 @@ const ViewerScreen = ({ navigation }) => {
                   {novelLines.map((nl, idx) => {
                     const paragraphs = nl.content.split("\n");
                     return (
-                      <>
-                        <LikeBtn isVisible={isLikeBtnVisible} onCloseButtons={onCloseLikeBtn} />
-                        <NovelContent key={idx} activeOpacity={1} onPress={onTouchScreen} onLongPress={onOpenLikeBtn}>
+                      <View key={idx}>
+                        <LikeBtn likeState={nl.like} isVisible={isLikeBtnVisible} onCloseButtons={onCloseLikeBtn} />
+                        <NovelContent activeOpacity={1} onPress={onTouchScreen} onLongPress={onOpenLikeBtn}>
                           {paragraphs.map((paragraph, index) => (
                             <ContentText key={index}>{paragraph}</ContentText>
                           ))}
                         </NovelContent>
-                      </>
+                      </View>
                     );
                   })}
                   {notConfirmLine && (
@@ -172,7 +173,7 @@ const ViewerScreen = ({ navigation }) => {
                 <BestCommentList>
                   {comments.map((co, idx) => {
                     return (
-                      <CommentView key={idx}>
+                      <CommentView key={idx} onPress={onOpenComments}>
                         <TopView>
                           <BestLabel style={idx === 0 && { backgroundColor: colors.red }}>
                             <BestLabelText>BEST</BestLabelText>
@@ -332,7 +333,7 @@ const SubContainer = styled.View`
 const BestCommentList = styled.View`
   gap: 16px;
 `;
-const CommentView = styled.View`
+const CommentView = styled.TouchableOpacity`
   padding: 5px 14px 5px 8px;
   gap: 8px;
   border: 1px solid ${colors.grey5};

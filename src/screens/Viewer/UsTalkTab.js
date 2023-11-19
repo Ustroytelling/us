@@ -127,9 +127,11 @@ const UsTalkTab = () => {
       <TalkContainer>
         <TalkInputView>
           <TalkInput placeholder="메시지를 입력해 주세요." value={text} onChangeText={onChangeText}></TalkInput>
-          <TalkBtn onPress={onPressBtn} style={text.length !== 0 && { backgroundColor: colors.primary }}>
-            <UpArrow fill={text.length === 0 ? colors.grey3 : colors.white} />
-          </TalkBtn>
+          {text.length !== 0 && (
+            <TalkBtn onPress={onPressBtn}>
+              <UpArrow fill={colors.white} />
+            </TalkBtn>
+          )}
         </TalkInputView>
       </TalkContainer>
     </>
@@ -218,6 +220,7 @@ const TalkBtn = styled.TouchableOpacity`
   width: 24px;
   height: 24px;
   border-radius: 50px;
+  background-color: ${colors.primary};
 `;
 
 export default UsTalkTab;
