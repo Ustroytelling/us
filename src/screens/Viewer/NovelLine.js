@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
-import DotMenuCol from "../../assets/Icons/dot-menu-col.svg";
-import Thumbs from "../../assets/Icons/thumbs up like vote.svg";
+import DotMenuCol from "../../assets/icons/dot-menu-col.svg";
+import Thumbs from "../../assets/icons/thumbs up like vote.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import { Path, Svg } from "react-native-svg";

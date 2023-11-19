@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 import UploadePostImg from "../../assets/CreateNovel/createPostIcon.svg";
-import OpenClose from "../../assets/Icons/s_arrow.svg";
+import OpenClose from "../../assets/icons/s_arrow.svg";
 import BeforeCheck from "../../assets/CreateNovel/checkBefore.svg";
 import AfterCheck from "../../assets/CreateNovel/checkAfter.svg";
 import { genreData, hashtagData } from "../../data/NovelData";

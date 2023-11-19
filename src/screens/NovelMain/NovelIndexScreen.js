@@ -3,14 +3,14 @@ import { FlatList, LayoutAnimation, TouchableOpacity, View } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import styled from "styled-components";
-import LeftArrowIcon from "../../assets/Icons/arrow.svg";
-import RightArrowIcon from "../../assets/Icons/s_arrow.svg";
+import LeftArrowIcon from "../../assets/icons/arrow.svg";
+import RightArrowIcon from "../../assets/icons/s_arrow.svg";
 import LikeIcon from "../../assets/NovelMainIcons/heart.svg";
-import FillLikeIcon from "../../assets/Icons/Fill_heart.svg";
+import FillLikeIcon from "../../assets/icons/Fill_heart.svg";
 import PaperFileIcon from "../../assets/NovelMainIcons/paperFile.svg";
 import UpDownIcon from "../../assets/NovelMainIcons/arrowsUpDown.svg";
 import NovelCover from "../../assets/novel_cover.png";
-import NovelNextImg from "../../assets/Icons/NovelNext.svg";
+import NovelNextImg from "../../assets/icons/NovelNext.svg";
 import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";

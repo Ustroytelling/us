@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import BigArrow from "../../assets/Icons/big-arrow.svg";
+import BigArrow from "../../assets/icons/big-arrow.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 

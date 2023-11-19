@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SearchIcon from "../../assets/AppMainIcons/searchIcon.svg";
 import EditIcon from "../../assets/AppMainIcons/editNote.svg";
 import LogoIcon from "../../assets/AppMainIcons/usLogo.svg";
-import GoIcon from "../../assets/Icons/s_arrow.svg";
+import GoIcon from "../../assets/icons/s_arrow.svg";
 import { AlgorithmData, RealTimeData } from "../../data/NovelData";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";

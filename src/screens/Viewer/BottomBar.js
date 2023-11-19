@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
-import Document from "../../assets/Icons/document.svg";
-import BigComment from "../../assets/Icons/big-comment.svg";
-import Text from "../../assets/Icons/Text.svg";
-import PreviousArrow from "../../assets/Icons/previous-arrow.svg";
-import NextArrow from "../../assets/Icons/next-arrow.svg";
+import Document from "../../assets/icons/document.svg";
+import BigComment from "../../assets/icons/big-comment.svg";
+import Text from "../../assets/icons/text.svg";
+import PreviousArrow from "../../assets/icons/previous-arrow.svg";
+import NextArrow from "../../assets/icons/next-arrow.svg";
 import { useState } from "react";
 import TextSetting from "./TextSetting";
 

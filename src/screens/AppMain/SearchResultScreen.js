@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
-import Search from "../../assets/Icons/search.svg";
-import Arrow from "../../assets/Icons/big-arrow.svg";
+import Search from "../../assets/icons/search.svg";
+import Arrow from "../../assets/icons/big-arrow.svg";
 import { useEffect, useState } from "react";
-import Star from "../../assets/Icons/Star 1.svg";
+import Star from "../../assets/icons/Star 1.svg";
 
 const results = [
   {
