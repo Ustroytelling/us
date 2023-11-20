@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import styled from "styled-components";
 import AppMainScreen from "../screens/AppMain/AppMainScreen";
-import AlertScreen from "../screens/Tab/AlertScreen";
+import AlertScreen from "../screens/Alert/AlertScreen";
 import LockerScreen from "../screens/Tab/LockerScreen";
 import HomeIcon from "../assets/BottomIcons/homeMenu3.svg";
 import AlertIcon from "../assets/BottomIcons/onigiriRiceBall.svg";
@@ -18,7 +18,6 @@ const AppMainTab = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-
         tabBarActiveTintColor: "rgba(71, 190, 192, 1)",
         tabBarInactiveTintColor: "rgba(71, 190, 192, 1)",
         tabBarStyle: {
@@ -46,7 +45,7 @@ const AppMainTab = () => {
         component={AlertScreen}
         options={{
           title: "알림",
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <AlertIcon />;
@@ -58,7 +57,7 @@ const AppMainTab = () => {
         component={LockerScreen}
         options={{
           title: "보관함",
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <LocerIcon />;

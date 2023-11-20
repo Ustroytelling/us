@@ -14,8 +14,8 @@ import NovelNextImg from "../../assets/icons/NovelNext.svg";
 import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import ImageColors from "react-native-image-colors";
-import LinearGradient from "react-native-linear-gradient";
+/* import ImageColors from "react-native-image-colors";
+import LinearGradient from "react-native-linear-gradient"; */
 
 const NovelIndexScreen = ({ navigation, route: { params } }) => {
   // console.log(params);
@@ -138,7 +138,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
 
   return (
     <Container>
-      <LinearGradientBox
+      {/* <LinearGradientBox
         start={{ x: 0, y: 2 }}
         end={{ x: 0, y: -0.5 }}
         colors={[
@@ -146,7 +146,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
           rgbColors.background ? rgbColors.background : "transparent",
           rgbColors.secondary ? rgbColors.secondary : "transparent",
         ]}
-      />
+      /> */}
       <NovelHeaderBox>
         <IconBar stay={stay}>
           <LeftIconBox onPress={() => navigation.goBack()}>
@@ -270,12 +270,12 @@ const Container = styled.View`
   position: relative;
 `;
 
-const LinearGradientBox = styled(LinearGradient)`
+/* const LinearGradientBox = styled(LinearGradient)`
   width: 100%;
   height: 50%;
   position: absolute;
   z-index: -2;
-`;
+`; */
 
 const NovelHeaderBox = styled.View`
   justify-content: center;
