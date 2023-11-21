@@ -6,7 +6,7 @@ import LogoIcon from "../../assets/AppMainIcons/usLogo.svg";
 import GoIcon from "../../assets/icons/s_arrow.svg";
 import { AlgorithmData, RealTimeData } from "../../data/NovelData";
 import { FlatList, TouchableOpacity, View } from "react-native";
-/* import LinearGradient from "react-native-linear-gradient"; */
+import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-web-swiper";
 
 const AppMainScreen = ({ navigation }) => {
@@ -59,11 +59,11 @@ const AppMainScreen = ({ navigation }) => {
                 }}
               >
                 <BannerImage source={{ uri: item.image }} />
-                {/* <LinearGradientBox
+                <LinearGradientBox
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
                   colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.9)"]}
-                /> */}
+                />
                 <BannerTextBox>
                   <BannerTitle>{item.name}</BannerTitle>
                   <BannerSubTitle numberOfLines={2}>{item.description}</BannerSubTitle>
@@ -270,14 +270,14 @@ const BannerImage = styled.Image`
   border-radius: 16px;
 `;
 
-/* const LinearGradientBox = styled(LinearGradient)`
+const LinearGradientBox = styled(LinearGradient)`
   position: absolute;
   width: 100%;
   height: 150px;
   bottom: 0px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
-`; */
+`;
 
 const BannerTextBox = styled.View`
   position: absolute;
