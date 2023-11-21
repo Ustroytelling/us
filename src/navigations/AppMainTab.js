@@ -3,12 +3,12 @@ import React from "react";
 import styled from "styled-components";
 import AppMainScreen from "../screens/AppMain/AppMainScreen";
 import AlertScreen from "../screens/Alert/AlertScreen";
-import LockerScreen from "../screens/Tab/LockerScreen";
 import HomeIcon from "../assets/BottomIcons/homeMenu3.svg";
 import AlertIcon from "../assets/BottomIcons/onigiriRiceBall.svg";
 import LocerIcon from "../assets/BottomIcons/creditCard.svg";
 import ProfileIcon from "../assets/BottomIcons/profileUserPerson.svg";
 import MyInfoScreen from "../screens/Profile/MyInfoScreen";
+import StorageScreen from "../screens/Storage/StorageScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +35,8 @@ const AppMainTab = () => {
         component={AppMainScreen}
         options={{
           tabBarLabel: "홈",
+          headerShown: false,
+          headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <HomeIcon />;
           },
@@ -53,8 +55,8 @@ const AppMainTab = () => {
         }}
       />
       <Tab.Screen
-        name="Save"
-        component={LockerScreen}
+        name="Storage"
+        component={StorageScreen}
         options={{
           title: "보관함",
           headerShown: false,
