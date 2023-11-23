@@ -64,6 +64,34 @@ export const novelIndexData = [
       name: "주술회전",
     },
   },
+  {
+    novel: {
+      id: "10",
+      image: NovelCover,
+      name: "주술회전",
+    },
+  },
+  {
+    novel: {
+      id: "11",
+      image: NovelCover,
+      name: "주술회전",
+    },
+  },
+  {
+    novel: {
+      id: "12",
+      image: NovelCover,
+      name: "주술회전",
+    },
+  },
+  {
+    novel: {
+      id: "13",
+      image: NovelCover,
+      name: "주술회전",
+    },
+  },
 ];
 
 export const hashtagData = [

@@ -8,14 +8,14 @@ const AlertPost = (props) => {
 
   return (
     <Container style={idx !== 0 && { borderTopWidth: 1, borderTopColor: colors.grey5 }}>
-      {type === "update" || type === "add" ? (
-        <Thumbnail>
-          <ThumbnailImage src={image} />
-        </Thumbnail>
-      ) : (
+      {type === "like" ? (
         <Profile>
           <ProfileImage src={image} />
         </Profile>
+      ) : (
+        <Thumbnail>
+          <ThumbnailImage src={image} />
+        </Thumbnail>
       )}
       <Description>
         <Title>{title}</Title>

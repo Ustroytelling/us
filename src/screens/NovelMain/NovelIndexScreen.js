@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, LayoutAnimation, TouchableOpacity, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BottomSheet from "@gorhom/bottom-sheet";
-import styled from "styled-components";
+import { FlatList, TouchableOpacity, View, LayoutAnimation, Dimensions } from "react-native";
+import styled from "styled-components/native";
 import LeftArrowIcon from "../../assets/icons/arrow.svg";
 import RightArrowIcon from "../../assets/icons/s_arrow.svg";
 import LikeIcon from "../../assets/NovelMainIcons/heart.svg";
@@ -16,34 +14,29 @@ import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import ImageColors from "react-native-image-colors";
 import LinearGradient from "react-native-linear-gradient";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet from "@gorhom/bottom-sheet";
+import Modal from "react-native-modal";
 
 const NovelIndexScreen = ({ navigation, route: { params } }) => {
   // console.log(params);
   const [order, setOrder] = useState(false);
   const [stay, setStay] = useState(false);
   const [star, setStar] = useState(false);
-
-  // ref
-  const bottomSheetRef = useRef(null);
-
-  // variables
-  const snapPoints = useMemo(() => ["72%", "99%"], []);
-
-  // callbacks
-  const handleSheetChanges = useCallback(
-    (index) => {
-      setStay(index === 1);
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    },
-    [setStay],
-  );
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   // ref
   const bottomSheetRef2 = useRef(null);
+  const snapPoints2 = useMemo(() => ["1%", "75%"], []);
+  const handleSheetChanges2 = useCallback((index) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+    setBottomSheetVisible(index === 1);
+  }, []);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
-    bottomSheetRef2.current?.expand();
+    bottomSheetRef2.current?.expand(); // 모달이 열릴 때 85%로 바텀 시트를 열도록
+    setBottomSheetVisible(true);
   }, []);
 
   const [backgroundColor, setBackgroundColor] = useState({
@@ -137,137 +130,141 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
   }, [backgroundColor]);
 
   return (
-    <Container>
-      <LinearGradientBox
-        start={{ x: 0, y: 2 }}
-        end={{ x: 0, y: -0.5 }}
-        colors={[
-          rgbColors.primary ? rgbColors.primary : "transparent",
-          rgbColors.background ? rgbColors.background : "transparent",
-          rgbColors.secondary ? rgbColors.secondary : "transparent",
-        ]}
-      />
-      <NovelHeaderBox>
-        <IconBar stay={stay}>
-          <LeftIconBox onPress={() => navigation.goBack()}>
-            <LeftArrowIcon width={32} height={32} />
-          </LeftIconBox>
-          <RightIconBox>
-            <BellIconBox>
-              <SimpleLineIcons name="bell" size={19} color="rgba(255, 255, 255, 1)" />
-            </BellIconBox>
-            <LikeIconBox onPress={() => setStar(!star)}>
-              {star === false ? <LikeIcon width={32} height={32} /> : <FillLikeIcon width={32} height={32} />}
-            </LikeIconBox>
+    <>
+      <Container>
+        <LinearGradientBox
+          start={{ x: 0, y: 2 }}
+          end={{ x: 0, y: -0.5 }}
+          colors={[
+            rgbColors.primary ? rgbColors.primary : "transparent",
+            rgbColors.background ? rgbColors.background : "transparent",
+            rgbColors.secondary ? rgbColors.secondary : "transparent",
+          ]}
+        />
+        <NovelHeaderBox>
+          <IconBar stay={stay}>
+            <LeftIconBox onPress={() => navigation.goBack()}>
+              <LeftArrowIcon width={32} height={32} />
+            </LeftIconBox>
+            <RightIconBox>
+              <BellIconBox>
+                <SimpleLineIcons name="bell" size={19} color="rgba(255, 255, 255, 1)" />
+              </BellIconBox>
+              <LikeIconBox onPress={() => setStar(!star)}>
+                {star === false ? <LikeIcon width={32} height={32} /> : <FillLikeIcon width={32} height={32} />}
+              </LikeIconBox>
 
-            <PaperFileIconBox>
-              <PaperFileIcon width={32} height={32} />
-            </PaperFileIconBox>
-          </RightIconBox>
-        </IconBar>
-        <NovelCoverImg source={params ? { uri: params.image } : NovelCover} />
-      </NovelHeaderBox>
+              <PaperFileIconBox>
+                <PaperFileIcon width={32} height={32} />
+              </PaperFileIconBox>
+            </RightIconBox>
+          </IconBar>
+          <NovelCoverImg source={params ? { uri: params.image } : NovelCover} />
+        </NovelHeaderBox>
 
-      <WhiteBack />
+        <View style={{ marginTop: -18 }}>
+          <NovelIndexBody>
+            <NovelTitleContainer>
+              <NovelTitleBox>
+                <NovelTitle>{params ? params.name : "주술회전 1"}</NovelTitle>
+                <NovelInfoBtn onPress={handlePresentModalPress}>
+                  <RightArrowIcon width={24} height={24} style={{ transform: [{ rotateY: "180deg" }] }} />
+                </NovelInfoBtn>
+              </NovelTitleBox>
 
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            handleIndicatorStyle={{
-              display: "none",
-            }}
-          >
-            <NovelIndexBody>
-              <NovelTitleContainer>
-                <NovelTitleBox>
-                  <NovelTitle>{params ? params.name : "주술회전 1"}</NovelTitle>
-                  <NovelInfoBtn onPress={handlePresentModalPress}>
-                    <RightArrowIcon width={24} height={24} style={{ transform: [{ rotateY: "180deg" }] }} />
-                  </NovelInfoBtn>
-                </NovelTitleBox>
+              <NovelSubTitleBox>
+                <NovelSubBox1>
+                  <NovelSubText>학원물</NovelSubText>
+                  <Line />
+                  <NovelSubText>{params ? params.name : "홍길동"} 외 n명</NovelSubText>
+                </NovelSubBox1>
+                <NovelSubBox2>
+                  <TouchableOpacity>
+                    <NovelSubText>댓글 00</NovelSubText>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <NovelSubText>공유하기</NovelSubText>
+                  </TouchableOpacity>
+                </NovelSubBox2>
+              </NovelSubTitleBox>
 
-                <NovelSubTitleBox>
-                  <NovelSubBox1>
-                    <NovelSubText>학원물</NovelSubText>
-                    <Line />
-                    <NovelSubText>{params ? params.name : "홍길동"} 외 n명</NovelSubText>
-                  </NovelSubBox1>
-                  <NovelSubBox2>
-                    <TouchableOpacity>
-                      <NovelSubText>댓글 00</NovelSubText>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <NovelSubText>공유하기</NovelSubText>
-                    </TouchableOpacity>
-                  </NovelSubBox2>
-                </NovelSubTitleBox>
+              <NovelHashtagBox>
+                {hashtagData.map((d, id) => (
+                  <NovelHashtag key={id}>
+                    <NovelHashtagText>#{d.tag}</NovelHashtagText>
+                  </NovelHashtag>
+                ))}
+              </NovelHashtagBox>
+            </NovelTitleContainer>
 
-                <NovelHashtagBox>
-                  {hashtagData.map((d, id) => (
-                    <NovelHashtag key={id}>
-                      <NovelHashtagText>#{d.tag}</NovelHashtagText>
-                    </NovelHashtag>
-                  ))}
-                </NovelHashtagBox>
-              </NovelTitleContainer>
-
-              <NovelOrderBox>
-                <NovelAllCountText>전체 000</NovelAllCountText>
-                <NovelOrder>
-                  <NovelOrderBtn style={{ marginRight: 8 }} onPress={() => setOrder(!order)}>
-                    <UpDownIcon width={24} height={24} />
-                    {order === false ? (
-                      <NovelOrderText>최신순</NovelOrderText>
-                    ) : (
-                      <NovelOrderText>오래된 순</NovelOrderText>
-                    )}
-                  </NovelOrderBtn>
-                </NovelOrder>
-              </NovelOrderBox>
-
-              <NovelIndexContainer stay={stay}>
-                <FlatList
-                  data={novelIndexData}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={heightEmpty}
-                  inverted={order === false ? false : true}
-                  keyExtractor={(item) => item.novel.id + ""}
-                  renderItem={({ item }) => (
-                    <NovelIndexBox onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })}>
-                      <NovelIndexImg source={item.novel.image} />
-                      <NovelIndexTextBox>
-                        <NovelIndexTitle>
-                          {item.novel.name} {item.novel.id}화
-                        </NovelIndexTitle>
-                        <NovelIndexDate>2023.01.01</NovelIndexDate>
-                      </NovelIndexTextBox>
-                    </NovelIndexBox>
+            <NovelOrderBox>
+              <NovelAllCountText>전체 000</NovelAllCountText>
+              <NovelOrder>
+                <NovelOrderBtn style={{ marginRight: 8 }} onPress={() => setOrder(!order)}>
+                  <UpDownIcon width={24} height={24} />
+                  {order === false ? (
+                    <NovelOrderText>최신순</NovelOrderText>
+                  ) : (
+                    <NovelOrderText>오래된 순</NovelOrderText>
                   )}
-                  ListFooterComponent={
-                    <NovelNextMakeBox order={order}>
-                      <NovelNextImg width={56} height={80} />
-                      <NovelNextText>다음화를 생성해주세요</NovelNextText>
-                    </NovelNextMakeBox>
-                  }
-                />
-              </NovelIndexContainer>
-            </NovelIndexBody>
-          </BottomSheet>
-          <NovelInfoTab bottomSheetRef2={bottomSheetRef2} />
+                </NovelOrderBtn>
+              </NovelOrder>
+            </NovelOrderBox>
+
+            <NovelIndexContainer stay={stay}>
+              <FlatList
+                data={novelIndexData}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={({ item, idx }) => (
+                  <NovelIndexBox
+                    style={{ marginTop: idx === 0 ? 0 : 16 }}
+                    onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })}
+                  >
+                    <NovelIndexImg source={item.novel.image} />
+                    <NovelIndexTextBox>
+                      <NovelIndexTitle>
+                        {item.novel.name} {item.novel.id}화
+                      </NovelIndexTitle>
+                      <NovelIndexDate>2023.01.01</NovelIndexDate>
+                    </NovelIndexTextBox>
+                  </NovelIndexBox>
+                )}
+              />
+              <NovelNextMakeBox order={order}>
+                <NovelNextImg width={56} height={80} />
+                <NovelNextText>다음화를 생성해주세요</NovelNextText>
+              </NovelNextMakeBox>
+            </NovelIndexContainer>
+          </NovelIndexBody>
         </View>
-      </GestureHandlerRootView>
-    </Container>
+      </Container>
+      <Modal isVisible={bottomSheetVisible} style={{ margin: 0, flex: 1 }} backdropOpacity={0.35}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheet
+            ref={bottomSheetRef2}
+            index={1}
+            snapPoints={snapPoints2}
+            onChange={handleSheetChanges2}
+            handleIndicatorStyle={{
+              backgroundColor: "rgba(219, 219, 219, 1)",
+              width: 80,
+            }}
+            style={
+              {
+                /* marginTop: 164, */
+              }
+            }
+          >
+            <NovelInfoTab />
+          </BottomSheet>
+        </GestureHandlerRootView>
+      </Modal>
+    </>
   );
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
-  padding-top: 44px;
-  position: relative;
 `;
 
 const LinearGradientBox = styled(LinearGradient)`
@@ -278,6 +275,7 @@ const LinearGradientBox = styled(LinearGradient)`
 `;
 
 const NovelHeaderBox = styled.View`
+  margin-top: 8px;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -319,34 +317,23 @@ const PaperFileIconBox = styled.TouchableOpacity`
 `;
 
 const NovelCoverImg = styled.Image`
-  width: 160px;
-  height: 224px;
-  top: 36px;
+  margin-top: 4px;
+  width: 146px;
+  height: 204px;
   border-radius: 4px;
-  position: absolute;
-`;
-
-const WhiteBack = styled.View`
-  background-color: white;
-  width: 100%;
-  height: 140px;
-  top: 31.5%;
-  position: absolute;
-  z-index: -1;
-  border-width: 1px;
-  border-color: rgba(225, 225, 225, 1);
-  border-top-right-radius: 16px;
-  border-top-left-radius: 16px;
+  z-index: 0;
 `;
 
 const NovelIndexBody = styled.View`
+  padding-top: 18px;
+  border-radius: 16px 16px 0 0;
   background-color: white;
-  height: 1000px;
+  z-index: -1;
 `;
 
 const NovelTitleContainer = styled.View`
   margin: 0px 16px;
-  margin-top: 0px;
+  margin-top: 18px;
   border-bottom-width: 1px;
   border-color: rgba(219, 219, 219, 1);
   padding-bottom: 16px;
@@ -454,11 +441,12 @@ const NovelOrderText = styled.Text`
 `;
 
 const NovelIndexContainer = styled.View`
+  margin-top: 6px;
   padding: 0px 16px;
   width: 100%;
-  height: ${(props) => (props.stay ? "69%" : "42%")};
+  gap: 16px;
 `;
-
+const NovelIndexList = styled.View``;
 const NovelIndexBox = styled.TouchableOpacity`
   flex-direction: row;
   height: 80px;
@@ -488,16 +476,11 @@ const NovelIndexDate = styled.Text`
   color: rgba(32, 32, 32, 1);
 `;
 
-const heightEmpty = styled.View`
-  height: 16px;
-`;
-
 const NovelNextMakeBox = styled.TouchableOpacity`
-  background-color: rgba(248, 248, 248, 1);
   flex-direction: row;
   align-items: center;
-  margin-bottom: ${(props) => props.order === true && "16px"};
-  margin-top: ${(props) => props.order === false && "16px"};
+  margin-bottom: 40px;
+  background-color: rgba(248, 248, 248, 1);
 `;
 
 const NovelNextText = styled.Text`
@@ -506,6 +489,14 @@ const NovelNextText = styled.Text`
   line-height: 22px;
   color: rgba(32, 32, 32, 1);
   margin-left: 16px;
+`;
+const ModalContainer = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
 `;
 
 export default NovelIndexScreen;

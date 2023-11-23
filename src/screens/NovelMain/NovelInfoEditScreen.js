@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Alert } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 const NovelInfoEditScreen = ({ setEdit }) => {
   const [novelInfo, setNovelInfo] = useState("");
@@ -12,12 +13,13 @@ const NovelInfoEditScreen = ({ setEdit }) => {
   };
 
   return (
-    <Container showsVerticalScrollIndicator={false} onPress={() => keyboard.dismiss()} ref={scrollRef}>
+    <BottomSheetScrollView showsVerticalScrollIndicator={false} onPress={() => keyboard.dismiss()} ref={scrollRef}>
       <InfoBox style={{ marginTop: 16 }}>
         <InfoTitleText>작품 소개</InfoTitleText>
         <IfoInputBox>
           <InfoTextInput
             value={novelInfo}
+            textAlignVertical="top"
             placeholder="작품 소개를 입력해 주세요."
             placeholderTextColor="gray"
             keyboardType="default"
@@ -39,6 +41,7 @@ const NovelInfoEditScreen = ({ setEdit }) => {
         <IfoInputBox>
           <InfoTextInput
             value={writerInfo}
+            textAlignVertical="top"
             placeholder="작가 소개를 입력해 주세요."
             placeholderTextColor="gray"
             keyboardType="default"
@@ -105,7 +108,7 @@ const NovelInfoEditScreen = ({ setEdit }) => {
           </EditBtn>
         </EditBox>
       </MoreInfoContainer>
-    </Container>
+    </BottomSheetScrollView>
   );
 };
 

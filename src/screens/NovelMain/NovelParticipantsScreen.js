@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import LikeEmoji from "../../assets/icons/likeEmoji.svg";
 import Star from "../../assets/icons/star.svg";
 import Number1 from "../../assets/icons/number1.svg";
@@ -8,36 +8,40 @@ import Number2 from "../../assets/icons/number2.svg";
 import Number3 from "../../assets/icons/number3.svg";
 import User from "../../assets/icons/infouser.svg";
 import { ParticipantData } from "../../data/NovelData";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { colors } from "../../assets/color";
 
 const NovelParticipantsScreen = () => {
   return (
-    <Container>
-      <FlatList
-        data={ParticipantData}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={heightEmpty}
-        keyExtractor={(item) => item.id + ""}
-        renderItem={({ item }) => (
-          <ParticipantsBox>
-            <LikeEmojiBox>
-              <LikeEmoji width={16} height={16} />
-            </LikeEmojiBox>
-            <ParticipantText>
-              {item.name} | {item.share} {item.rank}등!
-            </ParticipantText>
-            {item.rank === "1" && (
-              <>
-                <Number1 width={24} height={24} />
-                <Star width={24} height={24} />
-              </>
-            )}
-            {item.rank === "2" && <Number2 width={24} height={24} />}
-            {item.rank === "3" && <Number3 width={24} height={24} />}
-            {item.manager === true && <User width={24} height={24} />}
-          </ParticipantsBox>
-        )}
-      />
-    </Container>
+    <BottomSheetScrollView style={{ flex: 1, backgroundColor: colors.white }}>
+      <Container>
+        <FlatList
+          data={ParticipantData}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={heightEmpty}
+          keyExtractor={(item) => item.id + ""}
+          renderItem={({ item }) => (
+            <ParticipantsBox>
+              <LikeEmojiBox>
+                <LikeEmoji width={16} height={16} />
+              </LikeEmojiBox>
+              <ParticipantText>
+                {item.name} | {item.share} {item.rank}등!
+              </ParticipantText>
+              {item.rank === "1" && (
+                <>
+                  <Number1 width={24} height={24} />
+                  <Star width={24} height={24} />
+                </>
+              )}
+              {item.rank === "2" && <Number2 width={24} height={24} />}
+              {item.rank === "3" && <Number3 width={24} height={24} />}
+              {item.manager === true && <User width={24} height={24} />}
+            </ParticipantsBox>
+          )}
+        />
+      </Container>
+    </BottomSheetScrollView>
   );
 };
 
