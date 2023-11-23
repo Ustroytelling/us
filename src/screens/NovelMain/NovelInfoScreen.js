@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { ScrollView } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import NovelInfoEditScreen from "./NovelInfoEditScreen";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 const NovelInfoScreen = () => {
   const [edit, setEdit] = useState(false);
@@ -14,7 +15,7 @@ const NovelInfoScreen = () => {
   return (
     <Container>
       {edit === false ? (
-        <ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
+        <BottomSheetScrollView style={{ flex: 1 }} scrollEnabled={true}>
           <InfoBox style={{ marginTop: 16 }}>
             <InfoTitleText>작품 소개</InfoTitleText>
             <InfoText>
@@ -22,7 +23,11 @@ const NovelInfoScreen = () => {
               회계연도마다 예산안을 편성하여 회계연도 개시 90일전까지 국회에 제출하고, 국회는 회계연도 개시 30일전까지
               이를 의결하여야 한다. 행정각부의 설치·조직과 직무범위는 법률로 정한다. 국가는 지역간의 균형있는 발전을
               위하여 지역경제를 육성할 의무를 진다. 탄핵결정은 공직으로부터 파면함에 그친다. 그러나, 이에 의하여
-              민사상이나 형사상의 책임이 면제되
+              민사상이나 형사상의 책임이 면제되 정부는 예산에 변경을 가할 필요가 있을 때에는 추가경정예산안을 편성하여
+              국회에 제출할 수 있다. 정부는 회계연도마다 예산안을 편성하여 회계연도 개시 90일전까지 국회에 제출하고,
+              국회는 회계연도 개시 30일전까지 이를 의결하여야 한다. 행정각부의 설치·조직과 직무범위는 법률로 정한다.
+              국가는 지역간의 균형있는 발전을 위하여 지역경제를 육성할 의무를 진다. 탄핵결정은 공직으로부터 파면함에
+              그친다. 그러나, 이에 의하여 민사상이나 형사상의 책임이 면제되
             </InfoText>
           </InfoBox>
           <InfoBox style={{ marginTop: 8 }}>
@@ -57,7 +62,7 @@ const NovelInfoScreen = () => {
               </EditBtn>
             </EditBox>
           </MoreInfoContainer>
-        </ScrollView>
+        </BottomSheetScrollView>
       ) : (
         <NovelInfoEditScreen setEdit={setEdit} />
       )}
@@ -67,7 +72,6 @@ const NovelInfoScreen = () => {
 
 const Container = styled.View`
   flex: 1;
-  height: 100%;
   background-color: rgba(255, 255, 255, 1);
 `;
 

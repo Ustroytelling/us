@@ -1,14 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import styled from "styled-components";
 import AppMainScreen from "../screens/AppMain/AppMainScreen";
 import AlertScreen from "../screens/Alert/AlertScreen";
 import HomeIcon from "../assets/BottomIcons/homeMenu3.svg";
 import AlertIcon from "../assets/BottomIcons/onigiriRiceBall.svg";
-import LocerIcon from "../assets/BottomIcons/creditCard.svg";
+import AlertBlackIcon from "../assets/BottomIcons/onigiri rice ball black.svg";
+import StorageIcon from "../assets/BottomIcons/creditCard.svg";
 import ProfileIcon from "../assets/BottomIcons/profileUserPerson.svg";
 import MyInfoScreen from "../screens/Profile/MyInfoScreen";
 import StorageScreen from "../screens/Storage/StorageScreen";
+import { colors } from "../assets/color";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,11 +20,12 @@ const AppMainTab = () => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "rgba(71, 190, 192, 1)",
-        tabBarInactiveTintColor: "rgba(71, 190, 192, 1)",
+        tabBarInactiveTintColor: colors.grey1,
         tabBarStyle: {
           backgroundColor: "white",
         },
         tabBarLabelStyle: {
+          marginTop: -4,
           textAlign: "center",
           fontSize: 10,
           fontWeight: 400,
@@ -38,7 +40,7 @@ const AppMainTab = () => {
           headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
-            return <HomeIcon />;
+            return <HomeIcon fill={focused ? colors.strong : colors.grey1} />;
           },
         }}
       />
@@ -50,7 +52,7 @@ const AppMainTab = () => {
           headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
-            return <AlertIcon />;
+            return focused ? <AlertIcon /> : <AlertBlackIcon />;
           },
         }}
       />
@@ -62,7 +64,7 @@ const AppMainTab = () => {
           headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
-            return <LocerIcon />;
+            return <StorageIcon fill={focused ? colors.strong : colors.grey1} />;
           },
         }}
       />
@@ -74,16 +76,12 @@ const AppMainTab = () => {
           headerShown: false,
           headerShadowVisible: false,
           tabBarIcon: ({ focused, color, size }) => {
-            return <ProfileIcon />;
+            return <ProfileIcon fill={focused ? colors.strong : colors.grey1} />;
           },
         }}
       />
     </Tab.Navigator>
   );
 };
-
-const SetupButton = styled.TouchableOpacity`
-  margin-right: 20px;
-`;
 
 export default AppMainTab;

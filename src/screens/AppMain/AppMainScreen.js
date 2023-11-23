@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import SearchIcon from "../../assets/AppMainIcons/searchIcon.svg";
 import EditIcon from "../../assets/AppMainIcons/editNote.svg";
@@ -8,11 +8,14 @@ import { AlgorithmData, RealTimeData } from "../../data/NovelData";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-web-swiper";
+import { Dimensions } from "react-native";
+
+const screenWidth = Dimensions.get("window").width;
+const novelWidth = (screenWidth - 40) / 3;
 
 const AppMainScreen = ({ navigation }) => {
   const swiperRef = useRef(null);
   const [swiper, setSwiper] = useState(0);
-
   const onGoNovel = () => {
     navigation.navigate("NovelStack", { screen: "NovelIndex" });
   };
@@ -86,14 +89,14 @@ const AppMainScreen = ({ navigation }) => {
               <GoIcon style={{ transform: [{ rotateY: "180deg" }] }} />
             </TouchableOpacity>
           </RealTimeHeader>
-          <RealTimeDataBox>
+          <RealTimeDataBox alTimeDataBox>
             <RealTimeBox onPress={onGoNovel}>
               <RealTimeImg
                 source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
               />
               <RealTimeName>소설 제목</RealTimeName>
             </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel} style={{ marginHorizontal: 4 }}>
+            <RealTimeBox onPress={onGoNovel}>
               <RealTimeImg
                 source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
               />
@@ -169,30 +172,31 @@ const AppMainScreen = ({ navigation }) => {
           </NewNovelDataScroll>
         </RealTimeContainer>
 
-        <RealTimeContainer>
-          <RealTimeHeader>
+        <ReadNovelContainer>
+          <ReadNovelHeader>
             <RealTimeText>읽은 소설</RealTimeText>
             <TouchableOpacity>
               <GoIcon style={{ transform: [{ rotateY: "180deg" }] }} />
             </TouchableOpacity>
-          </RealTimeHeader>
-          <FlatList
-            data={RealTimeData}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <RealTimeBox
-                onPress={() => {
-                  navigation.navigate("NovelStack", { screen: "NovelIndex", params: item });
-                }}
-                style={{ marginRight: 4 }}
-              >
-                <RealTimeImg source={{ uri: item.image }} />
-                <RealTimeName>{item.name}</RealTimeName>
-              </RealTimeBox>
-            )}
-          />
-        </RealTimeContainer>
+          </ReadNovelHeader>
+          <ReadNovelList horizontal={true}>
+            <ReadNovels>
+              {RealTimeData.map((data, idx) => {
+                return (
+                  <RealTimeBox
+                    onPress={() => {
+                      navigation.navigate("NovelStack", { screen: "NovelIndex", params: data });
+                    }}
+                    key={idx}
+                  >
+                    <RealTimeImg source={{ uri: data.image }} />
+                    <RealTimeName numberOfLines={1}>{data.name}</RealTimeName>
+                  </RealTimeBox>
+                );
+              })}
+            </ReadNovels>
+          </ReadNovelList>
+        </ReadNovelContainer>
       </MainScroll>
     </Container>
   );
@@ -201,7 +205,6 @@ const AppMainScreen = ({ navigation }) => {
 const Container = styled.View`
   flex: 1;
   background-color: rgba(255, 255, 255, 1);
-  padding-top: 44px;
 `;
 
 const HeaderContainer = styled.View`
@@ -247,13 +250,14 @@ const AlgorithmBtn = styled.TouchableOpacity`
   border-width: 1px;
   border-color: rgba(219, 219, 219, 1);
   border-radius: 50px;
-  padding: 8px 12px;
+  padding: 4px 12px;
   margin-right: 8px;
 `;
 
 const AlgorithmText = styled.Text`
   font-weight: 400;
   font-size: 14px;
+  line-height: 22px;
   color: rgba(32, 32, 32, 1);
 `;
 
@@ -314,7 +318,7 @@ const BannerNumberText = styled.Text`
 `;
 
 const RealTimeContainer = styled.View`
-  margin: 16px;
+  padding: 16px;
 `;
 
 const RealTimeHeader = styled.View`
@@ -334,14 +338,17 @@ const RealTimeText = styled.Text`
 
 const RealTimeDataBox = styled.View`
   flex-direction: row;
+  gap: 4px;
   width: 100%;
   height: 202px;
 `;
 
-const RealTimeBox = styled.TouchableOpacity``;
+const RealTimeBox = styled.TouchableOpacity`
+  width: ${novelWidth}px;
+`;
 
 const RealTimeImg = styled.Image`
-  width: 129px;
+  width: 100%;
   height: 176px;
   border-radius: 4px;
   margin-bottom: 4px;
@@ -356,7 +363,20 @@ const RealTimeName = styled.Text`
 `;
 
 const NewNovelDataScroll = styled.View``;
-
 const HorizontalView = styled.ScrollView``;
+const ReadNovelContainer = styled.View``;
+const ReadNovelHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px;
+  margin: 0 16px 8px;
+`;
+const ReadNovelList = styled.ScrollView``;
+const ReadNovels = styled.View`
+  flex-direction: row;
+  gap: 4px;
+  padding: 0 16px;
+`;
 
 export default AppMainScreen;

@@ -8,7 +8,7 @@ const StorageScreen = () => {
     <Container>
       <TitleView>
         <Title>
-          <TitleText>알림</TitleText>
+          <TitleText>보관함</TitleText>
         </Title>
       </TitleView>
       <StorageTab />
