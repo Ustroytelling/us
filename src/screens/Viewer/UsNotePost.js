@@ -27,7 +27,7 @@ const UsNotePost = (props) => {
       <Container>
         <ProfileImage src={post.image} />
         <MainView>
-          <ContentText>{post.content}</ContentText>
+          <ContentText numberOfLines={5}>{post.content}</ContentText>
           <ProfileSnapshotView>
             <ProfileView>
               <Nickname>{`${post.nickname} | ${post.date}`}</Nickname>
