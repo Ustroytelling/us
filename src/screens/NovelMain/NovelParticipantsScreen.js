@@ -11,35 +11,28 @@ import { ParticipantData } from "../../data/NovelData";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { colors } from "../../assets/color";
 
+const myNickname = "마바";
+
 const NovelParticipantsScreen = () => {
   return (
     <BottomSheetScrollView style={{ flex: 1, backgroundColor: colors.white }}>
       <Container>
-        <FlatList
-          data={ParticipantData}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={heightEmpty}
-          keyExtractor={(item) => item.id + ""}
-          renderItem={({ item }) => (
+        {ParticipantData.map((data) => {
+          return (
             <ParticipantsBox>
               <LikeEmojiBox>
                 <LikeEmoji width={16} height={16} />
               </LikeEmojiBox>
-              <ParticipantText>
-                {item.name} | {item.share} {item.rank}등!
+              <ParticipantText style={myNickname === data.name && { color: colors.strong }}>
+                {data.name} | {data.share} {data.rank}등!
               </ParticipantText>
-              {item.rank === "1" && (
-                <>
-                  <Number1 width={24} height={24} />
-                  <Star width={24} height={24} />
-                </>
-              )}
-              {item.rank === "2" && <Number2 width={24} height={24} />}
-              {item.rank === "3" && <Number3 width={24} height={24} />}
-              {item.manager === true && <User width={24} height={24} />}
+              {data.rank === "1" && <Number1 width={24} height={24} />}
+              {data.rank === "2" && <Number2 width={24} height={24} />}
+              {data.rank === "3" && <Number3 width={24} height={24} />}
+              {data.manager === true && <Star width={24} height={24} />}
             </ParticipantsBox>
-          )}
-        />
+          );
+        })}
       </Container>
     </BottomSheetScrollView>
   );
@@ -47,9 +40,8 @@ const NovelParticipantsScreen = () => {
 
 const Container = styled.View`
   flex: 1;
-  background-color: rgba(255, 255, 255, 1);
-  padding-top: 16px;
-  padding-bottom: 30px;
+  padding: 16px 0 30px;
+  gap: 8px;
 `;
 
 const ParticipantsBox = styled.View`
