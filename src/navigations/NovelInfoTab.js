@@ -16,9 +16,14 @@ const NovelInfoTab = () => {
           tabBarActiveTintColor: "rgba(32, 32, 32, 1)",
           tabBarInactiveTintColor: "rgba(32, 32, 32, 1)",
           tabBarStyle: {
+            height: 38,
             backgroundColor: "white",
+            shadowColor: colors.white,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.grey5,
           },
           tabBarLabelStyle: {
+            marginTop: -8,
             textAlign: "center",
             fontSize: 16,
             fontWeight: 500,
