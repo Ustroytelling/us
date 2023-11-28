@@ -13,7 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Buttons from "./Buttons";
 import Proposals from "./Proposals";
-import BigX from "../../assets/icons/big-x.svg";
 import StarRating from "./StarRating";
 import BottomBar from "./BottomBar";
 import Comments from "./Comments";
@@ -21,6 +20,13 @@ import Confirm from "./Confirm";
 import UsNote from "./UsNote";
 import LikeBtn from "./LikeBtn";
 import { View } from "react-native";
+import TopBar from "./TopBar";
+
+const bestNovelLine = {
+  nickname: "흰둥이",
+  content:
+    "구성원으로서 국정을 심의한다. 대통령은국무총리·국무위원·행정각부의 장 기타 법률이 정하는 공사의 직을 겸할 수 없다. 국토와 자원은\n보호를 받으며, 국가는 그 균형있는 개발과 이용을 위하여 필요한 계획을 수립한다. 국가안전보장에 관련되는\n대외정책·군사정책과 국내정책의 수립에 관하여 국무회의의 심 국교는 인정되지 아니하며,",
+};
 
 const novelLines = [
   {
@@ -97,6 +103,7 @@ const ViewerScreen = ({ navigation }) => {
   const onCloseUsNote = () => setIsUsNoteVisible(false);
   const onOpenLikeBtn = () => setIsLikeBtnVisible(true);
   const onCloseLikeBtn = () => setIsLikeBtnVisible(false);
+  const onGoBack = () => navigation.goBack();
 
   // api에서 폰트 사이즈 가져와야 함
   return (
@@ -108,14 +115,7 @@ const ViewerScreen = ({ navigation }) => {
         <StarRating isVisible={isRatingVisible} onCloseRating={onCloseRating} />
         <Confirm isVisible={isConfirmVisible} onCloseConfirm={onCloseConfirm} />
         <UsNote isVisible={isUsNoteVisible} onCloseUsNote={onCloseUsNote} />
-        {barVisible && (
-          <TopBar>
-            <CloseButton onPress={() => navigation.goBack()}>
-              <BigX />
-            </CloseButton>
-            <TitleText>주술회전 1화</TitleText>
-          </TopBar>
-        )}
+        {barVisible && <TopBar onGoBack={onGoBack} />}
         <ScrollContainer>
           <TouchScreen onPress={onTouchScreen} activeOpacity={1}>
             <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }} resetScrollToCoords={{ x: 0, y: 0 }}>
@@ -134,6 +134,14 @@ const ViewerScreen = ({ navigation }) => {
                       </View>
                     );
                   })}
+                  {bestNovelLine && (
+                    <NovelLine
+                      page={"viewer"}
+                      info={bestNovelLine}
+                      onTouchMenu={onTouchMenu}
+                      onOpenProposals={onOpenProposals}
+                    />
+                  )}
                   {notConfirmLine && (
                     <NovelLine
                       page={"viewer"}
@@ -239,26 +247,6 @@ const ScrollContainer = styled.ScrollView`
 `;
 const TouchScreen = styled.TouchableOpacity`
   flex: 1;
-`;
-const TopBar = styled.View`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-  padding: 0 8px;
-  height: 48px;
-  border-bottom-color: ${colors.grey6};
-  border-bottom-width: 1px;
-`;
-const CloseButton = styled.TouchableOpacity``;
-const TitleText = styled.Text`
-  font-size: ${fontSize.body1};
-  font-weight: ${fontWeight.bold};
-  line-height: 22px;
-  color: ${colors.mainText};
 `;
 const MainContainer = styled.View`
   flex: 1;

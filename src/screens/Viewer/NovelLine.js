@@ -6,9 +6,12 @@ import { fontSize, fontWeight } from "../../assets/font";
 import { Path, Svg } from "react-native-svg";
 import { useState } from "react";
 
+const myNickname = "유리";
+
 const NovelLine = (props) => {
   const { page, info, onTouchMenu, onOpenProposals } = props;
   const [fold, setFold] = useState(true);
+  const myNovelLine = info.nickname === myNickname;
   const [isTextOverflowed, setIsTextOverflowed] = useState(false);
   const onPressUnfold = () => {
     setFold(!fold);
@@ -19,7 +22,7 @@ const NovelLine = (props) => {
   };
 
   return (
-    <ContentView>
+    <ContentView style={myNovelLine && { borderColor: colors.strong }}>
       <ProfileView>
         <UserStateView>
           <Nickname>{info.nickname}</Nickname>
@@ -61,9 +64,9 @@ const NovelLine = (props) => {
             <ButtonText>제안보기</ButtonText>
           </Button>
         )}
-        {page !== "viewer" && isTextOverflowed && fold && (
+        {page !== "viewer" && isTextOverflowed && (
           <Button style={{ paddingLeft: 8 }} onPress={onPressUnfold}>
-            <ButtonText>펼쳐보기</ButtonText>
+            <ButtonText>{fold ? "펼쳐보기" : "접기"}</ButtonText>
           </Button>
         )}
       </NovelLineBtns>
