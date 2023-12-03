@@ -21,7 +21,7 @@ const AppMainStack = () => {
         component={NewNevelScreen}
         options={{
           title: "작품 생성",
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
         }}
       />

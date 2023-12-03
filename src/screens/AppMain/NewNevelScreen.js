@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import UploadePostImg from "../../assets/CreateNovel/createPostIcon.svg";
 import OpenClose from "../../assets/icons/s_arrow.svg";
 import BeforeCheck from "../../assets/CreateNovel/checkBefore.svg";
 import AfterCheck from "../../assets/CreateNovel/checkAfter.svg";
 import { genreData, hashtagData } from "../../data/NovelData";
 import * as ImagePicker from "expo-image-picker";
+import { colors } from "../../assets/color";
+import LeftArrow from "../../assets/icons/angle arrow left.svg";
+import { fontSize, fontWeight } from "../../assets/font";
+import CancelModal from "./CancelModal";
 
-const NewNevelScreen = () => {
+const NewNevelScreen = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-
   const [novelName, setNovelName] = useState("");
   const [novelInfo, setNovelInfo] = useState("");
   const [userInfo, setUserInfo] = useState("");
-
   const [tagOpen, setTagOpen] = useState(false);
   const [genreOpen, setGenreOpen] = useState(false);
-
-  const [selectTags, setSelectTag] = useState([]);
-  const [selectGenres, setSelectGenre] = useState([]);
+  const [selectTags, setSelectTags] = useState([]);
+  const [selectGenre, setSelectGenre] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [complete, setComplete] = useState(false);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   const uploadImage = async () => {
     // 권한 확인 코드: 권한이 없을 경우 물어보고, 승인하지 않을 경우 코드를 종료함
@@ -49,14 +52,14 @@ const NewNevelScreen = () => {
 
   const onClickToggleTag = (tag) => {
     if (selectTags.includes(tag)) {
-      setSelectTag(selectTags.filter((selectTag) => selectTag !== tag));
+      setSelectTags(selectTags.filter((selectTag) => selectTag !== tag));
     } else {
-      setSelectTag([...selectTags, tag]);
+      setSelectTags([...selectTags, tag]);
     }
   };
 
   const onClickToggleGenre = (genre) => {
-    if (selectGenres.includes(genre)) {
+    if (selectGenre.includes(genre)) {
       // 이미 선택된 경우, 선택 해제
       setSelectGenre([]);
     } else {
@@ -73,187 +76,257 @@ const NewNevelScreen = () => {
     }
   };
 
+  const onClickResister = () => {
+    if (!complete) return;
+  };
+  const onClickReturn = () => {
+    setIsVisibleModal(true);
+  };
+  const onCloseModal = () => {
+    setIsVisibleModal(false);
+  };
+  const onGoReturn = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    if (
+      imageUrl.length &&
+      novelName.length &&
+      novelInfo.length &&
+      userInfo.length &&
+      selectTags.length &&
+      selectGenre.length &&
+      selectedOption
+    ) {
+      setComplete(true);
+    } else {
+      setComplete(false);
+    }
+  }, [imageUrl, novelName, novelInfo, userInfo, selectTags, selectGenre, selectedOption]);
+
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}
-      onPress={() => keyboard.dismiss()}
-    >
-      <Container>
-        <NewPostImgBox>
-          <TouchableOpacity onPress={uploadImage}>
-            {imageUrl ? <SelectPostImg source={{ uri: imageUrl }} /> : <UploadePostImg />}
-          </TouchableOpacity>
-        </NewPostImgBox>
-        <NewPostDetailBox>
-          <InputBox>
-            <NewPostTitle>
-              <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-              제목
-            </NewPostTitle>
-            <NewPostInput
-              value={novelName}
-              placeholder="제목을 입력해 주세요."
-              placeholderTextColor="gray"
-              keyboardType="default"
-              autoCapitalize="none"
-              autoCorrect={false}
-              maxLength={16}
-              multiline={true}
-              returnKeyType="next"
-              onChangeText={(text) => setNovelName(text)}
-            />
-            <InputLimitBox>
-              <InputLimitText>{novelName ? novelName.length : 0}/16</InputLimitText>
-            </InputLimitBox>
-          </InputBox>
-          <InputBox>
-            <NewPostTitle>
-              <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-              작품 소개
-            </NewPostTitle>
-            <NewPostInput
-              value={novelInfo}
-              placeholder="소개를 입력해 주세요."
-              placeholderTextColor="gray"
-              keyboardType="default"
-              autoCapitalize="none"
-              autoCorrect={false}
-              multiline={true}
-              maxLength={300}
-              returnKeyType="done"
-              onChangeText={(text) => setNovelInfo(text)}
-            />
-            <InputLimitBox>
-              <InputLimitText>{novelInfo ? novelInfo.length : 0}/300</InputLimitText>
-            </InputLimitBox>
-          </InputBox>
-          <InputBox>
-            <NewPostTitle>
-              <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-              작가 소개
-            </NewPostTitle>
-            <NewPostInput
-              value={userInfo}
-              placeholder="소개를 입력해 주세요."
-              placeholderTextColor="gray"
-              keyboardType="default"
-              autoCapitalize="none"
-              autoCorrect={false}
-              multiline={true}
-              maxLength={300}
-              returnKeyType={"done"}
-              onChangeText={(text) => setUserInfo(text)}
-            />
-            <InputLimitBox>
-              <InputLimitText>{userInfo ? userInfo.length : 0}/300</InputLimitText>
-            </InputLimitBox>
-          </InputBox>
-
-          <InputBox>
-            <TagBox>
+    <>
+      <CancelModal isVisible={isVisibleModal} onCloseModal={onCloseModal} onGoReturn={onGoReturn} />
+      <TopBar>
+        <CloseButton onPress={onClickReturn}>
+          <LeftArrow />
+        </CloseButton>
+        <TitleText>작품생성</TitleText>
+        <EmptyBox />
+      </TopBar>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: colors.white }}
+        onPress={() => keyboard.dismiss()}
+      >
+        <Container>
+          <NewPostImgBox>
+            <TouchableOpacity onPress={uploadImage}>
+              {imageUrl ? <SelectPostImg source={{ uri: imageUrl }} /> : <UploadePostImg />}
+            </TouchableOpacity>
+          </NewPostImgBox>
+          <NewPostDetailBox>
+            <InputBox>
               <NewPostTitle>
                 <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-                태그 (최대 8개)
+                제목
               </NewPostTitle>
-              <OpenIconBox onPress={() => setTagOpen(!tagOpen)}>
-                <OpenClose
-                  width={24}
-                  height={24}
-                  style={{
-                    transform: [{ rotate: tagOpen === false ? "90deg" : "270deg" }],
-                  }}
-                />
-              </OpenIconBox>
-            </TagBox>
-            <TagSelectBox style={{ flexWrap: tagOpen ? "wrap" : "nowrap" }}>
-              {tagOpen
-                ? hashtagData.map((d, id) => (
-                    <NovelHashtag
-                      key={id}
-                      selected={selectTags.includes(d.tag)}
-                      onPress={() => onClickToggleTag(d.tag)}
-                    >
-                      <NovelHashtagText>#{d.tag}</NovelHashtagText>
-                    </NovelHashtag>
-                  ))
-                : hashtagData.slice(0, 4).map((d, id) => (
-                    <NovelHashtag
-                      key={id}
-                      selected={selectTags.includes(d.tag)}
-                      onPress={() => onClickToggleTag(d.tag)}
-                    >
-                      <NovelHashtagText>#{d.tag}</NovelHashtagText>
-                    </NovelHashtag>
-                  ))}
-            </TagSelectBox>
-          </InputBox>
-
-          <InputBox>
-            <TagBox>
+              <NewPostInput
+                value={novelName}
+                placeholder="제목을 입력해 주세요."
+                placeholderTextColor={colors.grey3}
+                keyboardType="default"
+                autoCapitalize="none"
+                autoCorrect={false}
+                maxLength={16}
+                multiline={true}
+                returnKeyType="next"
+                onChangeText={(text) => setNovelName(text)}
+              />
+              <InputLimitBox>
+                <InputLimitText>{novelName ? novelName.length : 0}/16</InputLimitText>
+              </InputLimitBox>
+            </InputBox>
+            <InputBox>
               <NewPostTitle>
                 <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-                장르 (1개 선택)
+                작품 소개
               </NewPostTitle>
-              <OpenIconBox onPress={() => setGenreOpen(!genreOpen)}>
-                <OpenClose
-                  width={24}
-                  height={24}
-                  style={{
-                    transform: [{ rotate: genreOpen === false ? "90deg" : "270deg" }],
-                  }}
-                />
-              </OpenIconBox>
-            </TagBox>
-            <TagSelectBox style={{ flexWrap: genreOpen ? "wrap" : "nowrap" }}>
-              {genreOpen
-                ? genreData.map((d, id) => (
-                    <NovelGenre
-                      key={id}
-                      selected={selectGenres.includes(d.genre)}
-                      onPress={() => onClickToggleGenre(d.genre)}
-                    >
-                      <NovelGenreText>#{d.genre}</NovelGenreText>
-                    </NovelGenre>
-                  ))
-                : genreData.slice(0, 4).map((d, id) => (
-                    <NovelGenre
-                      key={id}
-                      selected={selectGenres.includes(d.genre)}
-                      onPress={() => onClickToggleGenre(d.genre)}
-                    >
-                      <NovelGenreText>#{d.genre}</NovelGenreText>
-                    </NovelGenre>
-                  ))}
-            </TagSelectBox>
-          </InputBox>
+              <NewPostInput
+                value={novelInfo}
+                placeholder="소개를 입력해 주세요."
+                placeholderTextColor={colors.grey3}
+                keyboardType="default"
+                autoCapitalize="none"
+                autoCorrect={false}
+                multiline={true}
+                maxLength={300}
+                returnKeyType="done"
+                onChangeText={(text) => setNovelInfo(text)}
+              />
+              <InputLimitBox>
+                <InputLimitText>{novelInfo ? novelInfo.length : 0}/300</InputLimitText>
+              </InputLimitBox>
+            </InputBox>
+            <InputBox>
+              <NewPostTitle>
+                <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
+                작가 소개
+              </NewPostTitle>
+              <NewPostInput
+                value={userInfo}
+                placeholder="소개를 입력해 주세요."
+                placeholderTextColor={colors.grey3}
+                keyboardType="default"
+                autoCapitalize="none"
+                autoCorrect={false}
+                multiline={true}
+                maxLength={300}
+                returnKeyType={"done"}
+                onChangeText={(text) => setUserInfo(text)}
+              />
+              <InputLimitBox>
+                <InputLimitText>{userInfo ? userInfo.length : 0}/300</InputLimitText>
+              </InputLimitBox>
+            </InputBox>
 
-          <InputBox>
-            <NewPostTitle>
-              <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-              소설 총 분류 제한
-            </NewPostTitle>
-            <CheckBox>
-              <CheckBtn onPress={() => onClickNovelLimit("short")}>
-                {selectedOption === "short" ? <AfterCheck /> : <BeforeCheck />}
-                <CheckTitle>단편소설(5만자 이내)</CheckTitle>
-              </CheckBtn>
-              <CheckBtn onPress={() => onClickNovelLimit("long")}>
-                {selectedOption === "long" ? <AfterCheck /> : <BeforeCheck />}
-                <CheckTitle>장편소설(20만자 이내)</CheckTitle>
-              </CheckBtn>
-            </CheckBox>
-          </InputBox>
-        </NewPostDetailBox>
-      </Container>
-    </ScrollView>
+            <InputBox>
+              <TagBox>
+                <NewPostTitle>
+                  <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
+                  태그 (최대 8개)
+                </NewPostTitle>
+                <OpenIconBox onPress={() => setTagOpen(!tagOpen)}>
+                  <OpenClose
+                    width={24}
+                    height={24}
+                    style={{
+                      transform: [{ rotate: tagOpen === false ? "90deg" : "270deg" }],
+                    }}
+                  />
+                </OpenIconBox>
+              </TagBox>
+              <TagSelectBox style={{ flexWrap: tagOpen ? "wrap" : "nowrap" }}>
+                {tagOpen
+                  ? hashtagData.map((d, id) => (
+                      <NovelHashtag
+                        key={id}
+                        selected={selectTags.includes(d.tag)}
+                        onPress={() => onClickToggleTag(d.tag)}
+                      >
+                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
+                      </NovelHashtag>
+                    ))
+                  : hashtagData.slice(0, 4).map((d, id) => (
+                      <NovelHashtag
+                        key={id}
+                        selected={selectTags.includes(d.tag)}
+                        onPress={() => onClickToggleTag(d.tag)}
+                      >
+                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
+                      </NovelHashtag>
+                    ))}
+              </TagSelectBox>
+            </InputBox>
+
+            <InputBox>
+              <TagBox>
+                <NewPostTitle>
+                  <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
+                  장르 (1개 선택)
+                </NewPostTitle>
+                <OpenIconBox onPress={() => setGenreOpen(!genreOpen)}>
+                  <OpenClose
+                    width={24}
+                    height={24}
+                    style={{
+                      transform: [{ rotate: genreOpen === false ? "90deg" : "270deg" }],
+                    }}
+                  />
+                </OpenIconBox>
+              </TagBox>
+              <TagSelectBox style={{ flexWrap: genreOpen ? "wrap" : "nowrap" }}>
+                {genreOpen
+                  ? genreData.map((d, id) => (
+                      <NovelGenre
+                        key={id}
+                        selected={selectGenre.includes(d.genre)}
+                        onPress={() => onClickToggleGenre(d.genre)}
+                      >
+                        <NovelGenreText selected={selectGenre.includes(d.genre)}>#{d.genre}</NovelGenreText>
+                      </NovelGenre>
+                    ))
+                  : genreData.slice(0, 4).map((d, id) => (
+                      <NovelGenre
+                        key={id}
+                        selected={selectGenre.includes(d.genre)}
+                        onPress={() => onClickToggleGenre(d.genre)}
+                      >
+                        <NovelGenreText selected={selectGenre.includes(d.genre)}>#{d.genre}</NovelGenreText>
+                      </NovelGenre>
+                    ))}
+              </TagSelectBox>
+            </InputBox>
+
+            <InputBox>
+              <NewPostTitle>
+                <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
+                소설 총 분류 제한
+              </NewPostTitle>
+              <CheckBox>
+                <CheckBtn onPress={() => onClickNovelLimit("short")}>
+                  {selectedOption === "short" ? <AfterCheck /> : <BeforeCheck />}
+                  <CheckTitle>단편소설(5만자 이내)</CheckTitle>
+                </CheckBtn>
+                <CheckBtn onPress={() => onClickNovelLimit("long")}>
+                  {selectedOption === "long" ? <AfterCheck /> : <BeforeCheck />}
+                  <CheckTitle>장편소설(20만자 이내)</CheckTitle>
+                </CheckBtn>
+              </CheckBox>
+            </InputBox>
+          </NewPostDetailBox>
+        </Container>
+      </ScrollView>
+      <ButtonBox>
+        <ResisterBtn style={complete && { backgroundColor: colors.primary }}>
+          <BtnText style={complete && { color: colors.white }}>등록하기</BtnText>
+        </ResisterBtn>
+      </ButtonBox>
+    </>
   );
 };
 
+const TopBar = styled.View`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px;
+  height: 40px;
+  border-bottom-color: ${colors.grey6};
+  border-bottom-width: 1px;
+  background-color: ${colors.white};
+`;
+const CloseButton = styled.TouchableOpacity``;
+const TitleText = styled.Text`
+  font-size: ${fontSize.body1};
+  font-weight: ${fontWeight.bold};
+  line-height: 22px;
+  color: ${colors.mainText};
+`;
+const EmptyBox = styled.View`
+  width: 24px;
+  height: 24px;
+`;
 const Container = styled.View`
   align-items: center;
+  margin-bottom: 88px;
 `;
-
 const NewPostImgBox = styled.View`
   justify-content: center;
   align-items: center;
@@ -272,12 +345,13 @@ const SelectPostImg = styled.Image`
 `;
 
 const NewPostDetailBox = styled.View`
-  width: 90%;
-  height: 100%;
+  gap: 24px;
+  padding: 0 16px;
+  width: 100%;
 `;
 
 const InputBox = styled.View`
-  margin-bottom: 24px;
+  width: 100%;
 `;
 
 const NewPostTitle = styled.Text`
@@ -323,33 +397,39 @@ const TagSelectBox = styled.View`
 `;
 
 const NovelHashtag = styled.TouchableOpacity`
+  justify-content: center;
+  padding: 2px 4px;
+  height: 32px;
+  background-color: ${(props) => (props.selected ? colors.primary : "white")};
   border-radius: 4px;
   border-width: 1px;
-  border-color: rgba(225, 225, 225, 1);
-  padding: 2px 4px;
-  background-color: ${(props) => (props.selected ? "rgba(217, 242, 243, 1)" : "white")};
+  border-color: ${(props) => (props.selected ? colors.primary : colors.grey3)};
+  box-sizing: border-box;
 `;
 
 const NovelHashtagText = styled.Text`
   font-weight: 400;
   font-size: 12px;
   line-height: 22px;
-  color: rgba(32, 32, 32, 1);
+  color: ${(props) => (props.selected ? colors.white : colors.grey1)};
 `;
 
 const NovelGenre = styled.TouchableOpacity`
+  justify-content: center;
+  padding: 2px 4px;
+  height: 32px;
+  background-color: ${(props) => (props.selected ? colors.primary : "white")};
   border-radius: 4px;
   border-width: 1px;
-  border-color: rgba(225, 225, 225, 1);
-  padding: 2px 4px;
-  background-color: ${(props) => (props.selected ? "rgba(217, 242, 243, 1)" : "white")};
+  border-color: ${(props) => (props.selected ? colors.primary : colors.grey3)};
+  box-sizing: border-box;
 `;
 
 const NovelGenreText = styled.Text`
   font-weight: 400;
   font-size: 12px;
   line-height: 22px;
-  color: rgba(32, 32, 32, 1);
+  color: ${(props) => (props.selected ? colors.white : colors.grey1)};
 `;
 
 const CheckBox = styled.View`
@@ -369,6 +449,28 @@ const CheckTitle = styled.Text`
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
+`;
+const ButtonBox = styled.View`
+  position: fixed;
+  padding: 0 18px;
+`;
+const ResisterBtn = styled.TouchableOpacity`
+  position: absolute;
+  left: 18px;
+  right: 0;
+  bottom: 16px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  background-color: ${colors.grey5};
+`;
+const BtnText = styled.Text`
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22px;
+  color: ${colors.mainText};
 `;
 
 export default NewNevelScreen;
