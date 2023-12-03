@@ -4,6 +4,8 @@ import styled from "styled-components";
 import NewNevelScreen from "../screens/AppMain/NewNevelScreen";
 import SearchScreen from "../screens/AppMain/SearchScreen";
 import SearchResultScreen from "../screens/AppMain/SearchResultScreen";
+import AlgorithmNovelScreen from "../screens/AppMain/TopicNovelScreen";
+import TopicNovelScreen from "../screens/AppMain/TopicNovelScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,18 +21,15 @@ const AppMainStack = () => {
         component={NewNevelScreen}
         options={{
           title: "작품 생성",
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
         }}
       />
       <Stack.Screen name="Search" component={SearchScreen} />
       <Stack.Screen name="SearchResult" component={SearchResultScreen} />
+      <Stack.Screen name="TopicNovel" component={TopicNovelScreen} />
     </Stack.Navigator>
   );
 };
-
-const SetupButton = styled.TouchableOpacity`
-  margin-right: 20px;
-`;
 
 export default AppMainStack;
