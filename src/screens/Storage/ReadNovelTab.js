@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
-import StoragePost from "./StoragePost";
+import ReadNovelPost from "./ReadNovelPost";
 
 const datas = [
   {
@@ -87,7 +87,7 @@ const ReadNovelTab = () => {
   return (
     <Container>
       {datas.map((data, idx) => {
-        return <StoragePost data={data} key={idx} />;
+        return <ReadNovelPost data={data} key={idx} idx={idx} />;
       })}
     </Container>
   );

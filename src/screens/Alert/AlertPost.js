@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
+import { getDiffTime } from "../../utils/getDiffTime";
 
 const AlertPost = (props) => {
   const { data, idx } = props;
@@ -23,7 +24,7 @@ const AlertPost = (props) => {
         {type === "update" && <Phrase>{`${data.episode}화가 업데이트 되었습니다.`}</Phrase>}
         {type === "subscribe" && <Phrase>{`${data.nickname}님이 작가님의 소설을 구독했습니다.`}</Phrase>}
         {type === "add" && <Phrase>{"소설 문장이 추가되었습니다."}</Phrase>}
-        <Date>{date}</Date>
+        <Date>{getDiffTime(date)}</Date>
       </Description>
     </Container>
   );
