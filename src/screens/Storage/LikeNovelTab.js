@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { colors } from "../../assets/color";
-import StoragePost from "./StoragePost";
+import LikeNovelPost from "./LikeNovelPost";
 
 const datas = [
   {
@@ -87,7 +87,7 @@ const LikeNovelTab = () => {
   return (
     <Container>
       {datas.map((data, idx) => {
-        return <StoragePost data={data} key={idx} />;
+        return <LikeNovelPost data={data} key={idx} idx={idx} />;
       })}
     </Container>
   );

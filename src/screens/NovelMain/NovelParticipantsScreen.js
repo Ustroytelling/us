@@ -19,7 +19,7 @@ const NovelParticipantsScreen = () => {
       <Container>
         {ParticipantData.map((data) => {
           return (
-            <ParticipantsBox>
+            <ParticipantsBox key={data.id}>
               <LikeEmojiBox>
                 <LikeEmoji width={16} height={16} />
               </LikeEmojiBox>

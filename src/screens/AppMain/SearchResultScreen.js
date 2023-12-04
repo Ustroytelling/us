@@ -143,7 +143,9 @@ const SearchResultScreen = ({ navigation, route }) => {
       </SearchBar>
       <SearchResults>
         <SearchTerm>
-          <SearchText>{`“${searchText}” 검색 결과`}</SearchText>
+          <SearchText>{`“${
+            searchText.length > 16 ? searchText.slice(0, 16) + "..." : searchText
+          }” 검색 결과`}</SearchText>
         </SearchTerm>
         <ResultsScrollView>
           <ResultList>

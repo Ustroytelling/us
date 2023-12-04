@@ -49,7 +49,7 @@ const NovelLine = (props) => {
       <NovelLineBtns>
         <Button>
           <Thumbs />
-          <ButtonText>0</ButtonText>
+          <ButtonText>100</ButtonText>
         </Button>
         {page === "viewer" && (
           <Button onPress={onOpenProposals}>
@@ -126,6 +126,7 @@ const NovelLineBtns = styled.View`
 const Button = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding: 0 8px 0 4px;
   height: 28px;
   border: 1px solid ${colors.grey4};
@@ -134,7 +135,7 @@ const Button = styled.TouchableOpacity`
 `;
 const ButtonText = styled.Text`
   font-size: ${fontSize.body3};
-  font-weight: ${fontWeight.medium};
+  font-weight: ${fontWeight.regular};
   line-height: 22px;
   color: ${colors.grey2};
 `;

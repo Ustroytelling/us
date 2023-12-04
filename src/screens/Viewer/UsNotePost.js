@@ -30,7 +30,7 @@ const UsNotePost = (props) => {
           <ContentText numberOfLines={5}>{post.content}</ContentText>
           <ProfileSnapshotView>
             <ProfileView>
-              <Nickname>{`${post.nickname} | ${post.date}`}</Nickname>
+              <Nickname>{`${post.episode} | ${post.nickname} | ${post.date}`}</Nickname>
               <Button onPress={onChangeLike}>{like ? <SmFillHeart /> : <SmHeart />}</Button>
             </ProfileView>
             <Button onPress={onTouchMenu}>

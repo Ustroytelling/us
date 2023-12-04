@@ -12,8 +12,8 @@ import NovelNextImg from "../../assets/icons/NovelNext.svg";
 import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";
-/* import ImageColors from "react-native-image-colors"; */
-/* import LinearGradient from "react-native-linear-gradient"; */
+import ImageColors from "react-native-image-colors";
+import LinearGradient from "react-native-linear-gradient";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Modal from "react-native-modal";
@@ -132,7 +132,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
   return (
     <>
       <Container>
-        {/* <LinearGradientBox
+        <LinearGradientBox
           start={{ x: 0, y: 2 }}
           end={{ x: 0, y: -0.5 }}
           colors={[
@@ -140,7 +140,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
             rgbColors.background ? rgbColors.background : "transparent",
             rgbColors.secondary ? rgbColors.secondary : "transparent",
           ]}
-        /> */}
+        />
         <NovelHeaderBox>
           <IconBar stay={stay}>
             <LeftIconBox onPress={() => navigation.goBack()}>
@@ -265,12 +265,12 @@ const Container = styled.ScrollView`
   flex: 1;
 `;
 
-/* const LinearGradientBox = styled(LinearGradient)`
+const LinearGradientBox = styled(LinearGradient)`
   width: 100%;
   height: 50%;
   position: absolute;
   z-index: -2;
-`; */
+`;
 
 const NovelHeaderBox = styled.View`
   margin-top: 8px;
