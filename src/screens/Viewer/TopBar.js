@@ -48,7 +48,7 @@ const TopBar = (props) => {
             <ModalBtn onPress={onPressCancel}>
               <ModalBtnText>취소</ModalBtnText>
             </ModalBtn>
-            <ModalBtn style={{ backgroundColor: colors.primary }} onPress={onPressConfirm}>
+            <ModalBtn style={{ backgroundColor: colors.primary, borderColor: colors.primary }} onPress={onPressConfirm}>
               <ModalBtnText style={{ color: colors.white }}>확인</ModalBtnText>
             </ModalBtn>
           </Buttons>
