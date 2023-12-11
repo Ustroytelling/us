@@ -1,10 +1,8 @@
 import styled from "styled-components/native";
-import SearchIcon from "../../assets/AppMainIcons/searchIcon.svg";
-import EditIcon from "../../assets/AppMainIcons/editNote.svg";
-import LogoIcon from "../../assets/AppMainIcons/usLogo.svg";
-import { TouchableOpacity } from "react-native";
-
 import { Dimensions } from "react-native";
+import { colors } from "../../assets/color";
+import { fontSize, fontWeight } from "../../assets/font";
+import LeftArrow from "../../assets/icons/angle arrow left.svg";
 
 const screenWidth = Dimensions.get("window").width;
 const novelWidth = (screenWidth - 40) / 3;
@@ -14,27 +12,21 @@ const TopicNovelScreen = (props) => {
   const onGoNovel = () => {
     navigation.navigate("NovelStack", { screen: "NovelIndex" });
   };
+  const onClickReturn = () => {
+    navigation.goBack();
+  };
+  console.log(route);
 
   return (
     <Container>
-      <HeaderContainer>
-        <LogoBox>
-          <LogoIcon />
-        </LogoBox>
-        <IconBox>
-          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "NewNovel" })}>
-            <EditIcon />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("MainStack", { screen: "Search" })}>
-            <SearchIcon />
-          </TouchableOpacity>
-        </IconBox>
-      </HeaderContainer>
+      <TopBar>
+        <CloseButton onPress={onClickReturn}>
+          <LeftArrow />
+        </CloseButton>
+        <TitleText>{route.params.topic}</TitleText>
+      </TopBar>
       <MainScroll showsVerticalScrollIndicator={false}>
-        <RealTimeContainer style={{ marginBottom: 0 }}>
-          <RealTimeHeader>
-            <RealTimeText>{route.params.topic}</RealTimeText>
-          </RealTimeHeader>
+        <RealTimeContainer>
           <RealTimeDataBox alTimeDataBox>
             <RealTimeBox onPress={onGoNovel}>
               <RealTimeImg
@@ -75,69 +67,82 @@ const TopicNovelScreen = (props) => {
               <RealTimeName>소설 제목</RealTimeName>
             </RealTimeBox>
           </RealTimeDataBox>
+          <RealTimeDataBox style={{ marginTop: 4 }}>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+          </RealTimeDataBox>
+          <RealTimeDataBox style={{ marginTop: 4 }}>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+            <RealTimeBox onPress={onGoNovel}>
+              <RealTimeImg
+                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+              />
+              <RealTimeName>소설 제목</RealTimeName>
+            </RealTimeBox>
+          </RealTimeDataBox>
         </RealTimeContainer>
-        <ServiceContainer>
-          <ServiceView>
-            <ServiceRegularText>우스</ServiceRegularText>
-            <ServiceText>
-              <ServiceMediumText>대표자</ServiceMediumText>
-              <ServiceRegularText> : 홍길동</ServiceRegularText>
-            </ServiceText>
-            <ServiceText>
-              <ServiceMediumText>사업자 등록 번호</ServiceMediumText>
-              <ServiceRegularText> : 000-00-0000</ServiceRegularText>
-            </ServiceText>
-            <ServiceText>
-              <ServiceMediumText>통신판매신고</ServiceMediumText>
-              <ServiceRegularText> : 김포마산-0000</ServiceRegularText>
-            </ServiceText>
-            <ServiceRegularText>경기도 김포시 김포한강8로</ServiceRegularText>
-            <ServiceText>
-              <ServiceMediumText>개인정보관리책임자</ServiceMediumText>
-              <ServiceRegularText> : 홍길동</ServiceRegularText>
-            </ServiceText>
-          </ServiceView>
-          <ServiceView>
-            <ServiceRegularText>개인정보처리방침 | 이용약관 | 이용안내</ServiceRegularText>
-          </ServiceView>
-        </ServiceContainer>
       </MainScroll>
     </Container>
   );
 };
 
+const TopBar = styled.View`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  height: 40px;
+  border-bottom-color: ${colors.grey6};
+  border-bottom-width: 1px;
+  background-color: ${colors.white};
+`;
+const CloseButton = styled.TouchableOpacity``;
+const TitleText = styled.Text`
+  font-size: ${fontSize.body1};
+  font-weight: ${fontWeight.bold};
+  line-height: 22px;
+  color: ${colors.mainText};
+`;
 const Container = styled.View`
   flex: 1;
   background-color: rgba(255, 255, 255, 1);
-`;
-const HeaderContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 40px;
-  padding: 0px 8px;
-  border-bottom-width: 1px;
-  border-color: rgba(225, 225, 225, 1);
-`;
-const LogoBox = styled.View`
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 27px;
-  background-color: rgba(170, 228, 229, 1);
-  border-radius: 12px;
-  border-width: 0.5px;
-  border-color: rgba(241, 241, 241, 1);
-`;
-const IconBox = styled.View`
-  flex-direction: row;
-  gap: 4px;
 `;
 const MainScroll = styled.ScrollView`
   height: 100%;
 `;
 const RealTimeContainer = styled.View`
-  padding: 8px 16px 32px;
+  padding: 8px 16px;
 `;
 const RealTimeHeader = styled.View`
   flex-direction: row;
@@ -178,30 +183,6 @@ const RealTimeName = styled.Text`
   line-height: 22px;
   color: rgba(32, 32, 32, 1);
   padding-left: 8px;
-`;
-const ServiceContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  height: 144px;
-  background-color: #ededed;
-`;
-const ServiceView = styled.View`
-  justify-content: center;
-  align-items: center;
-`;
-const ServiceText = styled.Text`
-  flex-direction: row;
-`;
-const ServiceMediumText = styled.Text`
-  font-size: 8px;
-  font-weight: 500;
-  color: #929292;
-`;
-const ServiceRegularText = styled.Text`
-  font-size: 8px;
-  font-weight: 400;
-  color: #929292;
 `;
 
 export default TopicNovelScreen;
