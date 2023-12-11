@@ -287,12 +287,12 @@ const NewNevelScreen = ({ navigation }) => {
             </InputBox>
           </NewPostDetailBox>
         </Container>
+        <ButtonBox>
+          <ResisterBtn style={complete && { backgroundColor: colors.primary }}>
+            <BtnText style={complete && { color: colors.white }}>등록하기</BtnText>
+          </ResisterBtn>
+        </ButtonBox>
       </ScrollView>
-      <ButtonBox>
-        <ResisterBtn style={complete && { backgroundColor: colors.primary }}>
-          <BtnText style={complete && { color: colors.white }}>등록하기</BtnText>
-        </ResisterBtn>
-      </ButtonBox>
     </>
   );
 };
@@ -325,7 +325,6 @@ const EmptyBox = styled.View`
 `;
 const Container = styled.View`
   align-items: center;
-  margin-bottom: 88px;
 `;
 const NewPostImgBox = styled.View`
   justify-content: center;
@@ -451,14 +450,9 @@ const CheckTitle = styled.Text`
   line-height: 16px;
 `;
 const ButtonBox = styled.View`
-  position: fixed;
-  padding: 0 18px;
+  padding: 24px 18px 16px;
 `;
 const ResisterBtn = styled.TouchableOpacity`
-  position: absolute;
-  left: 18px;
-  right: 0;
-  bottom: 16px;
   align-items: center;
   justify-content: center;
   width: 100%;
