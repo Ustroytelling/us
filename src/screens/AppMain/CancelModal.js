@@ -24,7 +24,7 @@ const CancelModal = (props) => {
           <Button onPress={onPressCancel}>
             <ButtonText>취소</ButtonText>
           </Button>
-          <Button style={{ backgroundColor: colors.primary }} onPress={onPressConfirm}>
+          <Button style={{ backgroundColor: colors.primary, borderColor: colors.primary }} onPress={onPressConfirm}>
             <ButtonText style={{ color: colors.white }}>확인</ButtonText>
           </Button>
         </Buttons>
