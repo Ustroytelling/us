@@ -11,16 +11,15 @@ import BigArrow from "../../assets/icons/big-arrow.svg";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Buttons from "./Buttons";
 import Proposals from "./Proposals";
 import StarRating from "./StarRating";
 import BottomBar from "./BottomBar";
 import Comments from "./Comments";
-import Confirm from "./Confirm";
 import UsNote from "./UsNote";
 import LikeBtn from "./LikeBtn";
 import { View } from "react-native";
 import TopBar from "./TopBar";
+import SaveModal from "./SaveModal";
 
 const bestNovelLine = {
   nickname: "흰둥이",
@@ -62,16 +61,15 @@ const comments = [
 
 const ViewerScreen = ({ navigation }) => {
   const [barVisible, setBarVisible] = useState(true);
-  const [isButtonsVisible, setIsButtonsVisible] = useState(false);
   const [isLikeBtnVisible, setIsLikeBtnVisible] = useState(false);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
   const [isRatingVisible, setIsRatingVisible] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isUsNoteVisible, setIsUsNoteVisible] = useState(false);
+  const [isSaveModalVisible, setIsSaveModalVisible] = useState(false);
   const [write, setWrite] = useState(false);
   const [text, setText] = useState("");
-  const [notConfirmLine, setNotConfirmLine] = useState(null);
+  const [myNovelLine, setMyNovelLine] = useState(null);
   const onClickAddBtn = () => setWrite(true);
   const onChangeText = (value) => {
     if (value.length > 300) return null;
@@ -80,29 +78,29 @@ const ViewerScreen = ({ navigation }) => {
   const onSubmit = () => {
     if (text.length === 0) return null;
 
-    setNotConfirmLine({
+    setMyNovelLine({
       nickname: "유리",
       content: text,
     });
 
     setWrite(false);
     setText("");
+    setIsSaveModalVisible(false);
   };
   const onTouchScreen = () => setBarVisible(!barVisible);
-  const onTouchMenu = () => setIsButtonsVisible(true);
-  const onCloseButtons = () => setIsButtonsVisible(false);
   const onOpenProposals = () => setIsProposalVisible(true);
   const onCloseProposals = () => setIsProposalVisible(false);
   const onOpenRating = () => setIsRatingVisible(true);
   const onCloseRating = () => setIsRatingVisible(false);
   const onOpenComments = () => setIsCommentsVisible(true);
   const onCloseComments = () => setIsCommentsVisible(false);
-  const onOpenConfirm = () => setIsConfirmVisible(true);
-  const onCloseConfirm = () => setIsConfirmVisible(false);
   const onOpenUsNote = () => setIsUsNoteVisible(true);
   const onCloseUsNote = () => setIsUsNoteVisible(false);
   const onOpenLikeBtn = () => setIsLikeBtnVisible(true);
   const onCloseLikeBtn = () => setIsLikeBtnVisible(false);
+  const onDeleteMyNovelLine = () => setMyNovelLine(null);
+  const onOpenSaveModal = () => setIsSaveModalVisible(true);
+  const onCloseSaveModal = () => setIsSaveModalVisible(false);
   const onGoBack = () => navigation.goBack();
 
   // api에서 폰트 사이즈 가져와야 함
@@ -111,10 +109,9 @@ const ViewerScreen = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 1)" }}>
         <Proposals isVisible={isProposalVisible} onCloseProposals={onCloseProposals} />
         <Comments isVisible={isCommentsVisible} onCloseComments={onCloseComments} />
-        <Buttons isVisible={isButtonsVisible} onCloseButtons={onCloseButtons} onOpenConfirm={onOpenConfirm} />
         <StarRating isVisible={isRatingVisible} onCloseRating={onCloseRating} />
-        <Confirm isVisible={isConfirmVisible} onCloseConfirm={onCloseConfirm} />
         <UsNote isVisible={isUsNoteVisible} onCloseUsNote={onCloseUsNote} />
+        <SaveModal isVisible={isSaveModalVisible} onCloseSaveModal={onCloseSaveModal} onSubmit={onSubmit} />
         {barVisible && <TopBar onGoBack={onGoBack} />}
         <ScrollContainer>
           <TouchScreen onPress={onTouchScreen} activeOpacity={1}>
@@ -135,23 +132,20 @@ const ViewerScreen = ({ navigation }) => {
                     );
                   })}
                   {bestNovelLine && (
-                    <NovelLine
-                      page={"viewer"}
-                      info={bestNovelLine}
-                      onTouchMenu={onTouchMenu}
-                      onOpenProposals={onOpenProposals}
-                    />
+                    <NovelLine page={"viewer"} best={true} info={bestNovelLine} onOpenProposals={onOpenProposals} />
                   )}
-                  {notConfirmLine && (
+                  {myNovelLine && (
                     <NovelLine
                       page={"viewer"}
-                      info={notConfirmLine}
-                      onTouchMenu={onTouchMenu}
+                      info={myNovelLine}
                       onOpenProposals={onOpenProposals}
+                      onDeleteMyNovelLine={onDeleteMyNovelLine}
                     />
                   )}
                 </ContentList>
-                {write ? (
+                {myNovelLine ? (
+                  <></>
+                ) : write ? (
                   <InputView>
                     <NovelLineInput
                       placeholder="300자 이내로 입력가능합니다."
@@ -165,7 +159,7 @@ const ViewerScreen = ({ navigation }) => {
                         <TextCounter>{text.length}</TextCounter>
                         <TextLimit>/300자</TextLimit>
                       </TextCounterView>
-                      <SubmitBtn style={text.length === 0 && { opacity: 0.25 }} onPress={onSubmit}>
+                      <SubmitBtn style={text.length === 0 && { opacity: 0.25 }} onPress={onOpenSaveModal}>
                         <UpArrow fill={colors.white} />
                       </SubmitBtn>
                     </TextActionsPanel>

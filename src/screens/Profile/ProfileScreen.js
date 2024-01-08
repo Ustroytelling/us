@@ -47,7 +47,7 @@ const TitleView = styled.View`
   padding: 4px 16px;
 `;
 const ReturnBtn = styled.TouchableOpacity`
-  width: 27px;
+  width: 24px;
 `;
 const Title = styled.View`
   height: 32px;
