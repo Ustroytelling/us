@@ -1,17 +1,18 @@
 import styled from "styled-components/native";
-import SearchIcon from "../../assets/AppMainIcons/searchIcon.svg";
+import SearchIcon from "../../assets/icons/search magnifying glass.svg";
 import EditIcon from "../../assets/AppMainIcons/editNote.svg";
 import LogoIcon from "../../assets/AppMainIcons/usLogo.svg";
 import { useRef, useState } from "react";
 import GoIcon from "../../assets/icons/s_arrow.svg";
 import { AlgorithmData, RealTimeData } from "../../data/NovelData";
 import { FlatList, TouchableOpacity, View } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+/* import LinearGradient from "react-native-linear-gradient"; */
 import Swiper from "react-native-web-swiper";
 import { Dimensions } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 const novelWidth = (screenWidth - 40) / 3;
+const novelHeight = novelWidth * (3 / 2);
 
 const AppMainScreen = ({ navigation }) => {
   const swiperRef = useRef(null);
@@ -64,11 +65,11 @@ const AppMainScreen = ({ navigation }) => {
                 }}
               >
                 <BannerImage source={{ uri: item.image }} />
-                <LinearGradientBox
+                {/* <LinearGradientBox
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
                   colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.9)"]}
-                />
+                /> */}
                 <BannerTextBox>
                   <BannerTitle>{item.name}</BannerTitle>
                   <BannerSubTitle numberOfLines={2}>{item.description}</BannerSubTitle>
@@ -182,7 +183,7 @@ const AppMainScreen = ({ navigation }) => {
           </RealTimeDataBox>
         </RealTimeContainer>
 
-        <ReadNovelContainer style={{ marginBottom: 32 }}>
+        <ReadNovelContainer style={{ marginBottom: 80 }}>
           <ReadNovelHeader>
             <RealTimeText>읽은 소설</RealTimeText>
             <TouchableOpacity>
@@ -207,31 +208,6 @@ const AppMainScreen = ({ navigation }) => {
             </ReadNovels>
           </ReadNovelList>
         </ReadNovelContainer>
-        <ServiceContainer>
-          <ServiceView>
-            <ServiceRegularText>우스</ServiceRegularText>
-            <ServiceText>
-              <ServiceMediumText>대표자</ServiceMediumText>
-              <ServiceRegularText> : 홍길동</ServiceRegularText>
-            </ServiceText>
-            <ServiceText>
-              <ServiceMediumText>사업자 등록 번호</ServiceMediumText>
-              <ServiceRegularText> : 000-00-0000</ServiceRegularText>
-            </ServiceText>
-            <ServiceText>
-              <ServiceMediumText>통신판매신고</ServiceMediumText>
-              <ServiceRegularText> : 김포마산-0000</ServiceRegularText>
-            </ServiceText>
-            <ServiceRegularText>경기도 김포시 김포한강8로</ServiceRegularText>
-            <ServiceText>
-              <ServiceMediumText>개인정보관리책임자</ServiceMediumText>
-              <ServiceRegularText> : 홍길동</ServiceRegularText>
-            </ServiceText>
-          </ServiceView>
-          <ServiceView>
-            <ServiceRegularText>개인정보처리방침 | 이용약관 | 이용안내</ServiceRegularText>
-          </ServiceView>
-        </ServiceContainer>
       </MainScroll>
     </Container>
   );
@@ -304,14 +280,14 @@ const BannerImage = styled.Image`
   border-radius: 16px;
 `;
 
-const LinearGradientBox = styled(LinearGradient)`
+/* const LinearGradientBox = styled(LinearGradient)`
   position: absolute;
   width: 100%;
   height: 150px;
   bottom: 0px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
-`;
+`; */
 
 const BannerTextBox = styled.View`
   position: absolute;
@@ -352,7 +328,7 @@ const RealTimeContainer = styled.View`
 `;
 
 const RealTimeHeader = styled.View`
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   padding: 8px 4px;
   width: 100%;
 `;
@@ -363,7 +339,7 @@ const MoveBtn = styled.TouchableOpacity`
 `;
 const RealTimeText = styled.Text`
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 22px;
   color: rgba(32, 32, 32, 1);
 `;
@@ -372,7 +348,7 @@ const RealTimeDataBox = styled.View`
   flex-direction: row;
   gap: 4px;
   width: 100%;
-  height: 202px;
+  height: ${novelHeight + 26}px;
 `;
 
 const RealTimeBox = styled.TouchableOpacity`
@@ -381,7 +357,7 @@ const RealTimeBox = styled.TouchableOpacity`
 
 const RealTimeImg = styled.Image`
   width: 100%;
-  height: 176px;
+  height: ${novelHeight}px;
   border-radius: 4px;
   margin-bottom: 4px;
 `;
@@ -401,7 +377,7 @@ const ReadNovelHeader = styled.View`
   align-items: center;
   justify-content: space-between;
   padding: 8px 4px;
-  margin: 0 16px 8px;
+  margin: 0 16px 4px;
 `;
 const ReadNovelList = styled.ScrollView``;
 const ReadNovels = styled.View`

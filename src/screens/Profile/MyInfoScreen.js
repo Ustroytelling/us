@@ -2,43 +2,54 @@ import styled from "styled-components/native";
 import BigArrow from "../../assets/icons/big-arrow.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
+import { useState } from "react";
+import LogoutModal from "./LogoutModal";
 
 const MyInfoScreen = ({ navigation }) => {
+  const [isLogoutVisible, setIsLogoutVisible] = useState(false);
   const onGoProfile = () => {
     navigation.navigate("ProfileStack", { screen: "Profile" });
   };
+  const onGoComments = () => {
+    navigation.navigate("ProfileStack", { screen: "Comments" });
+  };
+  const onOpenLogout = () => setIsLogoutVisible(true);
+  const onCloseLogout = () => setIsLogoutVisible(false);
 
   return (
-    <Container>
-      <TitleView>
-        <Title>
-          <TitleText>내 정보</TitleText>
-        </Title>
-      </TitleView>
-      <ProfileView onPress={onGoProfile}>
-        <ProfileImage />
-        <NicknameView>
-          <Nickname>홍길동</Nickname>
-          <Icon>
-            <BigArrow />
-          </Icon>
-        </NicknameView>
-      </ProfileView>
-      <SettingList>
-        <SettingView>
-          <SettingText>댓글내역</SettingText>
-        </SettingView>
-        <SettingView>
-          <SettingText>설정 및 개인정보</SettingText>
-        </SettingView>
-        <SettingView>
-          <SettingText>고객센터</SettingText>
-        </SettingView>
-        <SettingView>
-          <SettingText>로그아웃</SettingText>
-        </SettingView>
-      </SettingList>
-    </Container>
+    <>
+      <LogoutModal isVisible={isLogoutVisible} onCloseLogout={onCloseLogout} />
+      <Container>
+        <TitleView>
+          <Title>
+            <TitleText>내 정보</TitleText>
+          </Title>
+        </TitleView>
+        <ProfileView onPress={onGoProfile}>
+          <ProfileImage />
+          <NicknameView>
+            <Nickname>홍길동</Nickname>
+            <Icon>
+              <BigArrow />
+            </Icon>
+          </NicknameView>
+        </ProfileView>
+        <SettingList>
+          <SettingView onPress={onGoComments}>
+            <SettingText>댓글내역</SettingText>
+          </SettingView>
+          <SettingView>
+            <SettingText>설정 및 개인정보</SettingText>
+          </SettingView>
+          <SettingView>
+            <SettingText>고객센터</SettingText>
+          </SettingView>
+          <SettingView onPress={onOpenLogout}>
+            <SettingText>로그아웃</SettingText>
+          </SettingView>
+        </SettingList>
+      </Container>
+    </>
   );
 };
 

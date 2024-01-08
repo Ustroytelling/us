@@ -3,13 +3,12 @@ import Modal from "react-native-modal";
 import { colors } from "../../assets/color";
 import { fontWeight } from "../../assets/font";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Report from "./Report";
-import ReportConfirm from "./ReportConfirm";
 import { useState } from "react";
+import ReportConfirm from "../Viewer/ReportConfirm";
+import Report from "../Viewer/Report";
 
-const Buttons = (props) => {
-  const { isVisible, onCloseButtons, onOpenConfirm, myNovelLine, onDeleteMyNovelLine } = props;
-  const manager = false;
+const ReportBtn = (props) => {
+  const { isVisible, onCloseBtns } = props;
   const [isReportVisible, setIsReportVisible] = useState(false);
   const [isReportConfirmVisible, setIsReportConfirmVisible] = useState(false);
   const onOpenReport = () => setIsReportVisible(true);
@@ -17,12 +16,8 @@ const Buttons = (props) => {
   const onOpenReportConfirm = () => setIsReportConfirmVisible(true);
   const onCloseReportConfirm = () => setIsReportConfirmVisible(false);
 
-  const onPressConfirm = () => {
-    onCloseButtons();
-    onOpenConfirm();
-  };
   const onPressReport = () => {
-    onCloseButtons();
+    onCloseBtns();
     onOpenReport();
   };
 
@@ -37,33 +32,14 @@ const Buttons = (props) => {
       <Modal isVisible={isVisible} backdropOpacity={0} style={{ margin: 0 }}>
         <SafeAreaView style={{ flex: 1, justifyContent: "flex-end", marginBottom: 16 }}>
           <Btns>
-            {manager && (
-              <BtnView onPress={onPressConfirm}>
-                <BtnText>확정하기</BtnText>
-              </BtnView>
-            )}
-            {myNovelLine && (
-              <BtnView onPress={onDeleteMyNovelLine}>
-                <BtnText>삭제하기</BtnText>
-              </BtnView>
-            )}
-            {manager && !myNovelLine && (
-              <BtnView>
-                <BtnText>추방하기</BtnText>
-              </BtnView>
-            )}
-            {!myNovelLine && (
-              <BtnView onPress={onPressReport}>
-                <BtnText>신고하기</BtnText>
-              </BtnView>
-            )}
-            {
-              <BtnView>
-                <BtnText>정보보기</BtnText>
-              </BtnView>
-            }
+            <BtnView>
+              <BtnText>추방하기</BtnText>
+            </BtnView>
+            <BtnView onPress={onPressReport}>
+              <BtnText>신고하기</BtnText>
+            </BtnView>
           </Btns>
-          <CancelBtn onPress={onCloseButtons} activeOpacity={0.8}>
+          <CancelBtn onPress={onCloseBtns} activeOpacity={0.8}>
             <CancelText>Cancel</CancelText>
           </CancelBtn>
         </SafeAreaView>
@@ -78,6 +54,7 @@ const Btns = styled.View`
   border-radius: 14px;
   background-color: ${colors.grey3};
   overflow: hidden;
+  z-index: 100;
 `;
 const BtnView = styled.TouchableOpacity`
   align-items: center;
@@ -108,4 +85,4 @@ const CancelText = styled.Text`
   color: ${colors.blue};
 `;
 
-export default Buttons;
+export default ReportBtn;

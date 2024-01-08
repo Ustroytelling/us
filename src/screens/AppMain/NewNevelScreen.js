@@ -195,45 +195,6 @@ const NewNevelScreen = ({ navigation }) => {
               <TagBox>
                 <NewPostTitle>
                   <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
-                  태그 (최대 8개)
-                </NewPostTitle>
-                <OpenIconBox onPress={() => setTagOpen(!tagOpen)}>
-                  <OpenClose
-                    width={24}
-                    height={24}
-                    style={{
-                      transform: [{ rotate: tagOpen === false ? "90deg" : "270deg" }],
-                    }}
-                  />
-                </OpenIconBox>
-              </TagBox>
-              <TagSelectBox style={{ flexWrap: tagOpen ? "wrap" : "nowrap" }}>
-                {tagOpen
-                  ? hashtagData.map((d, id) => (
-                      <NovelHashtag
-                        key={id}
-                        selected={selectTags.includes(d.tag)}
-                        onPress={() => onClickToggleTag(d.tag)}
-                      >
-                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
-                      </NovelHashtag>
-                    ))
-                  : hashtagData.slice(0, 4).map((d, id) => (
-                      <NovelHashtag
-                        key={id}
-                        selected={selectTags.includes(d.tag)}
-                        onPress={() => onClickToggleTag(d.tag)}
-                      >
-                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
-                      </NovelHashtag>
-                    ))}
-              </TagSelectBox>
-            </InputBox>
-
-            <InputBox>
-              <TagBox>
-                <NewPostTitle>
-                  <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
                   장르 (1개 선택)
                 </NewPostTitle>
                 <OpenIconBox onPress={() => setGenreOpen(!genreOpen)}>
@@ -265,6 +226,45 @@ const NewNevelScreen = ({ navigation }) => {
                       >
                         <NovelGenreText selected={selectGenre.includes(d.genre)}>#{d.genre}</NovelGenreText>
                       </NovelGenre>
+                    ))}
+              </TagSelectBox>
+            </InputBox>
+
+            <InputBox>
+              <TagBox>
+                <NewPostTitle>
+                  <Text style={{ color: "rgba(243, 17, 17, 1)" }}>*</Text>
+                  태그 (최대 8개)
+                </NewPostTitle>
+                <OpenIconBox onPress={() => setTagOpen(!tagOpen)}>
+                  <OpenClose
+                    width={24}
+                    height={24}
+                    style={{
+                      transform: [{ rotate: tagOpen === false ? "90deg" : "270deg" }],
+                    }}
+                  />
+                </OpenIconBox>
+              </TagBox>
+              <TagSelectBox style={{ flexWrap: tagOpen ? "wrap" : "nowrap" }}>
+                {tagOpen
+                  ? hashtagData.map((d, id) => (
+                      <NovelHashtag
+                        key={id}
+                        selected={selectTags.includes(d.tag)}
+                        onPress={() => onClickToggleTag(d.tag)}
+                      >
+                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
+                      </NovelHashtag>
+                    ))
+                  : hashtagData.slice(0, 4).map((d, id) => (
+                      <NovelHashtag
+                        key={id}
+                        selected={selectTags.includes(d.tag)}
+                        onPress={() => onClickToggleTag(d.tag)}
+                      >
+                        <NovelHashtagText selected={selectTags.includes(d.tag)}>#{d.tag}</NovelHashtagText>
+                      </NovelHashtag>
                     ))}
               </TagSelectBox>
             </InputBox>
@@ -450,7 +450,7 @@ const CheckTitle = styled.Text`
   line-height: 16px;
 `;
 const ButtonBox = styled.View`
-  padding: 24px 18px 16px;
+  padding: 92px 18px 16px;
 `;
 const ResisterBtn = styled.TouchableOpacity`
   align-items: center;

@@ -12,11 +12,14 @@ import NovelNextImg from "../../assets/icons/NovelNext.svg";
 import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import ImageColors from "react-native-image-colors";
-import LinearGradient from "react-native-linear-gradient";
+/* import ImageColors from "react-native-image-colors"; */
+/* import LinearGradient from "react-native-linear-gradient"; */
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Modal from "react-native-modal";
+import NextEpisodeModal from "./NextEpisodeModal";
+
+const number = 99;
 
 const NovelIndexScreen = ({ navigation, route: { params } }) => {
   // console.log(params);
@@ -24,6 +27,9 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
   const [stay, setStay] = useState(false);
   const [star, setStar] = useState(false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [episodeModalVisible, setEpisodeModalVisible] = useState(false);
+  const onOpenEpisodeModal = () => setEpisodeModalVisible(true);
+  const onCloseEpisodeModal = () => setEpisodeModalVisible(false);
 
   // ref
   const bottomSheetRef2 = useRef(null);
@@ -132,7 +138,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
   return (
     <>
       <Container>
-        <LinearGradientBox
+        {/* <LinearGradientBox
           start={{ x: 0, y: 2 }}
           end={{ x: 0, y: -0.5 }}
           colors={[
@@ -140,7 +146,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
             rgbColors.background ? rgbColors.background : "transparent",
             rgbColors.secondary ? rgbColors.secondary : "transparent",
           ]}
-        />
+        /> */}
         <NovelHeaderBox>
           <IconBar stay={stay}>
             <LeftIconBox onPress={() => navigation.goBack()}>
@@ -180,7 +186,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
                 </NovelSubBox1>
                 <NovelSubBox2>
                   <TouchableOpacity>
-                    <NovelSubText>댓글 00</NovelSubText>
+                    <NovelSubText>{`댓글 ${number > 100 ? "100+" : number}`}</NovelSubText>
                   </TouchableOpacity>
                   <TouchableOpacity>
                     <NovelSubText>공유하기</NovelSubText>
@@ -211,15 +217,13 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
               </NovelOrder>
             </NovelOrderBox>
 
-            <NovelIndexContainer stay={stay}>
-              <FlatList
-                data={novelIndexData}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item, idx }) => (
-                  <NovelIndexBox
-                    style={{ marginTop: idx === 0 ? 0 : 16 }}
-                    onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })}
-                  >
+            <NovelIndexContainer
+              style={order ? { flexDirection: "column" } : { flexDirection: "column-reverse" }}
+              stay={stay}
+            >
+              {novelIndexData.map((item, idx) => {
+                return (
+                  <NovelIndexBox onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })} key={idx}>
                     <NovelIndexImg source={item.novel.image} />
                     <NovelIndexTextBox>
                       <NovelIndexTitle>
@@ -228,9 +232,9 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
                       <NovelIndexDate>2023.01.01</NovelIndexDate>
                     </NovelIndexTextBox>
                   </NovelIndexBox>
-                )}
-              />
-              <NovelNextMakeBox order={order}>
+                );
+              })}
+              <NovelNextMakeBox order={order} onPress={onOpenEpisodeModal}>
                 <NovelNextImg width={56} height={80} />
                 <NovelNextText>다음화를 생성해주세요</NovelNextText>
               </NovelNextMakeBox>
@@ -257,6 +261,7 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
           </BottomSheet>
         </GestureHandlerRootView>
       </Modal>
+      <NextEpisodeModal isVisible={episodeModalVisible} onCloseEpisodeModal={onCloseEpisodeModal} />
     </>
   );
 };
@@ -265,12 +270,12 @@ const Container = styled.ScrollView`
   flex: 1;
 `;
 
-const LinearGradientBox = styled(LinearGradient)`
+/* const LinearGradientBox = styled(LinearGradient)`
   width: 100%;
   height: 50%;
   position: absolute;
   z-index: -2;
-`;
+`; */
 
 const NovelHeaderBox = styled.View`
   margin-top: 8px;
@@ -440,11 +445,12 @@ const NovelOrderText = styled.Text`
 
 const NovelIndexContainer = styled.View`
   margin-top: 6px;
+  margin-bottom: 40px;
   padding: 0px 16px;
   width: 100%;
   gap: 16px;
 `;
-const NovelIndexList = styled.View``;
+
 const NovelIndexBox = styled.TouchableOpacity`
   flex-direction: row;
   height: 80px;
@@ -477,7 +483,6 @@ const NovelIndexDate = styled.Text`
 const NovelNextMakeBox = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  margin-bottom: 40px;
   background-color: rgba(248, 248, 248, 1);
 `;
 
