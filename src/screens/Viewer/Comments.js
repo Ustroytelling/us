@@ -7,7 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import DotMenuCol from "../../assets/icons/dot-menu-col.svg";
 import SmHeart from "../../assets/icons/sm-heart.svg";
 import UpArrow from "../../assets/icons/up-arrow.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jsonConfig } from "../../api/axios";
 
 const comments = [
   {
@@ -42,12 +43,20 @@ const comments = [
 const Comments = (props) => {
   const { isVisible, onCloseComments } = props;
   const [text, setText] = useState("");
+  const [data, setData] = useState(null);
   const onPressBtn = () => {
     setText("");
   };
   const onChangeText = (value) => {
     setText(value);
   };
+
+  useEffect(() => {
+    (async () => {
+      const response = await jsonConfig("get", "/comment/chapter/500");
+      setData(response.data.data.commentInfos);
+    })();
+  }, [setData]);
 
   return (
     <Modal isVisible={isVisible} style={{ margin: 0 }} backdropOpacity={0.35}>
@@ -62,33 +71,34 @@ const Comments = (props) => {
           </Title>
           <ScrollContainer>
             <CommentList>
-              {comments.map((comment, idx) => {
-                return (
-                  <CommentView key={idx}>
-                    <ProfileMenuView>
-                      <ProfileView>
-                        <ProfileImage src={comment.image} />
-                        <Nickname>{comment.nickname}</Nickname>
-                        <Date>{comment.date}</Date>
-                      </ProfileView>
-                      <MenuBtn>
-                        <DotMenuCol fill={colors.grey2} />
-                      </MenuBtn>
-                    </ProfileMenuView>
-                    <MainView>
-                      <ContentText ellipsizeMode="tail" numberOfLines={5}>
-                        {comment.content}
-                      </ContentText>
-                      <Like>
-                        <LikeCountView>
-                          <SmHeart />
-                          <LikeCount>{comment.likeCount}</LikeCount>
-                        </LikeCountView>
-                      </Like>
-                    </MainView>
-                  </CommentView>
-                );
-              })}
+              {data &&
+                data.map((comment, idx) => {
+                  return (
+                    <CommentView key={idx}>
+                      <ProfileMenuView>
+                        <ProfileView>
+                          <ProfileImage src={comment.image} />
+                          <Nickname>{comment.authorName}</Nickname>
+                          <Date>{`${comment.createdAt[0]}. ${comment.createdAt[1]}. ${comment.createdAt[2]}`}</Date>
+                        </ProfileView>
+                        <MenuBtn>
+                          <DotMenuCol fill={colors.grey2} />
+                        </MenuBtn>
+                      </ProfileMenuView>
+                      <MainView>
+                        <ContentText ellipsizeMode="tail" numberOfLines={5}>
+                          {comment.content}
+                        </ContentText>
+                        <Like>
+                          <LikeCountView>
+                            <SmHeart />
+                            <LikeCount>{comment.likeCnt}</LikeCount>
+                          </LikeCountView>
+                        </Like>
+                      </MainView>
+                    </CommentView>
+                  );
+                })}
             </CommentList>
           </ScrollContainer>
         </Container>

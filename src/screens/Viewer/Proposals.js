@@ -1,63 +1,28 @@
 import Modal from "react-native-modal";
 import styled from "styled-components/native";
+import { useState, useEffect } from "react";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import NovelLine from "./NovelLine";
 import BigX from "../../assets/icons/big-x.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { jsonConfig } from "../../api/axios";
 
 const myNickname = "유리";
 
-const proposals = [
-  {
-    nickname: "짱아",
-    content:
-      "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
-  },
-  {
-    nickname: "흰둥이",
-    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
-  },
-  {
-    nickname: "유리",
-    content:
-      "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
-  },
-  {
-    nickname: "흰둥이",
-    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
-  },
-  {
-    nickname: "짱아",
-    content:
-      "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
-  },
-  {
-    nickname: "흰둥이",
-    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
-  },
-  {
-    nickname: "짱아",
-    content:
-      "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
-  },
-  {
-    nickname: "흰둥이",
-    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
-  },
-  {
-    nickname: "짱아",
-    content:
-      "개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 개미는 뚠뚠 오늘도 뚠뚠 열심히 일을 하네",
-  },
-  {
-    nickname: "흰둥이",
-    content: "땀을 뻘뻘 흘리면서 그렇지만 뚠뚠",
-  },
-];
-
 const Proposals = (props) => {
   const { isVisible, onCloseProposals } = props;
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const response = await jsonConfig("get", "paragraph/500/voting");
+      console.log(response.data.data);
+      setData(response.data.data);
+    })();
+  }, [setData]);
+
+  if (!data) return <></>;
 
   return (
     <Modal isVisible={isVisible} style={{ margin: 0 }} backdropOpacity={0.35}>
@@ -72,7 +37,7 @@ const Proposals = (props) => {
           </Title>
           <ScrollContainer>
             <ProposalList>
-              {proposals.map((proposal, idx) => {
+              {data.paragraphInVotings.map((proposal, idx) => {
                 return (
                   <NovelLineView key={idx}>
                     <NovelLine info={proposal} myNovelLine={proposal.nickname === myNickname} best={!idx} />
