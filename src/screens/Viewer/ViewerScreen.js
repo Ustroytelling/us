@@ -8,7 +8,7 @@ import SmStar from "../../assets/icons/sm-star.svg";
 import SmComment from "../../assets/icons/sm-comment.svg";
 import SmArrow from "../../assets/icons/sm-arrow.svg";
 import BigArrow from "../../assets/icons/big-arrow.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Proposals from "./Proposals";
@@ -20,27 +20,7 @@ import LikeBtn from "./LikeBtn";
 import { View } from "react-native";
 import TopBar from "./TopBar";
 import SaveModal from "./SaveModal";
-
-const bestNovelLine = {
-  nickname: "흰둥이",
-  content:
-    "구성원으로서 국정을 심의한다. 대통령은국무총리·국무위원·행정각부의 장 기타 법률이 정하는 공사의 직을 겸할 수 없다. 국토와 자원은\n보호를 받으며, 국가는 그 균형있는 개발과 이용을 위하여 필요한 계획을 수립한다. 국가안전보장에 관련되는\n대외정책·군사정책과 국내정책의 수립에 관하여 국무회의의 심 국교는 인정되지 아니하며,",
-};
-
-const novelLines = [
-  {
-    nickname: "짱구",
-    content:
-      "구성원으로서 국정을 심의한다. 대통령은국무총리·국무위원·행정각부의 장 기타 법률이 정하는 공사의 직을 겸할 수 없다. 국토와 자원은\n보호를 받으며, 국가는 그 균형있는 개발과 이용을 위하여 필요한 계획을 수립한다. 국가안전보장에 관련되는\n대외정책·군사정책과 국내정책의 수립에 관하여 국무회의의 심 국교는 인정되지 아니하며,",
-    like: true,
-  },
-  {
-    nickname: "홍길동",
-    content:
-      "한 번 숲 속으로 들어간 나무꾼이 있었습니다. 그의 이름은 톰이었고, 그는 모든 종류의 나무와 친구였습니다.\n어느 날, 숲에 이상한 일이 일어났어요. 나무들이 얘기를 하더니 갑자기 숲이 굉음처럼 울렸어요. 톰은 당황했지만, 나무들이 도와주기 시작했어요.\n모두 함께 숲의 문제를 해결했고, 톰은 그들의 우정을 더욱 소중히 여겼습니다. 그날 이후, 톰은 더 많은 모험을 찾아 떠나기로 했죠.",
-    like: false,
-  },
-];
+import { jsonConfig } from "../../api/axios";
 
 const comments = [
   {
@@ -60,6 +40,7 @@ const comments = [
 ];
 
 const ViewerScreen = ({ navigation }) => {
+  const [data, setData] = useState(null);
   const [barVisible, setBarVisible] = useState(true);
   const [isLikeBtnVisible, setIsLikeBtnVisible] = useState(false);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
@@ -71,21 +52,29 @@ const ViewerScreen = ({ navigation }) => {
   const [text, setText] = useState("");
   const [myNovelLine, setMyNovelLine] = useState(null);
   const onClickAddBtn = () => setWrite(true);
-  const onChangeText = (value) => {
+  const onChangeText = async (value) => {
     if (value.length > 300) return null;
     setText(value);
   };
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (text.length === 0) return null;
 
-    setMyNovelLine({
-      nickname: "유리",
-      content: text,
-    });
+    const submitData = { content: text };
+    try {
+      const response = await jsonConfig("post", "paragraph/500", submitData);
+      console.log(response);
 
-    setWrite(false);
-    setText("");
-    setIsSaveModalVisible(false);
+      setMyNovelLine({
+        content: text,
+      });
+
+      setWrite(false);
+      setText("");
+      setIsSaveModalVisible(false);
+    } catch (error) {
+      // 에러 처리, 로깅하거나 사용자에게 메시지 표시 가능
+      console.error("데이터 제출 중 오류 발생:", error);
+    }
   };
   const onTouchScreen = () => setBarVisible(!barVisible);
   const onOpenProposals = () => setIsProposalVisible(true);
@@ -103,6 +92,17 @@ const ViewerScreen = ({ navigation }) => {
   const onCloseSaveModal = () => setIsSaveModalVisible(false);
   const onGoBack = () => navigation.goBack();
 
+  useEffect(() => {
+    (async () => {
+      const response = await jsonConfig("get", "chapter/500/500");
+      console.log(response.data.data);
+      setData(response.data.data);
+      setMyNovelLine(response.data.data.myParagraph);
+    })();
+  }, [setData]);
+
+  if (!data) return <></>;
+
   // api에서 폰트 사이즈 가져와야 함
   return (
     <>
@@ -112,27 +112,37 @@ const ViewerScreen = ({ navigation }) => {
         <StarRating isVisible={isRatingVisible} onCloseRating={onCloseRating} />
         <UsNote isVisible={isUsNoteVisible} onCloseUsNote={onCloseUsNote} />
         <SaveModal isVisible={isSaveModalVisible} onCloseSaveModal={onCloseSaveModal} onSubmit={onSubmit} />
-        {barVisible && <TopBar onGoBack={onGoBack} />}
+        {barVisible && <TopBar onGoBack={onGoBack} title={data.title} />}
         <ScrollContainer>
           <TouchScreen onPress={onTouchScreen} activeOpacity={1}>
             <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }} resetScrollToCoords={{ x: 0, y: 0 }}>
               <MainContainer>
                 <ContentList>
-                  {novelLines.map((nl, idx) => {
-                    const paragraphs = nl.content.split("\n");
-                    return (
-                      <View key={idx}>
-                        <LikeBtn likeState={nl.like} isVisible={isLikeBtnVisible} onCloseButtons={onCloseLikeBtn} />
-                        <NovelContent activeOpacity={1} onPress={onTouchScreen} onLongPress={onOpenLikeBtn}>
-                          {paragraphs.map((paragraph, index) => (
-                            <ContentText key={index}>{paragraph}</ContentText>
-                          ))}
-                        </NovelContent>
-                      </View>
-                    );
-                  })}
-                  {bestNovelLine && (
-                    <NovelLine page={"viewer"} best={true} info={bestNovelLine} onOpenProposals={onOpenProposals} />
+                  {data &&
+                    data.selectedParagraphs.map((nl, idx) => {
+                      const paragraphs = nl.content.split("\n");
+                      return (
+                        <View key={idx}>
+                          <LikeBtn
+                            likeState={data.liked}
+                            isVisible={isLikeBtnVisible}
+                            onCloseButtons={onCloseLikeBtn}
+                          />
+                          <NovelContent activeOpacity={1} onPress={onTouchScreen} onLongPress={onOpenLikeBtn}>
+                            {paragraphs.map((paragraph, index) => (
+                              <ContentText key={index}>{paragraph}</ContentText>
+                            ))}
+                          </NovelContent>
+                        </View>
+                      );
+                    })}
+                  {data.bestParagraph && (
+                    <NovelLine
+                      page={"viewer"}
+                      best={true}
+                      info={data.bestParagraph}
+                      onOpenProposals={onOpenProposals}
+                    />
                   )}
                   {myNovelLine && (
                     <NovelLine
@@ -140,6 +150,7 @@ const ViewerScreen = ({ navigation }) => {
                       info={myNovelLine}
                       onOpenProposals={onOpenProposals}
                       onDeleteMyNovelLine={onDeleteMyNovelLine}
+                      myNovelLine={true}
                     />
                   )}
                 </ContentList>
@@ -173,28 +184,29 @@ const ViewerScreen = ({ navigation }) => {
               </MainContainer>
               <SubContainer>
                 <BestCommentList>
-                  {comments.map((co, idx) => {
-                    return (
-                      <CommentView key={idx} onPress={onOpenComments}>
-                        <TopView>
-                          <BestLabel style={idx === 0 && { backgroundColor: colors.red }}>
-                            <BestLabelText>BEST</BestLabelText>
-                          </BestLabel>
-                          <CommentNickname>{co.nickname}</CommentNickname>
-                        </TopView>
-                        <CommentText ellipsizeMode="tail" numberOfLines={2}>
-                          {co.content}
-                        </CommentText>
-                      </CommentView>
-                    );
-                  })}
+                  {comments &&
+                    comments.map((co, idx) => {
+                      return (
+                        <CommentView key={idx} onPress={onOpenComments}>
+                          <TopView>
+                            <BestLabel style={idx === 0 && { backgroundColor: colors.red }}>
+                              <BestLabelText>BEST</BestLabelText>
+                            </BestLabel>
+                            <CommentNickname>{co.nickname}</CommentNickname>
+                          </TopView>
+                          <CommentText ellipsizeMode="tail" numberOfLines={2}>
+                            {co.content}
+                          </CommentText>
+                        </CommentView>
+                      );
+                    })}
                 </BestCommentList>
                 <Horizon />
                 <Reviews>
                   <ReviewView onPress={onOpenRating}>
                     <ReviewCounterView>
                       <SmStar />
-                      <ReviewCounter>4.5</ReviewCounter>
+                      <ReviewCounter>{data.score}</ReviewCounter>
                     </ReviewCounterView>
                     <ShortcutBtn>
                       <ShortcutText>별점</ShortcutText>
@@ -206,7 +218,7 @@ const ViewerScreen = ({ navigation }) => {
                   <ReviewView onPress={onOpenComments}>
                     <ReviewCounterView>
                       <SmComment />
-                      <ReviewCounter>21</ReviewCounter>
+                      <ReviewCounter>{data.commentCnt}</ReviewCounter>
                     </ReviewCounterView>
                     <ShortcutBtn>
                       <ShortcutText>댓글</ShortcutText>

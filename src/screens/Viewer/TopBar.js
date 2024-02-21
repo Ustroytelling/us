@@ -9,7 +9,7 @@ import Warning from "../../assets/icons/warning.svg";
 const TopBar = (props) => {
   const { onGoBack } = props;
   const [editPossible, setEditPossible] = useState(true);
-  const [title, setTitle] = useState("주술회전 1화");
+  const [title, setTitle] = useState(props.title);
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState(title);
   const [isModalVisible, setIsModalVisible] = useState(false);

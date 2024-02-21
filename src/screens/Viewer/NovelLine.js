@@ -8,11 +8,8 @@ import { useState } from "react";
 import Buttons from "./Buttons";
 import Confirm from "./Confirm";
 
-const myNickname = "유리";
-
 const NovelLine = (props) => {
-  const { page, info, onOpenProposals, onDeleteMyNovelLine, best } = props;
-  const myNovelLine = info.nickname === myNickname;
+  const { page, info, onOpenProposals, onDeleteMyNovelLine, best, myNovelLine } = props;
   const [fold, setFold] = useState(true);
   const [isButtonsVisible, setIsButtonsVisible] = useState(false);
   const [isTextOverflowed, setIsTextOverflowed] = useState(false);
@@ -42,7 +39,7 @@ const NovelLine = (props) => {
       <ContentView style={myNovelLine && { borderColor: colors.strong }}>
         <ProfileView>
           <UserStateView>
-            <Nickname>{info.nickname}</Nickname>
+            <Nickname>{info.authorName}</Nickname>
             {best && (
               <BestLabel>
                 <BestText>BEST</BestText>
@@ -71,7 +68,7 @@ const NovelLine = (props) => {
         <NovelLineBtns>
           <Button>
             <Thumbs />
-            <ButtonText>100</ButtonText>
+            <ButtonText>{info.likeCnt}</ButtonText>
           </Button>
           {!myNovelLine && page === "viewer" && (
             <Button onPress={onOpenProposals}>

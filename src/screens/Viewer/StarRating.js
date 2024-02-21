@@ -20,8 +20,8 @@ const StarRating = (props) => {
         <Main>
           <Stars onPress={onCloseRating}>
             <Rating
-              type="custom"
-              ratingImage={require("../../assets/star.png")}
+              type="star"
+              ratingImage={require("../../assets/icons/star.svg")}
               ratingColor="#FFEA30"
               ratingBackgroundColor="#c8c7c8"
               ratingCount={5}
