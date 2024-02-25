@@ -29,6 +29,7 @@ const AppMainTab = () => {
           textAlign: "center",
           fontSize: 10,
           fontWeight: 400,
+          lineHeight: 20,
         },
       }}
     >
