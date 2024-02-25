@@ -21,6 +21,7 @@ import { View } from "react-native";
 import TopBar from "./TopBar";
 import SaveModal from "./SaveModal";
 import { jsonConfig } from "../../api/axios";
+import axios from "axios";
 
 const comments = [
   {
@@ -57,11 +58,10 @@ const ViewerScreen = ({ navigation }) => {
     setText(value);
   };
   const onSubmit = async () => {
-    if (text.length === 0) return null;
-
+    if (text.length < 50) return null;
     const submitData = { content: text };
     try {
-      const response = await jsonConfig("post", "paragraph/500", submitData);
+      const response = await axios.post("http://13.125.109.43:8080/paragraph/500", submitData);
       console.log(response);
 
       setMyNovelLine({
@@ -154,7 +154,7 @@ const ViewerScreen = ({ navigation }) => {
                     />
                   )}
                 </ContentList>
-                {myNovelLine ? (
+                {!myNovelLine ? (
                   <></>
                 ) : write ? (
                   <InputView>

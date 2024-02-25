@@ -10,42 +10,22 @@ import UpArrow from "../../assets/icons/up-arrow.svg";
 import { useEffect, useState } from "react";
 import { jsonConfig } from "../../api/axios";
 
-const comments = [
-  {
-    nickname: "닉네임이긴사람",
-    image:
-      "https://mblogthumb-phinf.pstatic.net/MjAxODEwMTlfMTgx/MDAxNTM5OTI4MjAwNDEx.k7oG-Q0tA6bdI1smaMzsK4t08NREjRrq3OthZKoIz8Qg.BeZxWi7HekwTWipOckbNWpvnesXuHjpldNGA7QppprUg.JPEG.retspe/eb13.jpg?type=w800",
-    content:
-      "네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.",
-    date: "2023.11.08",
-    likeCount: 100,
-  },
-  {
-    nickname: "뮤",
-    image:
-      "https://mblogthumb-phinf.pstatic.net/MjAxODEwMTlfMTgx/MDAxNTM5OTI4MjAwNDEx.k7oG-Q0tA6bdI1smaMzsK4t08NREjRrq3OthZKoIz8Qg.BeZxWi7HekwTWipOckbNWpvnesXuHjpldNGA7QppprUg.JPEG.retspe/eb13.jpg?type=w800",
-    content:
-      "네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.",
-    date: "2023.11.08",
-    likeCount: 100,
-  },
-  {
-    nickname: "시리",
-    image:
-      "https://mblogthumb-phinf.pstatic.net/MjAxODEwMTlfMTgx/MDAxNTM5OTI4MjAwNDEx.k7oG-Q0tA6bdI1smaMzsK4t08NREjRrq3OthZKoIz8Qg.BeZxWi7HekwTWipOckbNWpvnesXuHjpldNGA7QppprUg.JPEG.retspe/eb13.jpg?type=w800",
-    content:
-      "네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.네번째 내용 모든 국민은 헌법과 법률이 정한 법관에 의하여 법률에 의한 재판을 받을 권리를 가진다. 국군은 국가의 안전보장과 국토방위의 신성한 의무를 수행함을 사명으로 하며, 그 정치적 중립성은 준수된다.",
-    date: "2023.11.08",
-    likeCount: 100,
-  },
-];
-
 const Comments = (props) => {
   const { isVisible, onCloseComments } = props;
   const [text, setText] = useState("");
   const [data, setData] = useState(null);
-  const onPressBtn = () => {
-    setText("");
+  const onPressBtn = async () => {
+    if (text.length === 0) return null;
+    const submitData = { content: text };
+    try {
+      const response = await axios.post("http://13.125.109.43:8080/comment/novel/500", submitData);
+      console.log(response);
+
+      setText("");
+    } catch (error) {
+      // 에러 처리, 로깅하거나 사용자에게 메시지 표시 가능
+      console.error("데이터 제출 중 오류 발생:", error);
+    }
   };
   const onChangeText = (value) => {
     setText(value);
