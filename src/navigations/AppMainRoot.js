@@ -1,9 +1,10 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AppMainTab from "./AppMainTab";
 import AppMainStack from "./AppMainStack";
 import NovelStack from "./NovelStack";
 import ProfileStack from "./ProfileStack";
+import SignInStack from "./SignInStack";
+import SignInScreen from "../screens/SignIn/SignInScreen";
 
 const Root = createNativeStackNavigator();
 
@@ -14,7 +15,8 @@ const AppMainRoot = () => {
         headerShown: false,
       }}
     >
-      <Root.Screen name="MainTab" component={AppMainTab} />
+      <Root.Screen name="SignIn" component={SignInScreen} />
+      <Root.Screen name="SignInStack" component={SignInStack} />
       <Root.Screen name="MainStack" component={AppMainStack} />
       <Root.Screen name="NovelStack" component={NovelStack} />
       <Root.Screen name="ProfileStack" component={ProfileStack} />

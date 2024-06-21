@@ -2,10 +2,13 @@
   "expo": {
     "name": "us",
     "slug": "us",
+    "owner": "us",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
-  },
-  "name": "us"
+    ],
+    "android": {
+      "package": "com.us.us"
+    }
+  }
 }
