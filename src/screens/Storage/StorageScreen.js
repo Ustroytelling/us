@@ -22,11 +22,11 @@ const Container = styled.View`
 `;
 const TitleView = styled.View`
   flex-direction: row;
-  justify-content: center;
   align-items: center;
   padding: 4px 16px;
 `;
 const Title = styled.View`
+  width: 72px;
   height: 32px;
   align-items: center;
   justify-content: center;

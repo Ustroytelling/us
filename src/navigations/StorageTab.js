@@ -1,29 +1,39 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { colors } from "../assets/color";
-import ReadNovelTab from "../screens/Storage/ReadNovelTab";
-import LikeNovelTab from "../screens/Storage/LikeNovelTab";
-import MyNovelTab from "../screens/Storage/MyNovelTab";
-import JoinNovelTab from "../screens/Storage/JoinNovelTab";
+import LibraryTab from "../screens/Storage/LibraryTab";
+import NoteTab from "../screens/Storage/NoteTab";
+import { Text } from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
 const StorageTab = () => {
   return (
     <Tab.Navigator
-      screenOptions={() => ({
+      screenOptions={({ route }) => ({
         tabBarActiveTintColor: colors.mainText,
         tabBarInactiveTintColor: colors.mainText,
         tabBarStyle: {
-          height: 32,
+          height: 36,
           backgroundColor: colors.white,
           shadowColor: colors.white,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.grey4,
         },
-        tabBarLabelStyle: {
-          marginTop: -14,
-          textAlign: "center",
-          fontSize: 15,
-          fontWeight: 400,
-          lineHeight: 22,
+        tabBarLabel: ({ focused, color }) => {
+          return (
+            <Text
+              style={{
+                marginTop: -14,
+                fontSize: 15,
+                fontWeight: focused ? 700 : 400,
+                textAlign: "center",
+                lineHeight: 22,
+                color: color,
+              }}
+            >
+              {route.name}
+            </Text>
+          );
         },
         tabBarIndicatorStyle: {
           borderBottomColor: colors.grey2,
@@ -33,31 +43,17 @@ const StorageTab = () => {
       })}
     >
       <Tab.Screen
-        name="ReadNovel"
-        component={ReadNovelTab}
+        name="서재"
+        component={LibraryTab}
         options={{
-          title: "읽은 소설",
+          title: "서재",
         }}
       />
       <Tab.Screen
-        name="MyNovel"
-        component={MyNovelTab}
+        name="노트"
+        component={NoteTab}
         options={{
-          title: "My 소설",
-        }}
-      />
-      <Tab.Screen
-        name="JoinNovel"
-        component={JoinNovelTab}
-        options={{
-          title: "참여 소설",
-        }}
-      />
-      <Tab.Screen
-        name="LikeNovel"
-        component={LikeNovelTab}
-        options={{
-          title: "좋아요",
+          title: "노트",
         }}
       />
     </Tab.Navigator>
