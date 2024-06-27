@@ -11,6 +11,7 @@ import { colors } from "../../assets/color";
 import LeftArrow from "../../assets/icons/angle arrow left.svg";
 import { fontSize, fontWeight } from "../../assets/font";
 import CancelModal from "./CancelModal";
+import { jsonConfig } from "../../api/axios";
 
 const NewNevelScreen = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState("");
@@ -23,7 +24,7 @@ const NewNevelScreen = ({ navigation }) => {
   const [selectTags, setSelectTags] = useState([]);
   const [selectGenre, setSelectGenre] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [complete, setComplete] = useState(false);
+  const [complete, setComplete] = useState(true);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   const uploadImage = async () => {
@@ -76,8 +77,22 @@ const NewNevelScreen = ({ navigation }) => {
     }
   };
 
-  const onClickResister = () => {
-    if (!complete) return;
+  const onClickResister = async () => {
+    if (!complete) return null;
+    const data = {
+      title: novelName,
+      synopsis: novelInfo,
+      authorDescription: userInfo,
+      hashtag: selectTags,
+      genre: selectGenre[0],
+      ageRating: "GENERAL",
+      novelSize: "LONG",
+      thumbnail: "주술회전.jpg",
+    };
+    console.log(data);
+    const response = await jsonConfig("post", "/novel", data);
+    console.log(response);
+    navigation.navigate("SignInStack", { screen: "AppMain" });
   };
   const onClickReturn = () => {
     setIsVisibleModal(true);
@@ -89,9 +104,8 @@ const NewNevelScreen = ({ navigation }) => {
     navigation.goBack();
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (
-      imageUrl.length &&
       novelName.length &&
       novelInfo.length &&
       userInfo.length &&
@@ -103,7 +117,7 @@ const NewNevelScreen = ({ navigation }) => {
     } else {
       setComplete(false);
     }
-  }, [imageUrl, novelName, novelInfo, userInfo, selectTags, selectGenre, selectedOption]);
+  }, [imageUrl, novelName, novelInfo, userInfo, selectTags, selectGenre, selectedOption]); */
 
   return (
     <>
@@ -288,7 +302,7 @@ const NewNevelScreen = ({ navigation }) => {
           </NewPostDetailBox>
         </Container>
         <ButtonBox>
-          <ResisterBtn style={complete && { backgroundColor: colors.primary }}>
+          <ResisterBtn style={complete && { backgroundColor: colors.primary }} onPress={onClickResister}>
             <BtnText style={complete && { color: colors.white }}>등록하기</BtnText>
           </ResisterBtn>
         </ButtonBox>

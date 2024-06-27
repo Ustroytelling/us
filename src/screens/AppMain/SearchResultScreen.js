@@ -5,123 +5,36 @@ import Search from "../../assets/icons/search.svg";
 import Arrow from "../../assets/icons/big-arrow.svg";
 import { useEffect, useState } from "react";
 import Star from "../../assets/icons/Star 1.svg";
-
-const results = [
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-  {
-    title: "가나다라마바사파하아댜죠",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVSkmNOQ6abMCc5e6R2r7VwRZDkBHFTyzAg&usqp=CAU",
-    writer: "작가명",
-    allWriter: 7,
-    rating: 4.5,
-    counts: 1046,
-  },
-];
+import { jsonConfig } from "../../api/axios";
 
 const SearchResultScreen = ({ navigation, route }) => {
+  const [page, setPage] = useState(0);
   const [text, setText] = useState(route.params);
   const [searchText, setSearchText] = useState(route.params);
+  const [datas, setDatas] = useState(null);
   const onChangeText = (value) => {
     setText(value);
   };
-  const handleSubmission = () => {
+  const handleSubmit = () => {
     setSearchText(text);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await jsonConfig("get", `novel/search/${page}`, undefined, {
+          keyword: searchText,
+          nextPage: page,
+        });
+        const data = response.data.data;
+        console.log(data);
+        setDatas(data.novelSimpleInfos);
+        if (data.hasNext) setPage(data.nextPage);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [searchText]);
 
   return (
     <Container>
@@ -137,7 +50,7 @@ const SearchResultScreen = ({ navigation, route }) => {
             onChangeText={onChangeText}
             placeholderTextColor={colors.grey3}
             returnKeyType="search"
-            onSubmitEditing={handleSubmission}
+            onSubmitEditing={handleSubmit}
           />
         </InputView>
       </SearchBar>
@@ -149,26 +62,31 @@ const SearchResultScreen = ({ navigation, route }) => {
         </SearchTerm>
         <ResultsScrollView>
           <ResultList>
-            {results.map((result, idx) => {
-              return (
-                <Result key={idx}>
-                  <Thumbnail>
-                    <ThumbnailImage src={result.image} />
-                  </Thumbnail>
-                  <Description>
-                    <Title>{result.title}</Title>
-                    <Writer>{`${result.writer} 외 ${result.allWriter}명 참여중`}</Writer>
-                    <Reviews>
-                      <Star />
-                      <RatingView>
-                        <Rating style={{ color: "#DE2929" }}>{result.rating}</Rating>
-                        <Rating>{` (${result.counts})`}</Rating>
-                      </RatingView>
-                    </Reviews>
-                  </Description>
-                </Result>
-              );
-            })}
+            {datas &&
+              datas.map((result, idx) => {
+                return (
+                  <Result key={idx}>
+                    <Thumbnail>
+                      <ThumbnailImage src={result.image} />
+                    </Thumbnail>
+                    <Description>
+                      <Title>{result.title}</Title>
+                      <Writer>
+                        {result.joinedAuthorCnt === 0
+                          ? `${result.createdAuthor}`
+                          : `${result.createdAuthor} 외 ${result.allWriter}명 참여중`}
+                      </Writer>
+                      <Reviews>
+                        <Star />
+                        <RatingView>
+                          <Rating style={{ color: "#DE2929" }}>{result.score}</Rating>
+                          <Rating>{` (${result.commentCnt})`}</Rating>
+                        </RatingView>
+                      </Reviews>
+                    </Description>
+                  </Result>
+                );
+              })}
           </ResultList>
         </ResultsScrollView>
       </SearchResults>
@@ -227,7 +145,7 @@ const ResultList = styled.View`
   gap: 16px;
   padding: 8px 0;
 `;
-const Result = styled.View`
+const Result = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   gap: 16px;

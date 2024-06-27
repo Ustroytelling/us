@@ -1,10 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import styled from "styled-components";
 import NewNevelScreen from "../screens/AppMain/NewNevelScreen";
 import SearchScreen from "../screens/AppMain/SearchScreen";
 import SearchResultScreen from "../screens/AppMain/SearchResultScreen";
-import AlgorithmNovelScreen from "../screens/AppMain/TopicNovelScreen";
 import TopicNovelScreen from "../screens/AppMain/TopicNovelScreen";
 
 const Stack = createNativeStackNavigator();

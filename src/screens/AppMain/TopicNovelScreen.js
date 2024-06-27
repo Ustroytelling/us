@@ -3,19 +3,37 @@ import { Dimensions } from "react-native";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import LeftArrow from "../../assets/icons/angle arrow left.svg";
+import { useEffect, useState } from "react";
+import { jsonConfig } from "../../api/axios";
 
 const screenWidth = Dimensions.get("window").width;
 const novelWidth = (screenWidth - 40) / 3;
 
-const TopicNovelScreen = (props) => {
-  const { navigation, route } = props;
+const TopicNovelScreen = ({ navigation, route }) => {
+  const { topic } = route.params;
+  const [page, setPage] = useState(0);
+  const [datas, setDatas] = useState(null);
   const onGoNovel = () => {
     navigation.navigate("NovelStack", { screen: "NovelIndex" });
   };
   const onClickReturn = () => {
     navigation.goBack();
   };
-  console.log(route);
+  const getData = async (topic) => {
+    const response = await jsonConfig("get", `novel/main/more/${topic}/${page}`);
+    const data = response.data.data;
+    setDatas(data.novelList);
+    if (data.hasNext) setPage(data.nextPage);
+  };
+
+  useEffect(() => {
+    console.log(topic);
+    if (topic.indexOf("실시간") !== -1) {
+      getData("UPDATE");
+    } else {
+      getData("NEW");
+    }
+  }, [topic]);
 
   return (
     <Container>
@@ -23,89 +41,24 @@ const TopicNovelScreen = (props) => {
         <CloseButton onPress={onClickReturn}>
           <LeftArrow />
         </CloseButton>
-        <TitleText>{route.params.topic}</TitleText>
+        <TitleText>{topic}</TitleText>
       </TopBar>
       <MainScroll showsVerticalScrollIndicator={false}>
         <RealTimeContainer>
           <RealTimeDataBox alTimeDataBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-          </RealTimeDataBox>
-          <RealTimeDataBox style={{ marginTop: 4 }}>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-          </RealTimeDataBox>
-          <RealTimeDataBox style={{ marginTop: 4 }}>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-          </RealTimeDataBox>
-          <RealTimeDataBox style={{ marginTop: 4 }}>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
+            {datas &&
+              datas.map((novel, idx) => {
+                return (
+                  <RealTimeBox key={idx} onPress={() => onGoNovel(novel)}>
+                    <RealTimeImg
+                      source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+                    />
+                    <RealTimeName ellipsizeMode="tail" numberOfLines={1}>
+                      {novel.title}
+                    </RealTimeName>
+                  </RealTimeBox>
+                );
+              })}
           </RealTimeDataBox>
         </RealTimeContainer>
       </MainScroll>

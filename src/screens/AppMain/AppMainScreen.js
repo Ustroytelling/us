@@ -2,27 +2,53 @@ import styled from "styled-components/native";
 import SearchIcon from "../../assets/icons/search magnifying glass.svg";
 import EditIcon from "../../assets/AppMainIcons/editNote.svg";
 import LogoIcon from "../../assets/AppMainIcons/usLogo.svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GoIcon from "../../assets/icons/s_arrow.svg";
-import { AlgorithmData, RealTimeData } from "../../data/NovelData";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { RealTimeData } from "../../data/NovelData";
+import { TouchableOpacity, View } from "react-native";
 /* import LinearGradient from "react-native-linear-gradient"; */
 import Swiper from "react-native-web-swiper";
 import { Dimensions } from "react-native";
+import { jsonConfig } from "../../api/axios";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
 const novelWidth = (screenWidth - 40) / 3;
 const novelHeight = novelWidth * (3 / 2);
 
-const AppMainScreen = ({ navigation }) => {
+const AppMainScreen = () => {
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const swiperRef = useRef(null);
   const [swiper, setSwiper] = useState(0);
-  const onGoNovel = () => {
-    navigation.navigate("NovelStack", { screen: "NovelIndex" });
+  const [realTimeNovelsdata, setRealTimeNovelsData] = useState(null);
+  const [newNovelsdata, setNewTimeNovelsData] = useState(null);
+  const [readNovelsdata, setReadNovelsData] = useState(null);
+  const [favoriteNovelsdata, setfavoriteNovelsData] = useState(null);
+  const [dd, setdd] = useState(null);
+  const fetchData = async () => {
+    try {
+      const response = await jsonConfig("get", "novel/main");
+      const data = response.data.data;
+      setNewTimeNovelsData(data.recentlyCreatedNovels);
+      setRealTimeNovelsData(data.realTimeUpdateNovels);
+      setReadNovelsData(data.readNovels);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const onGoNovel = (data) => {
+    navigation.navigate("NovelStack", { screen: "NovelIndex", params: data });
   };
   const onGoTopicNovel = (topic) => {
     navigation.navigate("MainStack", { screen: "TopicNovel", params: { topic } });
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData();
+    }
+  }, [isFocused]);
 
   return (
     <Container>
@@ -40,20 +66,6 @@ const AppMainScreen = ({ navigation }) => {
         </IconBox>
       </HeaderContainer>
       <MainScroll showsVerticalScrollIndicator={false}>
-        <AlgorithmContainer>
-          <FlatList
-            data={AlgorithmData}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id + ""}
-            renderItem={({ item }) => (
-              <AlgorithmBtn>
-                <AlgorithmText>{item.name}</AlgorithmText>
-              </AlgorithmBtn>
-            )}
-          />
-        </AlgorithmContainer>
-
         <View style={{ position: "relative", height: 280 }}>
           <Swiper ref={swiperRef} loop timeout={2} controlsEnabled={false} onIndexChanged={(index) => setSwiper(index)}>
             {RealTimeData.map((item, i) => (
@@ -87,124 +99,74 @@ const AppMainScreen = ({ navigation }) => {
 
         <RealTimeContainer>
           <RealTimeHeader>
-            <MoveBtn onPress={() => onGoTopicNovel("실시간 업데이트")}>
-              <RealTimeText>실시간 업데이트</RealTimeText>
+            <MoveBtn onPress={() => onGoTopicNovel("실시간 업데이트 ❤️‍🔥")}>
+              <RealTimeText>실시간 업데이트 ❤️‍🔥</RealTimeText>
               <GoIcon style={{ transform: [{ rotateY: "180deg" }] }} />
             </MoveBtn>
           </RealTimeHeader>
           <RealTimeDataBox alTimeDataBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-          </RealTimeDataBox>
-          <RealTimeDataBox style={{ marginTop: 4 }}>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
+            {realTimeNovelsdata &&
+              realTimeNovelsdata.map((novel, idx) => {
+                return (
+                  <RealTimeBox key={idx} onPress={() => onGoNovel(novel)}>
+                    <RealTimeImg
+                      source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+                    />
+                    <RealTimeName ellipsizeMode="tail" numberOfLines={1}>
+                      {novel.title}
+                    </RealTimeName>
+                  </RealTimeBox>
+                );
+              })}
           </RealTimeDataBox>
         </RealTimeContainer>
 
         <RealTimeContainer>
           <RealTimeHeader>
-            <MoveBtn onPress={() => onGoTopicNovel("신작")}>
-              <RealTimeText>신작</RealTimeText>
+            <MoveBtn onPress={() => onGoTopicNovel("따끈따끈한 신작 🥐")}>
+              <RealTimeText>따끈따끈한 신작 🥐</RealTimeText>
               <GoIcon style={{ transform: [{ rotateY: "180deg" }] }} />
             </MoveBtn>
           </RealTimeHeader>
           <RealTimeDataBox alTimeDataBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-          </RealTimeDataBox>
-          <RealTimeDataBox style={{ marginTop: 4 }}>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
-            <RealTimeBox onPress={onGoNovel}>
-              <RealTimeImg
-                source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
-              />
-              <RealTimeName>소설 제목</RealTimeName>
-            </RealTimeBox>
+            {newNovelsdata &&
+              newNovelsdata.map((novel, idx) => {
+                return (
+                  <RealTimeBox key={idx} onPress={() => onGoNovel(novel)}>
+                    <RealTimeImg
+                      source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+                    />
+                    <RealTimeName ellipsizeMode="tail" numberOfLines={1}>
+                      {novel.title}
+                    </RealTimeName>
+                  </RealTimeBox>
+                );
+              })}
           </RealTimeDataBox>
         </RealTimeContainer>
 
         <ReadNovelContainer style={{ marginBottom: 80 }}>
           <ReadNovelHeader>
-            <RealTimeText>읽은 소설</RealTimeText>
-            <TouchableOpacity>
+            <MoveBtn onPress={() => navigation.navigate("Storage")}>
+              <RealTimeText>읽은 소설 📚</RealTimeText>
               <GoIcon style={{ transform: [{ rotateY: "180deg" }] }} />
-            </TouchableOpacity>
+            </MoveBtn>
           </ReadNovelHeader>
           <ReadNovelList horizontal={true} showsHorizontalScrollIndicator={false}>
             <ReadNovels>
-              {RealTimeData.map((data, idx) => {
-                return (
-                  <RealTimeBox
-                    onPress={() => {
-                      navigation.navigate("NovelStack", { screen: "NovelIndex", params: data });
-                    }}
-                    key={idx}
-                  >
-                    <RealTimeImg source={{ uri: data.image }} />
-                    <RealTimeName numberOfLines={1}>{data.name}</RealTimeName>
-                  </RealTimeBox>
-                );
-              })}
+              {readNovelsdata &&
+                readNovelsdata.map((novel, idx) => {
+                  return (
+                    <RealTimeBox key={idx} onPress={() => onGoNovel(novel)}>
+                      <RealTimeImg
+                        source={{ uri: "https://i.pinimg.com/564x/0b/5c/91/0b5c91d3e3c0fc913b89ec6e9ad0011b.jpg" }}
+                      />
+                      <RealTimeName ellipsizeMode="tail" numberOfLines={1}>
+                        {novel.title}
+                      </RealTimeName>
+                    </RealTimeBox>
+                  );
+                })}
             </ReadNovels>
           </ReadNovelList>
         </ReadNovelContainer>
@@ -231,10 +193,6 @@ const LogoBox = styled.View`
   align-items: center;
   width: 60px;
   height: 27px;
-  background-color: rgba(170, 228, 229, 1);
-  border-radius: 12px;
-  border-width: 0.5px;
-  border-color: rgba(241, 241, 241, 1);
 `;
 const IconBox = styled.View`
   flex-direction: row;
@@ -242,29 +200,6 @@ const IconBox = styled.View`
 `;
 const MainScroll = styled.ScrollView`
   height: 100%;
-`;
-const AlgorithmContainer = styled.View`
-  align-items: center;
-  height: 32px;
-  margin-top: 12px;
-  padding-left: 16px;
-`;
-
-const AlgorithmBtn = styled.TouchableOpacity`
-  justify-content: center;
-  align-items: center;
-  border-width: 1px;
-  border-color: rgba(219, 219, 219, 1);
-  border-radius: 50px;
-  padding: 4px 12px;
-  margin-right: 8px;
-`;
-
-const AlgorithmText = styled.Text`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 22px;
-  color: rgba(32, 32, 32, 1);
 `;
 
 const BannerContainer = styled.TouchableOpacity`
@@ -333,10 +268,12 @@ const RealTimeHeader = styled.View`
   width: 100%;
 `;
 const MoveBtn = styled.TouchableOpacity`
+  width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 `;
+
 const RealTimeText = styled.Text`
   font-weight: 700;
   font-size: 18px;
@@ -346,9 +283,9 @@ const RealTimeText = styled.Text`
 
 const RealTimeDataBox = styled.View`
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 4px;
   width: 100%;
-  height: ${novelHeight + 26}px;
 `;
 
 const RealTimeBox = styled.TouchableOpacity`
@@ -384,30 +321,6 @@ const ReadNovels = styled.View`
   flex-direction: row;
   gap: 4px;
   padding: 0 16px;
-`;
-const ServiceContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  height: 144px;
-  background-color: #ededed;
-`;
-const ServiceView = styled.View`
-  justify-content: center;
-  align-items: center;
-`;
-const ServiceText = styled.Text`
-  flex-direction: row;
-`;
-const ServiceMediumText = styled.Text`
-  font-size: 8px;
-  font-weight: 500;
-  color: #929292;
-`;
-const ServiceRegularText = styled.Text`
-  font-size: 8px;
-  font-weight: 400;
-  color: #929292;
 `;
 
 export default AppMainScreen;
