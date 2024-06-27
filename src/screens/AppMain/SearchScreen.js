@@ -1,10 +1,11 @@
 import styled from "styled-components/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { colors } from "../../assets/color";
 import Search from "../../assets/icons/search.svg";
 import Arrow from "../../assets/icons/big-arrow.svg";
 import { fontSize, fontWeight } from "../../assets/font";
 import XsX from "../../assets/icons/xs_X.svg";
+import { jsonConfig } from "../../api/axios";
 
 const terms = ["모든 국민은", "법률이 정하는", "바에 의하여", "공무담임권을 가진다."];
 const popularTerms = [
@@ -21,6 +22,7 @@ const popularTerms = [
 ];
 
 const SearchScreen = ({ navigation }) => {
+  const [data, setData] = useState(null);
   const [text, setText] = useState("");
   const onChangeText = (value) => {
     setText(value);
@@ -33,6 +35,13 @@ const SearchScreen = ({ navigation }) => {
     navigation.navigate("MainStack", { screen: "SearchResult", params: term });
     setText("");
   };
+  useEffect(() => {
+    (async () => {
+      const response = await jsonConfig("get", "novel/main/search");
+      console.log(response.data.data);
+      setData(response.data.data);
+    })();
+  }, [setData]);
 
   return (
     <Container>
@@ -65,38 +74,41 @@ const SearchScreen = ({ navigation }) => {
         </SettingBtns>
       </RecentSearchView>
       <RecentSearchTermView>
-        <Terms
-          data={terms}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <SearchTermButton onPress={() => onSearchTerm(item)}>
-              <Term>{item}</Term>
-              <DeleteButton>
-                <XsX />
-              </DeleteButton>
-            </SearchTermButton>
-          )}
-        />
+        {data && (
+          <Terms
+            data={data.recentSearch}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <SearchTermButton onPress={() => onSearchTerm(item)}>
+                <Term>{item}</Term>
+                <DeleteButton>
+                  <XsX />
+                </DeleteButton>
+              </SearchTermButton>
+            )}
+          />
+        )}
       </RecentSearchTermView>
       <Horizon />
       <PopularSearchView>
         <Title>인기 검색어</Title>
         <PopularSearchTerms>
-          {popularTerms.map((term, idx) => {
-            return (
-              <PopularSearchTermView key={idx} onPress={() => onSearchTerm(term)}>
-                <RankView>
-                  <Rank style={idx < 3 && { color: colors.primary }}>{idx + 1}</Rank>
-                </RankView>
-                <PopularTermView>
-                  <PopularTerm ellipsizeMode="tail" numberOfLines={1}>
-                    {term}
-                  </PopularTerm>
-                </PopularTermView>
-              </PopularSearchTermView>
-            );
-          })}
+          {data &&
+            data.hotSearch.map((term, idx) => {
+              return (
+                <PopularSearchTermView key={idx} onPress={() => onSearchTerm(term)}>
+                  <RankView>
+                    <Rank style={idx < 3 && { color: colors.primary }}>{idx + 1}</Rank>
+                  </RankView>
+                  <PopularTermView>
+                    <PopularTerm ellipsizeMode="tail" numberOfLines={1}>
+                      {term}
+                    </PopularTerm>
+                  </PopularTermView>
+                </PopularSearchTermView>
+              );
+            })}
         </PopularSearchTerms>
       </PopularSearchView>
     </Container>
