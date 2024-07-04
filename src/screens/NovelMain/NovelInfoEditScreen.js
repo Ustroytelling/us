@@ -2,18 +2,30 @@ import React, { useRef, useState } from "react";
 import { Alert } from "react-native";
 import styled from "styled-components/native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { jsonConfig } from "../../api/axios";
 
-const NovelInfoEditScreen = ({ setEdit }) => {
-  const [novelInfo, setNovelInfo] = useState("");
-  const [writerInfo, setWriterInfo] = useState("");
+const NovelInfoEditScreen = ({ setEdit, data, onChangeData }) => {
+  const [novelInfo, setNovelInfo] = useState(data.synopsis);
+  const [writerInfo, setWriterInfo] = useState(data.authorIntroduction);
   const scrollRef = useRef();
-
-  const pressScrollTab = () => {
-    scrollRef.current.scrollTo({ x: 0, y: 0, animated: true });
+  const submitData = async () => {
+    setEdit(false);
+    const synopsisData = { synopsis: novelInfo };
+    const writerInfoData = { description: writerInfo };
+    try {
+      await jsonConfig("patch", `/novel/${data.novelId}/synopsis`, synopsisData);
+      await jsonConfig("patch", `/novel/${data.novelId}/author-description`, writerInfoData);
+      onChangeData(novelInfo, writerInfo);
+      setNovelInfo("");
+      setWriterInfo("");
+    } catch (error) {
+      // 에러 처리, 로깅하거나 사용자에게 메시지 표시 가능
+      console.error("데이터 제출 중 오류 발생:", error);
+    }
   };
 
   return (
-    <BottomSheetScrollView showsVerticalScrollIndicator={false} onPress={() => keyboard.dismiss()} ref={scrollRef}>
+    <BottomSheetScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
       <InfoBox style={{ marginTop: 16 }}>
         <InfoTitleText>작품 소개</InfoTitleText>
         <IfoInputBox>
@@ -66,18 +78,13 @@ const NovelInfoEditScreen = ({ setEdit }) => {
             <MoreInfoText>연령등급</MoreInfoText>
           </MoreInfo>
           <MoreInfo>
-            <MoreInfoText>학원물</MoreInfoText>
-            <MoreInfoText>전체이용가</MoreInfoText>
+            <MoreInfoText>{data && data.genre}</MoreInfoText>
+            <MoreInfoText>{data && data.ageRating === "GENERAL" && "전체이용가"}</MoreInfoText>
           </MoreInfo>
         </MoreInfoBox>
 
         <EditBox>
-          <EditBtn
-            onPress={() => {
-              setEdit(false);
-              pressScrollTab();
-            }}
-          >
+          <EditBtn onPress={submitData}>
             <EditText>저장하기</EditText>
           </EditBtn>
           <EditBtn
