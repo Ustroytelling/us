@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, TouchableOpacity, View, LayoutAnimation, Dimensions } from "react-native";
+import { TouchableOpacity, View, LayoutAnimation } from "react-native";
 import styled from "styled-components/native";
 import LeftArrowIcon from "../../assets/icons/arrow.svg";
 import RightArrowIcon from "../../assets/icons/s_arrow.svg";
@@ -7,260 +7,195 @@ import LikeIcon from "../../assets/NovelMainIcons/heart.svg";
 import FillLikeIcon from "../../assets/icons/Fill_heart.svg";
 import PaperFileIcon from "../../assets/NovelMainIcons/paperFile.svg";
 import UpDownIcon from "../../assets/NovelMainIcons/arrowsUpDown.svg";
-import NovelCover from "../../assets/novel_cover.png";
 import NovelNextImg from "../../assets/icons/NovelNext.svg";
-import { hashtagData, novelIndexData } from "../../data/NovelData";
 import NovelInfoTab from "../../navigations/NovelInfoTab";
 import { SimpleLineIcons } from "@expo/vector-icons";
-/* import ImageColors from "react-native-image-colors"; */
-/* import LinearGradient from "react-native-linear-gradient"; */
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
-import Modal from "react-native-modal";
 import NextEpisodeModal from "./NextEpisodeModal";
+import { jsonConfig } from "../../api/axios";
+import { colors } from "../../assets/color";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const number = 99;
 
 const NovelIndexScreen = ({ navigation, route: { params } }) => {
-  // console.log(params);
+  const [data, setData] = useState(null);
+  const [isManager, setIsManager] = useState(false);
   const [order, setOrder] = useState(false);
   const [stay, setStay] = useState(false);
-  const [star, setStar] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [episodeModalVisible, setEpisodeModalVisible] = useState(false);
   const onOpenEpisodeModal = () => setEpisodeModalVisible(true);
   const onCloseEpisodeModal = () => setEpisodeModalVisible(false);
-
-  // ref
-  const bottomSheetRef2 = useRef(null);
-  const snapPoints2 = useMemo(() => ["1%", "75%"], []);
-  const handleSheetChanges2 = useCallback((index) => {
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["1%", "85%"], []);
+  const handleSheetChanges = useCallback((index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    setBottomSheetVisible(index === 1);
+    if (index !== 1) {
+      bottomSheetRef.current?.close();
+    }
   }, []);
-
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetRef2.current?.expand(); // 모달이 열릴 때 85%로 바텀 시트를 열도록
+  const handlePresentModalPress = () => {
+    bottomSheetRef.current?.expand();
     setBottomSheetVisible(true);
-  }, []);
-
-  const [backgroundColor, setBackgroundColor] = useState({
-    background: "#ff0000",
-    primary: "#00ff00",
-    secondary: "#0000ff",
-  });
-
-  useEffect(() => {
-    const extractColor = async () => {
-      if (params) {
-        try {
-          const colors = await ImageColors.getColors(params.image, {
-            fallback: "#ffffff", // 추출 실패 시 사용할 색상
-            cache: true, // 추출한 색상을 캐시에 저장
-            key: params.image,
-          });
-
-          if (colors.platform === "android") {
-            setBackgroundColor(colors.dominant || "#ffffff");
-          } else {
-            // iOS에서는 세 가지 색상 활용
-            const dominantColor = colors.background || "#ffffff";
-            const averageColor = colors.primary || "#ffffff";
-            const vibrantColor = colors.secondary || "#ffffff";
-
-            // 세 가지 색상을 조합하여 원하는 형태로 배경 설정
-            setBackgroundColor({
-              background: `${dominantColor}`,
-              primary: `${averageColor}`,
-              secondary: `${vibrantColor}`,
-            });
-          }
-          // console.log(colors.primary);
-        } catch (error) {
-          console.error("Error extracting color:", error);
-        }
+  };
+  const onChangeData = (syn, aut) => {
+    const newData = { ...data };
+    newData.synopsis = syn;
+    newData.authorIntroduction = aut;
+    setData(newData);
+  };
+  const onChnageLike = async () => {
+    try {
+      if (isLiked) {
+        await jsonConfig("delete", `like/novel/${params.id}`);
+        setIsLiked(false);
       } else {
-        try {
-          const colors = await ImageColors.getColors(NovelCover, {
-            fallback: "#ffffff",
-            cache: true,
-            key: NovelCover,
-          });
-
-          if (colors.platform === "android") {
-            setBackgroundColor(colors.dominant || "#ffffff");
-          } else {
-            // iOS에서는 세 가지 색상 활용
-            const dominantColor = colors.background || "#ffffff";
-            const averageColor = colors.primary || "#ffffff";
-            const vibrantColor = colors.secondary || "#ffffff";
-
-            // 세 가지 색상을 조합하여 원하는 형태로 배경 설정
-            setBackgroundColor({
-              background: `${dominantColor}`,
-              primary: `${averageColor}`,
-              secondary: `${vibrantColor}`,
-            });
-          }
-        } catch (error) {
-          console.error("Error extracting color:", error);
-        }
+        await jsonConfig("post", `like/novel/${params.id}`);
+        setIsLiked(true);
       }
-    };
-    extractColor();
-  }, [params]);
-
-  const hexToRgb = (hex) => {
-    // HEX 색상을 RGB로 변환
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return `rgb(${r}, ${g}, ${b})`;
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const [rgbColors, setRgbColors] = useState({});
-
   useEffect(() => {
-    if (backgroundColor === null) {
-      return;
-    }
-
-    const newRgbColors = Object.keys(backgroundColor).reduce((acc, key) => {
-      acc[key] = hexToRgb(backgroundColor[key]);
-      return acc;
-    }, {});
-
-    setRgbColors(newRgbColors);
-  }, [backgroundColor]);
+    (async () => {
+      const memberId = await AsyncStorage.getItem("memberId");
+      const response = await jsonConfig("get", `novel/${params.id}/detail`);
+      console.log("소설 상세 페이지 데이터 가져옴", response.data.data);
+      setData(response.data.data);
+      setIsLiked(response.data.data.isLiked);
+      setIsManager(Number(memberId) === response.data.data.authorId);
+    })();
+  }, [setData]);
 
   return (
     <>
-      <Container>
-        {/* <LinearGradientBox
-          start={{ x: 0, y: 2 }}
-          end={{ x: 0, y: -0.5 }}
-          colors={[
-            rgbColors.primary ? rgbColors.primary : "transparent",
-            rgbColors.background ? rgbColors.background : "transparent",
-            rgbColors.secondary ? rgbColors.secondary : "transparent",
-          ]}
-        /> */}
-        <NovelHeaderBox>
-          <IconBar stay={stay}>
-            <LeftIconBox onPress={() => navigation.goBack()}>
-              <LeftArrowIcon width={32} height={32} />
-            </LeftIconBox>
-            <RightIconBox>
-              <BellIconBox>
-                <SimpleLineIcons name="bell" size={19} color="rgba(255, 255, 255, 1)" />
-              </BellIconBox>
-              <LikeIconBox onPress={() => setStar(!star)}>
-                {star === false ? <LikeIcon width={32} height={32} /> : <FillLikeIcon width={32} height={32} />}
-              </LikeIconBox>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Container>
+          <NovelHeaderBox src={data ? data.thumbnail : "http://via.placeholder.com/146X204"} blurRadius={30}>
+            <IconBar stay={stay}>
+              <LeftIconBox onPress={() => navigation.goBack()}>
+                <LeftArrowIcon width={32} height={32} />
+              </LeftIconBox>
+              <RightIconBox>
+                <BellIconBox>
+                  <SimpleLineIcons name="bell" size={19} color="white" />
+                </BellIconBox>
+                <LikeIconBox onPress={() => onChnageLike()}>
+                  {isLiked === false ? <LikeIcon width={32} height={32} /> : <FillLikeIcon width={32} height={32} />}
+                </LikeIconBox>
 
-              <PaperFileIconBox>
-                <PaperFileIcon width={32} height={32} />
-              </PaperFileIconBox>
-            </RightIconBox>
-          </IconBar>
-          <NovelCoverImg source={params ? { uri: params.image } : NovelCover} />
-        </NovelHeaderBox>
+                <PaperFileIconBox>
+                  <PaperFileIcon width={32} height={32} />
+                </PaperFileIconBox>
+              </RightIconBox>
+            </IconBar>
+            <NovelCoverImgBox>
+              <NovelCoverImg src={"http://via.placeholder.com/146X204"} />
+            </NovelCoverImgBox>
+          </NovelHeaderBox>
 
-        <View style={{ marginTop: -18 }}>
-          <NovelIndexBody>
-            <NovelTitleContainer>
-              <NovelTitleBox>
-                <NovelTitle>{params ? params.name : "주술회전 1"}</NovelTitle>
-                <NovelInfoBtn onPress={handlePresentModalPress}>
-                  <RightArrowIcon width={24} height={24} style={{ transform: [{ rotateY: "180deg" }] }} />
-                </NovelInfoBtn>
-              </NovelTitleBox>
+          <View style={{ marginTop: -18 }}>
+            <NovelIndexBody>
+              <NovelTitleContainer>
+                <NovelTitleBox>
+                  <NovelTitle>{data && data.title}</NovelTitle>
+                  <NovelInfoBtn onPress={handlePresentModalPress}>
+                    <RightArrowIcon width={24} height={24} style={{ transform: [{ rotateY: "180deg" }] }} />
+                  </NovelInfoBtn>
+                </NovelTitleBox>
 
-              <NovelSubTitleBox>
-                <NovelSubBox1>
-                  <NovelSubText>학원물</NovelSubText>
-                  <Line />
-                  <NovelSubText>{params ? params.name : "홍길동"} 외 n명</NovelSubText>
-                </NovelSubBox1>
-                <NovelSubBox2>
-                  <TouchableOpacity>
-                    <NovelSubText>{`댓글 ${number > 100 ? "100+" : number}`}</NovelSubText>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <NovelSubText>공유하기</NovelSubText>
-                  </TouchableOpacity>
-                </NovelSubBox2>
-              </NovelSubTitleBox>
+                <NovelSubTitleBox>
+                  <NovelSubBox1>
+                    <NovelSubText>{data && data.genre}</NovelSubText>
+                    <Line />
+                    <NovelSubText>{data && data.authorName} 외 n명</NovelSubText>
+                  </NovelSubBox1>
+                  <NovelSubBox2>
+                    <TouchableOpacity>
+                      <NovelSubText>{`댓글 ${number > 100 ? "100+" : number}`}</NovelSubText>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <NovelSubText>공유하기</NovelSubText>
+                    </TouchableOpacity>
+                  </NovelSubBox2>
+                </NovelSubTitleBox>
 
-              <NovelHashtagBox>
-                {hashtagData.map((d, id) => (
-                  <NovelHashtag key={id}>
-                    <NovelHashtagText>#{d.tag}</NovelHashtagText>
-                  </NovelHashtag>
-                ))}
-              </NovelHashtagBox>
-            </NovelTitleContainer>
+                <NovelHashtagBox>
+                  {data &&
+                    data.hashtags.map((d, id) => (
+                      <NovelHashtag key={id}>
+                        <NovelHashtagText>#{d}</NovelHashtagText>
+                      </NovelHashtag>
+                    ))}
+                </NovelHashtagBox>
+              </NovelTitleContainer>
 
-            <NovelOrderBox>
-              <NovelAllCountText>전체 000</NovelAllCountText>
-              <NovelOrder>
-                <NovelOrderBtn style={{ marginRight: 8 }} onPress={() => setOrder(!order)}>
-                  <UpDownIcon width={24} height={24} />
-                  {order === false ? (
-                    <NovelOrderText>최신순</NovelOrderText>
-                  ) : (
-                    <NovelOrderText>오래된 순</NovelOrderText>
-                  )}
-                </NovelOrderBtn>
-              </NovelOrder>
-            </NovelOrderBox>
+              <NovelOrderBox>
+                <NovelAllCountText>{`전체 ${data && data.chapterInfos.length}`}</NovelAllCountText>
+                <NovelOrder>
+                  <NovelOrderBtn style={{ marginRight: 8 }} onPress={() => setOrder(!order)}>
+                    <UpDownIcon width={24} height={24} />
+                    {order === false ? (
+                      <NovelOrderText>최신순</NovelOrderText>
+                    ) : (
+                      <NovelOrderText>오래된 순</NovelOrderText>
+                    )}
+                  </NovelOrderBtn>
+                </NovelOrder>
+              </NovelOrderBox>
 
-            <NovelIndexContainer
-              style={order ? { flexDirection: "column" } : { flexDirection: "column-reverse" }}
-              stay={stay}
-            >
-              {novelIndexData.map((item, idx) => {
-                return (
-                  <NovelIndexBox onPress={() => navigation.navigate("NovelStack", { screen: "NovelViewer" })} key={idx}>
-                    <NovelIndexImg source={item.novel.image} />
-                    <NovelIndexTextBox>
-                      <NovelIndexTitle>
-                        {item.novel.name} {item.novel.id}화
-                      </NovelIndexTitle>
-                      <NovelIndexDate>2023.01.01</NovelIndexDate>
-                    </NovelIndexTextBox>
-                  </NovelIndexBox>
-                );
-              })}
-              <NovelNextMakeBox order={order} onPress={onOpenEpisodeModal}>
-                <NovelNextImg width={56} height={80} />
-                <NovelNextText>다음화를 생성해주세요</NovelNextText>
-              </NovelNextMakeBox>
-            </NovelIndexContainer>
-          </NovelIndexBody>
-        </View>
-      </Container>
-      <Modal isVisible={bottomSheetVisible} style={{ margin: 0, flex: 1 }} backdropOpacity={0.35}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheet
-            ref={bottomSheetRef2}
-            index={1}
-            snapPoints={snapPoints2}
-            onChange={handleSheetChanges2}
-            handleIndicatorStyle={{
-              backgroundColor: "rgba(219, 219, 219, 1)",
-              width: 80,
-            }}
-            style={{
-              flex: 1,
-            }}
-          >
-            <NovelInfoTab />
-          </BottomSheet>
-        </GestureHandlerRootView>
-      </Modal>
+              <NovelIndexContainer
+                style={order ? { flexDirection: "column" } : { flexDirection: "column-reverse" }}
+                stay={stay}
+              >
+                {data &&
+                  data.chapterInfos.map((chapter, idx) => {
+                    return (
+                      <NovelIndexBox
+                        onPress={() =>
+                          navigation.navigate("NovelStack", {
+                            screen: "NovelViewer",
+                            params: { novelId: params.id, chapterId: chapter.id },
+                          })
+                        }
+                        key={idx}
+                      >
+                        <NovelIndexImg src={data ? data.thumbnail : "http://via.placeholder.com/146X204"} />
+                        <NovelIndexTextBox>
+                          <NovelIndexTitle>{chapter.title}</NovelIndexTitle>
+                          <NovelIndexDate>{chapter.createdAt.slice(0, 3).join(". ")}</NovelIndexDate>
+                        </NovelIndexTextBox>
+                      </NovelIndexBox>
+                    );
+                  })}
+                {isManager && (
+                  <NovelNextMakeBox order={order} onPress={onOpenEpisodeModal}>
+                    <NovelNextImg width={56} height={80} />
+                    <NovelNextText>다음화를 생성해주세요</NovelNextText>
+                  </NovelNextMakeBox>
+                )}
+              </NovelIndexContainer>
+            </NovelIndexBody>
+          </View>
+        </Container>
+        <BottomSheet
+          ref={bottomSheetRef}
+          snapPoints={snapPoints}
+          index={0}
+          onChange={handleSheetChanges}
+          onClose={() => {
+            setBottomSheetVisible(false);
+          }}
+          handleIndicatorStyle={{ backgroundColor: colors.grey4, width: 80 }}
+        >
+          <NovelInfoTab data={{ ...data, novelId: params.id }} onChangeData={onChangeData} />
+        </BottomSheet>
+      </GestureHandlerRootView>
       <NextEpisodeModal isVisible={episodeModalVisible} onCloseEpisodeModal={onCloseEpisodeModal} />
     </>
   );
@@ -268,30 +203,24 @@ const NovelIndexScreen = ({ navigation, route: { params } }) => {
 
 const Container = styled.ScrollView`
   flex: 1;
+  background-color: ${colors.black};
 `;
 
-/* const LinearGradientBox = styled(LinearGradient)`
-  width: 100%;
-  height: 50%;
-  position: absolute;
-  z-index: -2;
-`; */
-
-const NovelHeaderBox = styled.View`
-  margin-top: 8px;
+const NovelHeaderBox = styled.ImageBackground`
+  padding-top: 8px;
   justify-content: center;
   align-items: center;
   position: relative;
 `;
 
 const IconBar = styled.View`
+  position: ${(props) => props.stay && "absolute"};
+  top: 0px;
   width: 100%;
   height: 32px;
   padding: 0px 8px;
-  top: 0px;
   flex-direction: row;
   justify-content: space-between;
-  position: ${(props) => props.stay && "absolute"};
 `;
 
 const LeftIconBox = styled.TouchableOpacity``;
@@ -319,19 +248,29 @@ const PaperFileIconBox = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const NovelCoverImg = styled.Image`
+const NovelCoverImgBox = styled.View`
+  position: relative;
   margin-top: 4px;
   width: 146px;
   height: 204px;
   border-radius: 4px;
-  z-index: 0;
+  z-index: 20;
+`;
+
+const NovelCoverImg = styled.Image`
+  position: relative;
+  margin-top: 4px;
+  width: 146px;
+  height: 204px;
+  border-radius: 4px;
+  z-index: 20;
 `;
 
 const NovelIndexBody = styled.View`
   padding-top: 18px;
   border-radius: 16px 16px 0 0;
   background-color: white;
-  z-index: -1;
+  z-index: 10;
 `;
 
 const NovelTitleContainer = styled.View`
@@ -492,14 +431,6 @@ const NovelNextText = styled.Text`
   line-height: 22px;
   color: rgba(32, 32, 32, 1);
   margin-left: 16px;
-`;
-const ModalContainer = styled.View`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.35);
 `;
 
 export default NovelIndexScreen;

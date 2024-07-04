@@ -1,12 +1,19 @@
-import React, { useRef, useState } from "react";
-import { ScrollView } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import NovelInfoEditScreen from "./NovelInfoEditScreen";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-const NovelInfoScreen = () => {
+const NovelInfoScreen = (props) => {
+  const { data, onChangeData } = props;
   const [edit, setEdit] = useState(false);
   const scrollRef = useRef();
+  const [synopsis, setSynopsis] = useState("");
+  const [authorIntroduction, setAuthorIntroduction] = useState("");
+
+  useEffect(() => {
+    setSynopsis(data.synopsis);
+    setAuthorIntroduction(data.authorIntroduction);
+  }, [data]);
 
   const pressScrollTab = () => {
     scrollRef.current.scrollTo({ x: 0, y: 0, animated: true });
@@ -15,27 +22,14 @@ const NovelInfoScreen = () => {
   return (
     <Container>
       {edit === false ? (
-        <BottomSheetScrollView style={{ flex: 1 }} scrollEnabled={true}>
+        <BottomSheetScrollView style={{ flex: 1 }} scrollEnabled={true} ref={scrollRef}>
           <InfoBox style={{ marginTop: 16 }}>
             <InfoTitleText>작품 소개</InfoTitleText>
-            <InfoText>
-              정부는 예산에 변경을 가할 필요가 있을 때에는 추가경정예산안을 편성하여 국회에 제출할 수 있다. 정부는
-              회계연도마다 예산안을 편성하여 회계연도 개시 90일전까지 국회에 제출하고, 국회는 회계연도 개시 30일전까지
-              이를 의결하여야 한다. 행정각부의 설치·조직과 직무범위는 법률로 정한다. 국가는 지역간의 균형있는 발전을
-              위하여 지역경제를 육성할 의무를 진다. 탄핵결정은 공직으로부터 파면함에 그친다. 그러나, 이에 의하여
-              민사상이나 형사상의 책임이 면제되 정부는 예산에 변경을 가할 필요가 있을 때에는 추가경정예산안을 편성하여
-              국회에 제출할 수 있다. 정부는 회계연도마다 예산안을 편성하여 회계연도 개시 90일전까지 국회에 제출하고,
-              국회는 회계연도 개시 30일전까지 이를 의결하여야 한다. 행정각부의 설치·조직과 직무범위는 법률로 정한다.
-              국가는 지역간의 균형있는 발전을 위하여 지역경제를 육성할 의무를 진다. 탄핵결정은 공직으로부터 파면함에
-              그친다. 그러나, 이에 의하여 민사상이나 형사상의 책임이 면제되
-            </InfoText>
+            <InfoText>{synopsis}</InfoText>
           </InfoBox>
           <InfoBox style={{ marginTop: 8 }}>
             <InfoTitleText>작가 소개</InfoTitleText>
-            <InfoText>
-              안녕하세요 !!! 함께하실분 구해요
-              TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText
-            </InfoText>
+            <InfoText>{authorIntroduction}</InfoText>
           </InfoBox>
           <MoreInfoContainer>
             <MoreInfoTitle>상세정보</MoreInfoTitle>
@@ -45,12 +39,10 @@ const NovelInfoScreen = () => {
                 <MoreInfoText>연령등급</MoreInfoText>
               </MoreInfo>
               <MoreInfo>
-                <MoreInfoText>학원물</MoreInfoText>
-                <MoreInfoText>전체이용가</MoreInfoText>
+                <MoreInfoText>{data && data.genre}</MoreInfoText>
+                <MoreInfoText>{data && data.ageRating === "GENERAL" && "전체이용가"}</MoreInfoText>
               </MoreInfo>
             </MoreInfoBox>
-
-            {/* 권한을 가진 유저만 볼 수 있도록 조건문 추가 예정 */}
             <EditBox>
               <EditBtn
                 onPress={() => {
@@ -64,7 +56,7 @@ const NovelInfoScreen = () => {
           </MoreInfoContainer>
         </BottomSheetScrollView>
       ) : (
-        <NovelInfoEditScreen setEdit={setEdit} />
+        <NovelInfoEditScreen setEdit={setEdit} data={data} onChangeData={onChangeData} />
       )}
     </Container>
   );
