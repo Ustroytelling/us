@@ -111,8 +111,8 @@ const results = [
   },
 ];
 
-const CollectionTab = () => {
-  const [isPublic, setIsPublic] = useState(true);
+const CollectionTab = (props) => {
+  const isPublic = props.public;
 
   return (
     <Container>

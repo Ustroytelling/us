@@ -3,11 +3,11 @@ import Arrow from "../../assets/icons/angle arrow left.svg";
 import { colors } from "../../assets/color";
 import { fontSize, fontWeight } from "../../assets/font";
 import ProfileNovelTab from "../../navigations/ProfileNovelTab";
+import { useRoute } from "@react-navigation/native";
 
-const ProfileScreen = ({ navigation }) => {
-  const onGoEditProfile = () => {
-    navigation.navigate("ProfileStack", { screen: "EditProfile" });
-  };
+const PreviewScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { data } = route.params;
 
   return (
     <Container>
@@ -18,18 +18,16 @@ const ProfileScreen = ({ navigation }) => {
         <Title>
           <TitleText>프로필</TitleText>
         </Title>
-        <EditBtn onPress={onGoEditProfile}>
-          <EditText>편집</EditText>
-        </EditBtn>
+        <LayoutView />
       </TitleView>
       <ProfileView>
         <ProfileImage />
         <IntroduceView>
-          <IntroduceText>홍길동</IntroduceText>
-          <IntroduceText>TextTextTextTextTextText TextTextTextTextTextText</IntroduceText>
+          <IntroduceText>{data.nickname}</IntroduceText>
+          <IntroduceText>{data.introduction}</IntroduceText>
         </IntroduceView>
       </ProfileView>
-      <ProfileNovelTab public={{ collection: true, joinNovel: false }} />
+      <ProfileNovelTab public={{ collection: data.collectionNovelsPublic, joinNovel: data.participateNovelsPublic }} />
     </Container>
   );
 };
@@ -58,17 +56,9 @@ const TitleText = styled.Text`
   line-height: 22px;
   color: ${colors.mainText};
 `;
-const EditBtn = styled.TouchableOpacity`
-  width: 27px;
+const LayoutView = styled.View`
+  width: 32px;
   height: 32px;
-  align-items: flex-end;
-  justify-content: center;
-`;
-const EditText = styled.Text`
-  font-size: ${fontSize.body3};
-  font-weight: ${fontWeight.regular};
-  line-height: 22px;
-  color: ${colors.grey2};
 `;
 const ProfileView = styled.TouchableOpacity`
   justify-content: flex-start;
@@ -94,4 +84,4 @@ const IntroduceText = styled.Text`
   line-height: 22px;
   color: ${colors.mainText};
 `;
-export default ProfileScreen;
+export default PreviewScreen;

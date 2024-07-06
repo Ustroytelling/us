@@ -5,7 +5,9 @@ import CollectionTab from "../screens/Profile/CollectionTab";
 
 const Tab = createMaterialTopTabNavigator();
 
-const ProfileNovelTab = () => {
+const ProfileNovelTab = (props) => {
+  const { collection, joinNovel } = props.public;
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -29,14 +31,14 @@ const ProfileNovelTab = () => {
     >
       <Tab.Screen
         name="JoinNovel"
-        component={JoinNovelTab}
+        component={() => <JoinNovelTab public={joinNovel} />}
         options={{
           title: "참여 작품",
         }}
       />
       <Tab.Screen
         name="Collection"
-        component={CollectionTab}
+        component={() => <CollectionTab public={collection} />}
         options={{
           title: "소설 컬렉션",
         }}
