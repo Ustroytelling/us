@@ -6,18 +6,21 @@ import { fontSize, fontWeight } from "../../assets/font";
 import { useState } from "react";
 import Plus from "../../assets/icons/image plus.svg";
 import ImagePicker from "react-native-image-picker";
+import { jsonConfig } from "../../api/axios";
+import { useNavigation } from "@react-navigation/native";
 
-const EditProfileScreen = ({ navigation }) => {
+const EditProfileScreen = () => {
+  const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [nickname, setNickname] = useState("");
-  const [introduce, setIntroduce] = useState("");
+  const [introduction, setIntroduction] = useState("");
   const [showJoinNovel, setShowJoinNovel] = useState(true);
-  const [showCollection, setShowCollection] = useState(false);
+  const [showCollection, setShowCollection] = useState(true);
   const onChangeNickname = (value) => {
     setNickname(value);
   };
-  const onChangeIntroduce = (value) => {
-    setIntroduce(value);
+  const onChangeIntroduction = (value) => {
+    setIntroduction(value);
   };
   const onToggleJoinNovel = () => {
     setShowJoinNovel(!showJoinNovel);
@@ -35,6 +38,30 @@ const EditProfileScreen = ({ navigation }) => {
         setSelectedImage(response);
       }
     }); */
+  };
+  const onSaveProfile = async () => {
+    const data = {
+      profileImg: "증명사진.jpg",
+      nickname,
+      introduction,
+      participateNovelsPublic: showJoinNovel,
+      collectionNovelsPublic: showCollection,
+    };
+    const response = await jsonConfig("post", "/author", data);
+    console.log(response);
+  };
+  const onGoPreview = () => {
+    const data = {
+      profileImg: "증명사진.jpg",
+      nickname,
+      introduction,
+      participateNovelsPublic: showJoinNovel,
+      collectionNovelsPublic: showCollection,
+    };
+    navigation.navigate("ProfileStack", {
+      screen: "Preview",
+      params: { data },
+    });
   };
 
   return (
@@ -59,7 +86,7 @@ const EditProfileScreen = ({ navigation }) => {
           </EditInputView>
           <EditInputView>
             <EditText>소개</EditText>
-            <EditInput value={introduce} onChangeText={onChangeIntroduce} />
+            <EditInput value={introduction} onChangeText={onChangeIntroduction} />
           </EditInputView>
           <EditSelectView>
             <Select>
@@ -98,10 +125,10 @@ const EditProfileScreen = ({ navigation }) => {
       </EditView>
       <Buttons>
         <SavePreviewView>
-          <Button>
+          <Button onPress={onSaveProfile}>
             <ButtonText>저장</ButtonText>
           </Button>
-          <Button>
+          <Button onPress={onGoPreview}>
             <ButtonText>미리보기</ButtonText>
           </Button>
         </SavePreviewView>

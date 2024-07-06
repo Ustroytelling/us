@@ -4,6 +4,7 @@ import ProfileScreen from "../screens/Profile/ProfileScreen";
 import MyInfoScreen from "../screens/Profile/MyInfoScreen";
 import EditProfileScreen from "../screens/Profile/EditProfileScreen";
 import CommentsScreen from "../screens/Profile/CommentsScreen";
+import PreviewScreen from "../screens/Profile/PreviewScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ const ProfileStack = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="Comments" component={CommentsScreen} />
+      <Stack.Screen name="Preview" component={PreviewScreen} />
     </Stack.Navigator>
   );
 };

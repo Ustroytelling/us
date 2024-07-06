@@ -111,8 +111,8 @@ const results = [
   },
 ];
 
-const JoinNovelTab = () => {
-  const [isPublic, setIsPublic] = useState(false);
+const JoinNovelTab = (props) => {
+  const isPublic = props.public;
 
   return (
     <Container>
