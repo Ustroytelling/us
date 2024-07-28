@@ -4,10 +4,14 @@ import { fontSize } from "../../assets/font";
 
 const SignInScreen = ({ navigation }) => {
   const onGoMainPage = () => {
-    navigation.navigate("SignInStack", { screen: "AppMain" });
+    navigation.navigate("SignInStack", { screen: "Guest" });
   };
-  const onGoSignUp = () => {
-    navigation.navigate("SignInStack", { screen: "SignUpFirst" });
+  const onGoSignUp = async () => {
+    try {
+      navigation.navigate("SignInStack", { screen: "WebView" });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
